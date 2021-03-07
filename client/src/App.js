@@ -1,7 +1,19 @@
 import logo from './logo.svg';
 import './App.css';
 
+import Axios from 'axios';
+
 function App() {
+
+  Axios.get('/api', )
+      .then(res => {
+        console.log(res.data.response);
+      });
+  Axios.get('/users', )
+      .then(res => {
+        console.log(res.data.response);
+      });
+
   return (
     <div className="App">
       <header className="App-header">
