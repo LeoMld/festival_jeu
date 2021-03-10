@@ -5,11 +5,11 @@ import Axios from 'axios';
 
 function App() {
 
-  Axios.get('/api', )
+  Axios.get('/api')
       .then(res => {
         console.log(res.data.response);
       });
-  Axios.get('/users', )
+  Axios.get('/users')
       .then(res => {
         console.log(res.data.response);
       });
