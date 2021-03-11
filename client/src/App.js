@@ -1,8 +1,13 @@
-import logo from './logo.svg';
 import './App.css';
+import 'assets/vendor/nucleo/css/nucleo.css';
+import 'assets/vendor/font-awesome/css/font-awesome.min.css';
+import 'assets/scss/argon-design-system-react.scss';
 
-import NavBar from './components/navigation/DemoNavbar'
 import Axios from 'axios';
+import { Switch, Route, Redirect } from 'react-router-dom';
+
+import Navigation from './components/navigation/Navigation'
+import Home from './views/Home'
 
 function App() {
 
@@ -10,30 +15,20 @@ function App() {
       .then(res => {
         console.log(res.data.response);
       });
-  Axios.get('/users')
-      .then(res => {
-        console.log(res.data.response);
-      });
 
   return (
+      <div className="App">
 
-    <div className="App">
-        <NavBar/>
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+          <Navigation/>
+
+          <header className="App-header">
+          </header>
+
+          <Switch>
+            <Route path="/Accueil" exact component={Home}/>
+            <Route path="/"><Redirect to="/Accueil" /></Route>
+          </Switch>
+      </div>
   );
 }
 
