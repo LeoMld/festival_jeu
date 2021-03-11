@@ -1,6 +1,7 @@
 import logo from './logo.svg';
 import './App.css';
 
+import NavBar from './components/navigation/DemoNavbar'
 import Axios from 'axios';
 
 function App() {
@@ -15,7 +16,9 @@ function App() {
       });
 
   return (
+
     <div className="App">
+        <NavBar/>
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
