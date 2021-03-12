@@ -21,11 +21,9 @@ app.use(cors());
 app.use(cookieParser());
 
 // We import all the routes
-const indexRouter = require('./routes/index');
-const usersRouter = require('./routes/users');
+const homeRoutes = require('./routes/homeRoutes');
 
 // This is all our routes on the back-end
-app.use('/api', indexRouter);
-app.use('/users', usersRouter);
+app.use('/api', homeRoutes);
 
 module.exports = app;

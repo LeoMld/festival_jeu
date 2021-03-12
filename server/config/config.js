@@ -10,5 +10,22 @@ const pool = new Pool({
     port: process.env.PGPORT,
 })
 
-// We will use it to make our queries
-module.exports = pool
+module.exports = {
+
+    pool : pool,
+
+    // Retrieve the pool or a client that we will use to query
+    // client : pool or client, .query
+    getPoolClient : (client) => {
+        let clientUsed;
+        if(client === undefined){
+            // No client used, we send the pool for a single query
+            clientUsed = pool
+        }
+        else{
+            // Already a client being used, we still use it
+            clientUsed = client
+        }
+        return clientUsed
+    }
+}
