@@ -5,7 +5,7 @@ const Emplacement = require('./emplacementModel')
 
 // Update the festival that is the current one, and pass it at false
 changeCurrentStateFestival = async (client) => {
-    const queryText = 'UPDATE "Festival" SET "currentFestival" = false WHERE "currentFestival" = true'
+    const queryText = 'UPDATE "Festival" SET "currentFestival" = false WHERE "currentFestival" = true;'
     client.query(queryText)
 }
 
@@ -27,7 +27,7 @@ module.exports = {
             // We need to pass the last current festival to false
             await changeCurrentStateFestival(client)
             // We create the new festival
-            const queryText = 'INSERT INTO "Festival" ("nameFestival", "currentFestival") VALUES ($1, $2) RETURNING *'
+            const queryText = 'INSERT INTO "Festival" ("nameFestival", "currentFestival") VALUES ($1, $2) RETURNING *;'
             const queryValues = [nameFestival, true]
             // We execute the query and stock the new festival created
             const newFestival = (await client.query(queryText, queryValues)).rows[0]
@@ -58,7 +58,7 @@ module.exports = {
             // First we need to pass the older one to not current
             await changeCurrentStateFestival(client)
             // Now we update the given festival to current one
-            const queryText = 'UPDATE "Festival" SET "currentFestival" = true WHERE "idFestival" = $1'
+            const queryText = 'UPDATE "Festival" SET "currentFestival" = true WHERE "idFestival" = $1;'
             const queryValues = [idFestival]
             await client.query(queryText,queryValues)
             await client.query('COMMIT')
@@ -74,7 +74,7 @@ module.exports = {
     // Update the name of a festival
     updateFestival : async (idFestival, nameFestival, client) => {
         const clientUsed = await DB.getPoolClient(client)
-        const queryText = 'UPDATE "Festival" SET "nameFestival" = $2 WHERE "idFestival" = $1'
+        const queryText = 'UPDATE "Festival" SET "nameFestival" = $2 WHERE "idFestival" = $1;'
         const queryValues = [idFestival,nameFestival]
         clientUsed.query(queryText,queryValues)
     },
@@ -82,7 +82,7 @@ module.exports = {
     // Retrieve the current festival
     retrieveCurrentFestival : async (client) => {
         const clientUsed = await DB.getPoolClient(client)
-        const queryText = 'SELECT * FROM "Festival" WHERE "currentFestival" = true'
+        const queryText = 'SELECT * FROM "Festival" WHERE "currentFestival" = true;'
         return (await clientUsed.query(queryText)).rows[0]
     },
 
