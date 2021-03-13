@@ -6,9 +6,10 @@ import 'assets/scss/argon-design-system-react.scss';
 import Axios from 'axios';
 import { Switch, Route, Redirect } from 'react-router-dom';
 
-import Navigation from './components/navigation/Navigation'
+import Navigation from './components/navigation/Navigation';
+import Footer from './components/footer/Footer';
 
-import Home from './views/Home'
+import Home from './views/Home';
 import FestivalChoice from "./views/FestivalChoice";
 
 function App() {
@@ -33,6 +34,8 @@ function App() {
             <Route path="/ChoixFestival" exact component={FestivalChoice}/>
             <Route path="/"><Redirect to="/Accueil" /></Route>
           </Switch>
+
+          <Footer/>
       </div>
   );
 }

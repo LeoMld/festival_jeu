@@ -1,8 +1,15 @@
 import React from 'react'
 
+
 function Home(){
     return(
-        <h1>Bienvenue sur la page d'accueil !</h1>
+        <div>
+            <h1>Bienvenue sur la page d'accueil !</h1>
+            <p className='minHeight'>a</p>
+        </div>
+
+
+
     )
 }
 
