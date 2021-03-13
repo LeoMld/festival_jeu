@@ -24,7 +24,6 @@ app.use(cookieParser());
 
 // We import all the routes
 const homeRoutes = require('./routes/homeRoutes');
-const {retrieveFestivals} = require("./models/festivalModel");
 
 // This is all our routes on the back-end
 app.use('/api', homeRoutes);
