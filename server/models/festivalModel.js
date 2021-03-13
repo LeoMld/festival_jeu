@@ -20,7 +20,7 @@ module.exports = {
     //     coutMetreCarre,
     //     nombreTablesPrevues
     //     }, ...] an array of all the emplacements to create
-    createFestival: async (nameFestival,emplacements) => {
+    createFestival: async (nameFestival, emplacements) => {
         const client = await DB.pool.connect()
         try {
             await client.query('BEGIN')
@@ -32,13 +32,13 @@ module.exports = {
             // We execute the query and stock the new festival created
             const newFestival = (await client.query(queryText, queryValues)).rows[0]
             // We need to create a first zone "undefined" in the festival
-            await Zone.createNewZone("Zone - Indéfinie",newFestival.idFestival,client)
+            await Zone.createNewZone("Zone - Indéfinie", newFestival.idFestival, client)
             // We need to create the emplacements
             let emp
-            for(let i = 0; i<emplacements.length;i++){
+            for (let i = 0; i < emplacements.length; i++) {
                 emp = emplacements[i]
-                await Emplacement.createEmplacement(emp.libelleEmplacement,emp.coutTable,emp.coutMetreCarre,
-                    emp.nombreTablesPrevues,newFestival.idFestival,client)
+                await Emplacement.createEmplacement(emp.libelleEmplacement, emp.coutTable, emp.coutMetreCarre,
+                    emp.nombreTablesPrevues, newFestival.idFestival, client)
             }
             await client.query('COMMIT')
         } catch (err) {
@@ -51,7 +51,7 @@ module.exports = {
     },
 
     // Pass the given festival to current Festival
-    changeCurrentFestival : async (idFestival) => {
+    changeCurrentFestival: async (idFestival) => {
         const client = await DB.pool.connect()
         try {
             await client.query('BEGIN')
@@ -60,7 +60,7 @@ module.exports = {
             // Now we update the given festival to current one
             const queryText = 'UPDATE "Festival" SET "currentFestival" = true WHERE "idFestival" = $1;'
             const queryValues = [idFestival]
-            await client.query(queryText,queryValues)
+            await client.query(queryText, queryValues)
             await client.query('COMMIT')
         } catch (err) {
             // Something wrong happened, we rollback
@@ -72,22 +72,26 @@ module.exports = {
     },
 
     // Update the name of a festival
-    updateFestival : async (idFestival, nameFestival, client) => {
+    updateFestival: async (idFestival, nameFestival, client) => {
         const clientUsed = await DB.getPoolClient(client)
         const queryText = 'UPDATE "Festival" SET "nameFestival" = $2 WHERE "idFestival" = $1;'
-        const queryValues = [idFestival,nameFestival]
-        clientUsed.query(queryText,queryValues)
+        const queryValues = [idFestival, nameFestival]
+        clientUsed.query(queryText, queryValues)
     },
 
     // Retrieve the current festival
-    retrieveCurrentFestival : async (client) => {
+    retrieveCurrentFestival: async (client) => {
         const clientUsed = await DB.getPoolClient(client)
         const queryText = 'SELECT * FROM "Festival" WHERE "currentFestival" = true;'
         return (await clientUsed.query(queryText)).rows[0]
     },
 
-    // TODO Retrieve all the festivals, their emplacements and the reserved space
-    retrieveFestivals : () => {
+    // Retrieve all the festivals, their emplacements and the reserved space
+    retrieveFestivals: async () => {
+        const client = await DB.pool.connect()
+        const queryText = 'SELECT * FROM "Festival" JOIN "Emplacement" ON "idFestival" = "FK_idFestival" JOIN "EspaceReserve" ON "idEmplacement" = "FK_idEmplacement";'
+
+        return (await client.query(queryText)).rows[0]
 
     }
 }
