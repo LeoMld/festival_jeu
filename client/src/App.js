@@ -7,7 +7,9 @@ import Axios from 'axios';
 import { Switch, Route, Redirect } from 'react-router-dom';
 
 import Navigation from './components/navigation/Navigation'
+
 import Home from './views/Home'
+import FestivalChoice from "./views/FestivalChoice";
 
 function App() {
 
@@ -26,6 +28,7 @@ function App() {
 
           <Switch>
             <Route path="/Accueil" exact component={Home}/>
+            <Route path="/ChoixFestival" exact component={FestivalChoice}/>
             <Route path="/"><Redirect to="/Accueil" /></Route>
           </Switch>
       </div>

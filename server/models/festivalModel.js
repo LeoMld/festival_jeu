@@ -5,9 +5,8 @@ const Emplacement = require('./emplacementModel')
 
 // Update the festival that is the current one, and pass it at false
 changeCurrentStateFestival = async (client) => {
-    const clientUsed = await DB.getPoolClient(client)
     const queryText = 'UPDATE "Festival" SET "currentFestival" = false WHERE "currentFestival" = true'
-    clientUsed.query(queryText)
+    client.query(queryText)
 }
 
 // Contains all the queries to the database concerning a festival
@@ -42,12 +41,53 @@ module.exports = {
                     emp.nombreTablesPrevues,newFestival.idFestival,client)
             }
             await client.query('COMMIT')
-        } catch (e) {
+        } catch (err) {
             // Something wrong happened, we rollback
             await client.query('ROLLBACK')
         } finally {
             // We release the client in the pool
             client.release()
         }
+    },
+
+    // Pass the given festival to current Festival
+    changeCurrentFestival : async (idFestival) => {
+        const client = await DB.pool.connect()
+        try {
+            await client.query('BEGIN')
+            // First we need to pass the older one to not current
+            await changeCurrentStateFestival(client)
+            // Now we update the given festival to current one
+            const queryText = 'UPDATE "Festival" SET "currentFestival" = true WHERE "idFestival" = $1'
+            const queryValues = [idFestival]
+            await client.query(queryText,queryValues)
+            await client.query('COMMIT')
+        } catch (err) {
+            // Something wrong happened, we rollback
+            await client.query('ROLLBACK')
+        } finally {
+            // We release the client in the pool
+            client.release()
+        }
+    },
+
+    // Update the name of a festival
+    updateFestival : async (idFestival, nameFestival, client) => {
+        const clientUsed = await DB.getPoolClient(client)
+        const queryText = 'UPDATE "Festival" SET "nameFestival" = $2 WHERE "idFestival" = $1'
+        const queryValues = [idFestival,nameFestival]
+        clientUsed.query(queryText,queryValues)
+    },
+
+    // Retrieve the current festival
+    retrieveCurrentFestival : async (client) => {
+        const clientUsed = await DB.getPoolClient(client)
+        const queryText = 'SELECT * FROM "Festival" WHERE "currentFestival" = true'
+        return (await clientUsed.query(queryText)).rows[0]
+    },
+
+    // TODO Retrieve all the festivals, their emplacements and the reserved space
+    retrieveFestivals : () => {
+
     }
 }
