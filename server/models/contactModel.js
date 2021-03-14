@@ -2,11 +2,11 @@ const DB = require('../config/config')
 
 module.exports = {
     //Creating a contact linked to a Person
-    createContact: async (prenomContact,nomContact,mailContact,telFixeContact,telPortableContact,fonctionContact,principal,idPersonne,client)=>{
+    createContact: async (prenomContact,nomContact,mailContact,telFixeContact,telPortableContact,fonctionContact,principal,FK_idPersonne,client)=>{
         const clientUsed = await DB.getPoolClient(client);
         const queryText = `INSERT INTO "Contact"
-        ("prenomContact","nomContact","mailContact","telFixeContact","telPortableContact","fonctionContact","principal","idPersonne")
-        VALUES(${prenomContact},${nomContact},${mailContact},${telFixeContact},${telPortableContact},${fonctionContact},${principal},${idPersonne});`
+        ("prenomContact","nomContact","mailContact","telFixeContact","telPortableContact","fonctionContact","principal","FK_idPersonne")
+        VALUES(${prenomContact},${nomContact},${mailContact},${telFixeContact},${telPortableContact},${fonctionContact},${principal},${FK_idPersonne});`
         clientUsed.query(queryText,[])
     },
     //Updating a contact with all his info
@@ -27,7 +27,7 @@ module.exports = {
     //Get the contacts of a person
     getContactsOf: async (idPersone,client)=>{
         const clientUsed = await DB.getPoolClient(client);
-        const queryText = `SELECT * FROM "Contact" WHERE idPersonne = ${idPersone};`
+        const queryText = `SELECT * FROM "Contact" WHERE FK_idPersonne = ${idPersone};`
         return (await clientUsed.query(queryText,[]).rows)
 
     }
