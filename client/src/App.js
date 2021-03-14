@@ -26,7 +26,7 @@ function App() {
 
           <header className="App-header">
           </header>
-          <Navigation typeUser = {1} />
+          <Navigation  />
 
 
           <Switch>

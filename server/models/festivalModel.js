@@ -91,7 +91,10 @@ module.exports = {
         const client = await DB.pool.connect()
         const queryText = 'SELECT * FROM "Festival" JOIN "Emplacement" ON "idFestival" = "FK_idFestival" JOIN "EspaceReserve" ON "idEmplacement" = "FK_idEmplacement";'
 
-        return (await client.query(queryText)).rows[0]
+        return (await client.query(queryText)).rows
 
-    }
+    },
+
+
+
 }

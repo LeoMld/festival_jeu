@@ -24,6 +24,14 @@ app.use(cookieParser());
 
 // We import all the routes
 const homeRoutes = require('./routes/homeRoutes');
+const game = require('./models/jeuxModel')
+game.getAllGames().then(r =>{
+    console.log(r)
+})
+//game.modifyTypeJeu(1, "puzzle")
+//game.createTypeGame("action")
+//game.createJeu("Super jeu", 2, 12, "3-4 semaines",false,1,1);
+//game.modifyJeu("Super jeuqsdsqdqd", 2, 12, "3-4 semaines",false,1,1,3)
 
 // This is all our routes on the back-end
 app.use('/api', homeRoutes);
