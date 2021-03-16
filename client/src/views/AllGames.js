@@ -2,7 +2,7 @@ import React from 'react'
 import {Container} from "reactstrap";
 
 
-function Home(){
+function Allgames(){
     return(
         <div className="container justify-content-center">
             <h1>Tous les jeux</h1>
@@ -14,4 +14,4 @@ function Home(){
     )
 }
 
-export default Home;
+export default Allgames;
