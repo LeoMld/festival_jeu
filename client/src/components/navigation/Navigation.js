@@ -21,7 +21,7 @@ import {
     Col,
     UncontrolledTooltip
 } from "reactstrap";
-
+import logo from "../../assets/images/LogoFJM-couleur-seul.png";
 class Navigation extends Component {
     componentDidMount() {
         let headroom = new Headroom(document.getElementById("navbar-main"));
@@ -59,6 +59,7 @@ class Navigation extends Component {
                     >
                         <Container>
                             <NavbarBrand className="mr-lg-5" to="/" tag={Link}>
+                                <img style={{maxHeight : "40%"}} src={logo} alt="logo du festival"/>
                             </NavbarBrand>
                             <button className="navbar-toggler" id="navbar_global">
                                 <span className="navbar-toggler-icon"/>

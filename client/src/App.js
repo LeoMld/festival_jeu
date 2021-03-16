@@ -11,6 +11,7 @@ import Footer from './components/footer/Footer';
 
 import Home from './views/Home';
 import FestivalChoice from "./views/FestivalChoice";
+import Login from "./views/Login";
 
 function App() {
 
@@ -26,12 +27,13 @@ function App() {
 
           <header className="App-header">
           </header>
-          <Navigation  />
+          <Navigation typeUser ={1}  />
 
 
           <Switch>
             <Route path="/Accueil" exact component={Home}/>
             <Route path="/ChoixFestival" exact component={FestivalChoice}/>
+            <Route path="/login" exact component={Login}/>
             <Route path="/"><Redirect to="/Accueil" /></Route>
           </Switch>
 
