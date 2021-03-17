@@ -9,6 +9,8 @@ const personController = require("../controllers/personController");
 
 router.get('/AllFestivals', gestionController.getAllFestivals)
 
+
+router.get('/editeurs/', personController.getAllEditors)
 router.get('/editeurs/:id', personController.getEditorPage)
 
 
