@@ -19,7 +19,7 @@ import {
 
 
 
-function GameListVisitor(canModify) {
+function GameList(canModify) {
     const [listGames, setListGames] = useState(
         [{
             libelleJeu: "",
@@ -101,4 +101,4 @@ function GameListVisitor(canModify) {
 
 }
 
-export default GameListVisitor
+export default GameList
