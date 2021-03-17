@@ -13,6 +13,7 @@ import Home from './views/Home';
 import FestivalChoice from "./views/FestivalChoice";
 import GameList from "./components/festival/GameList";
 import Login from "./views/Login";
+import Person from "./views/Persons";
 
 function App() {
 
@@ -35,6 +36,7 @@ function App() {
             <Route path="/Accueil" exact component={Home}/>
             <Route path="/ChoixFestival" exact component={FestivalChoice}/>
             <Route path="/ListeJeux" exact component={GameList}/>
+            <Route path="/Editeurs" exact component={Person}/>
             <Route path="/login" exact component={Login}/>
 
             <Route path="/"><Redirect to="/Accueil" /></Route>

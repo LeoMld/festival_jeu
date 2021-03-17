@@ -39,7 +39,7 @@ module.exports = {
                 if(result.length===0){
                     res.status(200).json({message:"Pas d'éditeurs dans la Base de données"})
                 }else{
-                    res.status(200).json({editeurs: result})
+                    res.status(200).json(result)
                 }
             })
             .catch(error=>{
