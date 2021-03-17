@@ -13,7 +13,7 @@ module.exports = {
     //Update a zone
     updateZone: async (idZone,libelleZone,client)=>{
         const clientUsed = await DB.getPoolClient(client)
-        const queryText = `UPDATE "Zone" SET "libelleZone"=${libelleZone} WHERE "idZone"=${idZone};`
+        const queryText = `UPDATE "Zone" SET "libelleZone"='${libelleZone}' WHERE "idZone"=${idZone};`
         clientUsed.query(queryText,[])
     },
     //Delete a zone from a festival
