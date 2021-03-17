@@ -22,6 +22,15 @@ module.exports={
         clientUsed.query(text,queryValues)
     },
 
+    //modify the prototype value of a game (boolean)
+    modifyPrototypeJeu : async (idJeu, isPrototype, client) =>{
+
+        const clientUsed = await DB.getPoolClient(client)
+        const queryText = 'UPDATE "Jeu" SET "prototype" = $1 WHERE "idJeu" = $2;'
+        const queryValues = [isPrototype, idJeu]
+        clientUsed.query(queryText, queryValues)
+    },
+
     //modify a game
     modifyJeu : async (libellejeu,nombreJoueur,ageMinimum, duree,prototype, FK_idTypeJeu, FK_idPersonne, idJeu, client) =>{
         const clientUsed = await DB.getPoolClient(client)

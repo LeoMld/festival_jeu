@@ -11,7 +11,7 @@ import Footer from './components/footer/Footer';
 
 import Home from './views/Home';
 import FestivalChoice from "./views/FestivalChoice";
-import GameList from "./components/festival/GameList";
+import AllGames from "./views/AllGames";
 import Login from "./views/Login";
 import Person from "./views/Persons";
 
@@ -33,7 +33,7 @@ function App() {
           <Switch>
             <Route path="/Accueil" exact component={Home}/>
             <Route path="/ChoixFestival" exact component={FestivalChoice}/>
-            <Route path="/ListeJeux" exact component={GameList}/>
+            <Route path="/ListeJeux" exact component={AllGames}/>
             <Route path="/Editeurs" exact component={Person}/>
             <Route path="/login" exact component={Login}/>
 

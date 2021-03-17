@@ -25,9 +25,11 @@ app.use(cookieParser());
 // We import all the routes
 const homeRoutes = require('./routes/homeRoutes');
 const gestionRoutes = require('./routes/gestionRoutes')
+const gameRoutes = require('./routes/gameRoutes')
 
 // This is all our routes on the back-end
 app.use('/api/', homeRoutes);
 app.use('/api/gestion/',gestionRoutes);
+app.use('/api/game/',gameRoutes);
 
 module.exports = app;

@@ -11,6 +11,9 @@ router.get('/AllFestivals', gestionController.getAllFestivals)
 router.put('/changeCurrentFestival/:id',gestionController.changeCurrentFestival)
 
 
+router.get('/AllFestivals', gestionController.getAllFestivals)
+
+
 router.get('/editeurs/', personController.getAllEditors)
 router.get('/editeurs/:id', personController.getEditorPage)
 
@@ -23,3 +26,4 @@ router.put('/zone/:id', zoneController.updateZone)
 router.delete('/zone/:id', zoneController.deleteZone)
 
 module.exports = router;
+

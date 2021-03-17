@@ -1,17 +1,22 @@
 import React from 'react'
 import {Container} from "reactstrap";
+import GameList from "../components/game/GameList";
 
 
-function Allgames(){
+function AllGames(){
+
+    //appel au middleware pour savoir si l'utilisateur courant est admin
+    const isAdmin = true;
+
     return(
-        <div className="container justify-content-center">
-            <h1>Tous les jeux</h1>
-
-        </div>
+        <Container className="container justify-content-center mt-md" style={{minHeight : "500px"}}>
+            <h1 className="mb-md">Tous les jeux</h1>
+            <GameList isAdmin={isAdmin}/>
+        </Container>
 
 
 
     )
 }
 
-export default Allgames;
+export default AllGames;
