@@ -4,22 +4,18 @@ import {Link} from "react-router-dom";
 import Headroom from "headroom.js";
 
 import {
-    Button,
     UncontrolledCollapse,
     DropdownMenu,
     DropdownItem,
     DropdownToggle,
     UncontrolledDropdown,
-    Media,
     NavbarBrand,
     Navbar,
     NavItem,
-    NavLink,
     Nav,
     Container,
     Row,
     Col,
-    UncontrolledTooltip
 } from "reactstrap";
 import logo from "../../assets/images/LogoFJM-couleur-seul.png";
 class Navigation extends Component {
@@ -87,7 +83,7 @@ class Navigation extends Component {
                                 </div>
                                 <Nav className="navbar-nav-hover align-items-lg-center" navbar>
                                     <NavItem>
-                                        <Link className="nav-link" to="/">Festivals</Link>
+                                        <Link className="nav-link" to="/ChoixFestival">Festivals</Link>
                                     </NavItem>
                                     <UncontrolledDropdown nav>
                                         <DropdownToggle nav>

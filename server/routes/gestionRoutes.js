@@ -8,9 +8,9 @@ const zoneController = require("../controllers/zoneController");
 const personController = require("../controllers/personController");
 
 router.get('/AllFestivals', gestionController.getAllFestivals)
+router.put('/changeCurrentFestival/:id',gestionController.changeCurrentFestival)
 
 router.get('/editeurs/:id', personController.getEditorPage)
-
 
 router.post('/contact', contactController.createContact)
 router.put('/contact/:id', contactController.updateContact)

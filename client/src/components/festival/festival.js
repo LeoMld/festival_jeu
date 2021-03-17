@@ -3,130 +3,78 @@ import React, {useState} from 'react'
 import {
     Table,
     Button,
-    Modal,
-    Card,
-    CardHeader,
-    Form,
-    FormGroup,
-    InputGroup,
-    InputGroupAddon,
-    InputGroupText,
-    Input,
-    CardBody,
     Col,
     Row
 } from 'reactstrap';
 
-function Festival() {
+import CreateUpdateFestival from "./createUpdateFestival";
 
-    const [modalUpdate, setModalUpdate] = useState(false)
+function Festival(props) {
+
+    const [modalState, setModalState] = useState(false)
+    const [festival] = useState(props.festival)
 
     return (
-        <>
-            <Table>
+        <div className={"container justify-content-center table-bordered table-striped table-active"+ (festival.currentFestival ?
+            ' border-darker' : ' border-light')}>
+            <Row>
+                <Col>
+                    <h2 className="font-weight-bold font-italic">{festival.nameFestival}</h2>
+                </Col>
+                <Col className="mt-2">
+                    {!festival.currentFestival ? <Button
+                        outline
+                        onClick={() => {
+                            props.changeCurrentFestival(festival.idFestival)
+                        }}>
+                        Définir Festival Courant
+                    </Button> : <p className="text-primary font-weight-bold">Ce festival est le festival courant</p>}
+                </Col>
+            </Row>
+            <Table className="table-light">
                 <thead>
                 <tr>
-                    <th>#</th>
-                    <th>First Name</th>
-                    <th>Last Name</th>
-                    <th>Username</th>
+                    <th rowSpan={2}>Espace</th>
+                    <th rowSpan={2}>Nombre de tables</th>
+                    <th colSpan={2}>Prix</th>
+                    <th colSpan={2}>Réservés</th>
+                    <th rowSpan={2}>Restent</th>
+                </tr>
+                <tr>
+                    <th>Par tables</th>
+                    <th>Par m²</th>
+                    <th>Par tables</th>
+                    <th>Par m²</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <th scope="row">1</th>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
-                </tr>
-                <tr>
-                    <th scope="row">2</th>
-                    <td>Jacob</td>
-                    <td>Thornton</td>
-                    <td>@fat</td>
-                </tr>
-                <tr>
-                    <th scope="row">3</th>
-                    <td>Larry</td>
-                    <td>the Bird</td>
-                    <td>@twitter</td>
-                </tr>
+                {festival.emplacements && festival.emplacements.map((emplacement) => {
+                    return (
+                        <tr>
+                            <td>{emplacement.libelleEmplacement}</td>
+                            <td>{emplacement.nombreTablesPrevues}</td>
+                            <td>{emplacement.coutTable}</td>
+                            <td>{emplacement.coutMetreCarre}</td>
+                            <td>{emplacement.numberTables}</td>
+                            <td>{emplacement.numberSquareMeters}</td>
+                            <td>{emplacement.availableTables}</td>
+                        </tr>
+                    )
+                })}
                 </tbody>
             </Table>
             <Button
-                block
+                className="mb-3"
+                outline
                 color="default"
                 type="button"
-                onClick={() => setModalUpdate(!modalUpdate)}
+                onClick={() => setModalState(!modalState)}
             >
                 Modifier
             </Button>
-
-            <Modal
-                className="modal-dialog-centered"
-                size="xl"
-                isOpen={modalUpdate}
-                toggle={() => setModalUpdate(!modalUpdate)}
-            >
-                <div className="modal-body p-0">
-                    <Card className="bg-secondary shadow border-0">
-                        <Form role="form">
-                            <CardHeader className="bg-transparent pb-5">
-                                <div className="text-muted text-center mt-2 mb-3">
-                                    Nom du Festival
-                                </div>
-                                <FormGroup className="mb-3">
-                                    <Row className="text-center">
-                                        <Col md="8">
-                                            <InputGroup className="input-group-alternative">
-                                                <InputGroupAddon addonType="prepend">
-                                                    <InputGroupText>
-                                                        <i className="ni ni-badge"/>
-                                                    </InputGroupText>
-                                                </InputGroupAddon>
-                                                <Input placeholder="Nom du festival ..." type="text"/>
-                                            </InputGroup>
-                                        </Col>
-                                        <Col>
-                                            <Button
-                                                outline
-                                                color="success"
-                                                type="button"
-                                            >
-                                                Sauvegarder
-                                            </Button>
-                                        </Col>
-                                    </Row>
-                                </FormGroup>
-                            </CardHeader>
-                            <CardBody className="px-lg-5 py-lg-5">
-                                <div className="text-muted text-center mt-2 mb-3">
-                                    Emplacements du Festival
-                                </div>
-                                <div className="btn-wrapper text-center my-4">
-                                    <Button
-                                        outline
-                                        color="danger"
-                                        onClick={() => setModalUpdate(!modalUpdate)}
-                                    >
-                                        Annuler
-                                    </Button>
-                                    <Button
-                                        outline
-                                        color="success"
-                                        type="button"
-                                    >
-                                        Sauvegarder
-                                    </Button>
-                                </div>
-                            </CardBody>
-                        </Form>
-                    </Card>
-                </div>
-            </Modal>
-        </>
-    )
-        ;
+            <CreateUpdateFestival modalState={modalState} setModalState={setModalState}/>
+        </div>
+    );
 }
 
 export default Festival

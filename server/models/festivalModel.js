@@ -2,6 +2,7 @@ const DB = require('../config/config')
 
 const Zone = require('./zoneModel')
 const Emplacement = require('./emplacementModel')
+const EspaceReserve = require('./espaceReserveModel')
 
 // Update the festival that is the current one, and pass it at false
 changeCurrentStateFestival = async (client) => {
@@ -44,6 +45,8 @@ module.exports = {
         } catch (err) {
             // Something wrong happened, we rollback
             await client.query('ROLLBACK')
+            // The controller will handle this
+            throw err
         } finally {
             // We release the client in the pool
             client.release()
@@ -65,6 +68,8 @@ module.exports = {
         } catch (err) {
             // Something wrong happened, we rollback
             await client.query('ROLLBACK')
+            // The controller will handle this
+            throw err
         } finally {
             // We release the client in the pool
             client.release()
@@ -89,12 +94,45 @@ module.exports = {
     // Retrieve all the festivals, their emplacements and the reserved space
     retrieveFestivals: async () => {
         const client = await DB.pool.connect()
-        const queryText = 'SELECT * FROM "Festival" JOIN "Emplacement" ON "idFestival" = "FK_idFestival" JOIN "EspaceReserve" ON "idEmplacement" = "FK_idEmplacement";'
-
-        return (await client.query(queryText)).rows
-
-    },
-
-
-
+        let festivals = []
+        try {
+            // First, we retrieve all the festivals
+            let queryText = 'SELECT * FROM "Festival" ORDER BY "dateCreation" DESC;'
+            festivals = (await client.query(queryText)).rows;
+            // Then all the emplacements of each festival
+            let emplacements
+            for (let i = 0; i < festivals.length; i++) {
+                // We retrieve the emplacements of the festival
+                emplacements = (await Emplacement.retrieveEmplacements(festivals[i].idFestival))
+                festivals[i].emplacements = emplacements
+                // Now we retrieve the reserved spaces from each emplacements
+                let reservedSpaces
+                let numberTables
+                let numberSquareMeters
+                for (let j = 0; j < emplacements.length; j++) {
+                    reservedSpaces = (await EspaceReserve.retrieveReservedSpaces(emplacements[j].idEmplacement,client))
+                    // Now we calculate how much tables and square meters reserved we have for each emplacement
+                    numberTables = 0
+                    numberSquareMeters = 0
+                    for(let z = 0; z < reservedSpaces.length; z++){
+                        numberTables += reservedSpaces[z].nombreTables
+                        numberSquareMeters += reservedSpaces[z].metreCarres
+                    }
+                    festivals[i].emplacements[j].numberTables = numberTables
+                    festivals[i].emplacements[j].numberSquareMeters = numberSquareMeters
+                    festivals[i].emplacements[j].availableTables = emplacements[j].nombreTablesPrevues -
+                        (numberTables + (numberSquareMeters/6))
+                }
+            }
+        } catch (err) {
+            // Something wrong happened, we rollback
+            await client.query('ROLLBACK')
+            // The controller will handle this
+            throw err
+        } finally {
+            // We release the client in the pool
+            client.release()
+        }
+        return festivals
+    }
 }

@@ -24,12 +24,10 @@ function App() {
   return (
       <div className="App">
 
-
-
           <header className="App-header">
           </header>
-          <Navigation typeUser ={1}  />
 
+          <Navigation typeUser ={1}  />
 
           <Switch>
             <Route path="/Accueil" exact component={Home}/>
