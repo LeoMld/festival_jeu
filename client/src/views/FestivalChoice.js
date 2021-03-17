@@ -9,18 +9,20 @@ import {
 
 import useAxios from "../utils/useAxios";
 import Axios from "axios";
+import Waiting from "../components/utils/Waiting";
+import CreateUpdateFestival from "../components/festival/createUpdateFestival";
 
 function FestivalChoice() {
 
     const {data: festivals, setData: setFestivals, pending, error} = useAxios('/api/gestion/AllFestivals');
 
-    // TODO pending + error
+    // TODO error
     // TODO add or update festival
 
-    const [modalUpdate, setModalUpdate] = useState(false)
+    const [modalState, setModalState] = useState(false)
 
+    // Change the current festival to the one given in parameter
     const changeCurrentFestival = (idFestival) => {
-        // Change the current festival to the one given in parameter
         Axios.put('/api/gestion/changeCurrentfestival/' + idFestival)
             .then(res => {
                 // We update the festivals here
@@ -46,13 +48,14 @@ function FestivalChoice() {
                     <Button
                         color="success"
                         type="button"
-                        onClick={() => setModalUpdate(!modalUpdate)}
+                        onClick={() => setModalState(!modalState)}
                     >
                         Nouveau Festival
                     </Button>
                 </Col>
+                <CreateUpdateFestival modalState = {modalState} setModalState = {setModalState} componentState={0}/>
             </Row>
-            {festivals && festivals.map((festival, index) => {
+            {festivals ? festivals.map((festival, index) => {
                 return (
                     <Row className="mb-5">
                         <Col>
@@ -60,7 +63,7 @@ function FestivalChoice() {
                         </Col>
                     </Row>
                 )
-            })}
+            }) : <Waiting name = "Festivals"/>}
         </div>
     )
 }

@@ -15,8 +15,9 @@ function Festival(props) {
     const [festival] = useState(props.festival)
 
     return (
-        <div className={"container justify-content-center table-bordered table-striped table-active"+ (festival.currentFestival ?
-            ' border-darker' : ' border-light')}>
+        <div
+            className={"container justify-content-center table-bordered table-striped table-active" + (festival.currentFestival ?
+                ' border-darker' : ' border-light')}>
             <Row>
                 <Col>
                     <h2 className="font-weight-bold font-italic">{festival.nameFestival}</h2>
@@ -72,9 +73,9 @@ function Festival(props) {
             >
                 Modifier
             </Button>
-            <CreateUpdateFestival modalState={modalState} setModalState={setModalState}/>
+            <CreateUpdateFestival modalState={modalState} setModalState={setModalState} componentState={1}/>
         </div>
-    );
+    )
 }
 
 export default Festival
