@@ -7,10 +7,12 @@ import useAxios from "../../utils/useAxios";
 import Waiting from '../utils/Waiting'
 import ModalGame from '../game/ModalGame'
 import Selector from "../utils/Selector";
+import Axios from "axios";
 
 
 
 function GameList(props) {
+
 
     //the state to see a game trough a modal
     const [modalState, setModalState] = useState(false)
@@ -21,11 +23,26 @@ function GameList(props) {
     //states related to all the games
     const {data: games, setData: setGames, isPending, error} = useAxios("/api/games")
 
+    //if there is an error when deleting
+    const [errorDeleting , setErrorDeleting] = useState(false)
+
     const openModal = (game) =>{
         setModalState(!modalState)
         setGameModal(game)
 
     };
+
+    //TODO delete a game
+    const deleteGame = (idJeu)=>{
+        /*Axios.delete('/api/games/'+idJeu)
+            .then(res => {
+                props.setModalState(!props.modalState)
+                setIsChanging(false)
+            }).catch(e => {
+            setIsChanging(false)
+            setError(true)
+        })*/
+    }
 
 
     return(

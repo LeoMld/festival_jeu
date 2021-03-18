@@ -3,6 +3,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
+const expressSanitizer = require('express-sanitizer');
 
 const app = express();
 
@@ -14,6 +15,7 @@ else {
     // TODO We are in production
 }
 
+app.use(expressSanitizer());
 app.use(logger('dev'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());

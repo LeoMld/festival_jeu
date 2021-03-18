@@ -1,5 +1,44 @@
+const usersModel = require("../models/utilisateurModel")
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
+const jwt = require('../utils/token')
+
 module.exports = {
-    home: (req,res) => {
+    home: async (req,res) => {
         res.json({ response : "Yes, it works, thanks." })
-    }
+    },
+
+    login : async (req, res)=>{
+        let data = {exist : false,match : false}
+
+        //sanitize the request
+        const email = req.sanitize(req.body.email);
+        const password = req.sanitize(req.body.password);
+
+        //search if the user exist
+        try{
+            const user = await usersModel.searchUser(email)
+            let token = null
+
+            //if an user exist
+            if(user[0]){
+                data.exist = true
+                const match = await bcrypt.compare(password, user[0].mdpUtilisateur);
+                //if it's the good password
+                if(match){
+                    data.match = true
+                    token = jwt.connect(req,res,user[0].idUtilisateur,user[0].typeUtilisateur)
+                    res.status(200).json({token : token,data : data})
+                }else{
+                    res.status(200).json({token : token,data : data})
+                }
+            }else{
+                res.status(200).json({token : token,data : data})
+            }
+        }catch (err){
+            res.status(503).json({error: err})
+        }
+
+    },
+
 }
