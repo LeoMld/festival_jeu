@@ -26,6 +26,7 @@ function App() {
       <div className="App">
 
           <header className="App-header">
+              <meta name="viewport" content="width=device-width, initial-scale=1"/>
           </header>
 
           <Navigation typeUser ={1}  />

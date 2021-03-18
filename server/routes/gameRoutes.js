@@ -4,8 +4,8 @@ const router = express.Router();
 // We import the controller of the gestion routes
 const gameController = require('../controllers/gameController');
 
-router.get('/allGames', gameController.getAllGames)
-router.put('/changePrototype', gameController.changePrototype)
-router.put('/changeGame', gameController.changeGame)
+router.get('/', gameController.getAllGames)
+
+router.put('/:id', gameController.handleGame)
 
 module.exports = router;

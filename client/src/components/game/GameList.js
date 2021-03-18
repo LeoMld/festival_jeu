@@ -1,12 +1,12 @@
 import React, {useState, useEffect} from 'react'
 
 import {
-    Container, Modal, Button
+    Container, Modal, Button, Alert
 } from 'reactstrap';
 import useAxios from "../../utils/useAxios";
 import Waiting from '../utils/Waiting'
 import ModalGame from '../game/ModalGame'
-import SelectorPrototype from "./SelectorPrototype";
+import Selector from "../utils/Selector";
 
 
 
@@ -19,7 +19,7 @@ function GameList(props) {
     const [gameModal, setGameModal] = useState()
 
     //states related to all the games
-    const {data: games, setData: setGames, isPending, error} = useAxios("/api/game/allGames")
+    const {data: games, setData: setGames, isPending, error} = useAxios("/api/games")
 
     const openModal = (game) =>{
         setModalState(!modalState)
@@ -37,26 +37,26 @@ function GameList(props) {
                 <tr>
                     <th className="text-center">#</th>
                     <th>Titre</th>
-                    <th>Nombre de joueurs</th>
-                    <th>Âge minimum</th>
-                    <th>Durée</th>
+                    <th className="d-none d-lg-table-cell">Nombre de joueurs</th>
+                    <th className="d-none d-lg-table-cell">Âge minimum</th>
+                    <th className="d-none d-lg-table-cell">Durée</th>
                     {props.isAdmin && <th >Prototype</th>}
                     {props.isAdmin && <th >Action</th>}
 
                 </tr>
                 </thead>
-                <tbody className="hidden-xs-down">
+                <tbody>
 
                     {games && games.data.map((game, index) => {
                         return(
-                            <tr >
+                            <tr key={index}>
                                 <td className="text-center">{index}</td>
                                 <td>{game.libelleJeu}</td>
-                                <td>{game.nombreJoueur}</td>
-                                <td>{game.ageMinimum}</td>
-                                <td >{game.duree}</td>
-                                {props.isAdmin && <SelectorPrototype game={game}/>}
-                                {props.isAdmin && <td className="td-actions text-right">
+                                <td className="d-none d-lg-table-cell">{game.nombreJoueur}</td>
+                                <td className="d-none d-lg-table-cell">{game.ageMinimum}</td>
+                                <td className="d-none d-lg-table-cell">{game.duree}</td>
+                                {props.isAdmin && <Selector url={'/api/games/'+game.idJeu} bool={game.prototype}/>}
+                                {props.isAdmin && <td className="td-actions text-right d-flex">
                                     <button type="button" rel="tooltip" className="btn btn-info btn-icon btn-sm "
                                             data-original-title="" title="modify game" onClick={() => openModal(game)}>
                                         <i className="ni ni-circle-08 pt-1"></i>
@@ -81,7 +81,9 @@ function GameList(props) {
             }
 
             {games && <ModalGame game={gameModal} setGame={setGameModal} modalState={modalState} setModalState={setModalState}/>}
-
+            {error && <Alert color="danger">
+                Erreur lors du changement des données, veuillez recharger la page et réessayer
+            </Alert> }
 
 
         </Container>

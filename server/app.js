@@ -30,6 +30,6 @@ const gameRoutes = require('./routes/gameRoutes')
 // This is all our routes on the back-end
 app.use('/api/', homeRoutes);
 app.use('/api/gestion/',gestionRoutes);
-app.use('/api/game/',gameRoutes);
+app.use('/api/games/',gameRoutes);
 
 module.exports = app;
