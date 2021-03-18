@@ -36,12 +36,14 @@ module.exports = {
             await Zone.createNewZone("Zone - Indéfinie", newFestival.idFestival, client)
             // We need to create the emplacements
             let emp
+            newFestival.emplacements = [emplacements.length]
             for (let i = 0; i < emplacements.length; i++) {
                 emp = emplacements[i]
-                await Emplacement.createEmplacement(emp.libelleEmplacement, emp.coutTable, emp.coutMetreCarre,
-                    emp.nombreTablesPrevues, newFestival.idFestival, client)
+                newFestival.emplacements[i] = (await Emplacement.createEmplacement(emp.libelleEmplacement, parseFloat(emp.coutTable),
+                    parseFloat(emp.coutMetreCarre), parseInt(emp.nombreTablesPrevues), newFestival.idFestival, client)).rows[0]
             }
             await client.query('COMMIT')
+            return newFestival
         } catch (err) {
             // Something wrong happened, we rollback
             await client.query('ROLLBACK')
@@ -97,7 +99,7 @@ module.exports = {
         let festivals = []
         try {
             // First, we retrieve all the festivals
-            let queryText = 'SELECT * FROM "Festival" ORDER BY "dateCreation" DESC;'
+            let queryText = 'SELECT * FROM "Festival" ORDER BY "currentFestival" DESC, "dateCreation" DESC, "idFestival" DESC;'
             festivals = (await client.query(queryText)).rows;
             // Then all the emplacements of each festival
             let emplacements
@@ -110,23 +112,21 @@ module.exports = {
                 let numberTables
                 let numberSquareMeters
                 for (let j = 0; j < emplacements.length; j++) {
-                    reservedSpaces = (await EspaceReserve.retrieveReservedSpaces(emplacements[j].idEmplacement,client))
+                    reservedSpaces = (await EspaceReserve.retrieveReservedSpaces(emplacements[j].idEmplacement, client))
                     // Now we calculate how much tables and square meters reserved we have for each emplacement
                     numberTables = 0
                     numberSquareMeters = 0
-                    for(let z = 0; z < reservedSpaces.length; z++){
+                    for (let z = 0; z < reservedSpaces.length; z++) {
                         numberTables += reservedSpaces[z].nombreTables
                         numberSquareMeters += reservedSpaces[z].metreCarres
                     }
                     festivals[i].emplacements[j].numberTables = numberTables
                     festivals[i].emplacements[j].numberSquareMeters = numberSquareMeters
                     festivals[i].emplacements[j].availableTables = emplacements[j].nombreTablesPrevues -
-                        (numberTables + (numberSquareMeters/6))
+                        (numberTables + (numberSquareMeters / 6))
                 }
             }
         } catch (err) {
-            // Something wrong happened, we rollback
-            await client.query('ROLLBACK')
             // The controller will handle this
             throw err
         } finally {

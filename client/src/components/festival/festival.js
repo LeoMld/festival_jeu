@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 
 import {
     Table,
@@ -8,11 +8,20 @@ import {
 } from 'reactstrap';
 
 import CreateUpdateFestival from "./createUpdateFestival";
+import Waiting from "../utils/Waiting";
 
 function Festival(props) {
 
     const [modalState, setModalState] = useState(false)
-    const [festival] = useState(props.festival)
+    const [festival, setFestival] = useState(props.festival)
+    // Used to only have the spinner on the clicked festival
+    const [click, setClick] = useState(false)
+
+    // We change the festival
+    useEffect(() => {
+        !props.isChanging && (setClick(false))
+        setFestival(props.festival)
+    })
 
     return (
         <div
@@ -23,13 +32,18 @@ function Festival(props) {
                     <h2 className="font-weight-bold font-italic">{festival.nameFestival}</h2>
                 </Col>
                 <Col className="mt-2">
-                    {!festival.currentFestival ? <Button
-                        outline
-                        onClick={() => {
-                            props.changeCurrentFestival(festival.idFestival)
-                        }}>
-                        Définir Festival Courant
-                    </Button> : <p className="text-primary font-weight-bold">Ce festival est le festival courant</p>}
+                    {!festival.currentFestival ?
+                        ((props.isChanging && click) ? <Waiting/> :
+                            <Button
+                                outline
+                                color="primary"
+                                onClick={() => {
+                                    setClick(true)
+                                    props.changeCurrentFestival(festival.idFestival)
+                                }}>
+                                Définir Festival Courant
+                            </Button>) :
+                        <p className="text-primary font-weight-bold">Ce festival est le festival courant</p>}
                 </Col>
             </Row>
             <Table className="table-light">
@@ -39,7 +53,7 @@ function Festival(props) {
                     <th rowSpan={2}>Nombre de tables</th>
                     <th colSpan={2}>Prix</th>
                     <th colSpan={2}>Réservés</th>
-                    <th rowSpan={2}>Restent</th>
+                    <th rowSpan={2}>Reste</th>
                 </tr>
                 <tr>
                     <th>Par tables</th>
@@ -73,7 +87,9 @@ function Festival(props) {
             >
                 Modifier
             </Button>
-            <CreateUpdateFestival modalState={modalState} setModalState={setModalState} componentState={1}/>
+            <CreateUpdateFestival modalState={modalState}
+                                  setModalState={setModalState}
+                                  componentState={1}/>
         </div>
     )
 }
