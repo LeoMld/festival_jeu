@@ -32,17 +32,39 @@ module.exports = {
             // All good, we create the festival
             Festival.createFestival(nameFestival, emplacements)
                 .then((newFestival) => {
-                    res.json({
+                    res.status(200).json({
                         generalStatus: err.generalStatus,
                         newFestival
                     })
                 })
                 .catch((err) => {
-                    // TODO erreur serveur
-                    console.log("Erreur serveur ...")
+                    res.status(503).json({error: "Une erreur est survenue, veuillez réessayer."})
                 })
         } else {
-            res.json(err)
+            res.status(200).json(err)
+        }
+    },
+
+    updateFestival: (req, res) => {
+        const body = req.body
+        const nameFestival = body.nameFestival
+        const idFestival = body.idFestival
+        const err = FestivalUtils.checkFestivalName(nameFestival)
+        if (!err) {
+            // The name is correct, we update
+            Festival.updateFestival(idFestival, nameFestival)
+                .then(() => {
+                    // All good, we tell the client
+                    res.status(200).json({
+                        generalStatus: 0
+                    })
+                })
+                .catch((err) => {
+                    res.status(503).json({error: "Une erreur est survenue, veuillez réessayer."})
+                })
+        } else {
+            // Name invalid
+            res.status(200).json({generalStatus: 1})
         }
     }
 }

@@ -89,7 +89,9 @@ function Festival(props) {
             </Button>
             <CreateUpdateFestival modalState={modalState}
                                   setModalState={setModalState}
-                                  componentState={1}/>
+                                  componentState={1}
+                                  festival={festival}
+                                  updateFestival={props.updateFestival}/>
         </div>
     )
 }

@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState} from 'react'
 
 import Festival from "../components/festival/festival";
 import {
@@ -18,7 +18,6 @@ function FestivalChoice() {
     const [isChanging, setIsChanging] = useState(false)
 
     // TODO error
-    // TODO update festival
 
     const [modalState, setModalState] = useState(false)
 
@@ -53,6 +52,17 @@ function FestivalChoice() {
         setFestivals([newFestival, ...festivals])
     }
 
+    // Update the name of the festival on the view
+    const updateFestival = (idFestival, nameFestival) => {
+        const updateFestivals = [...festivals];
+        updateFestivals.forEach(f => {
+            if (f.idFestival === idFestival) {
+                f.nameFestival = nameFestival
+            }
+        })
+        setFestivals(updateFestivals)
+    }
+
     return (
         <div className="container justify-content-center">
             <Row className="mb-5 mt-5">
@@ -79,7 +89,8 @@ function FestivalChoice() {
                         <Col>
                             <Festival festival={festival}
                                       changeCurrentFestival={changeCurrentFestival}
-                                      isChanging={isChanging}/>
+                                      isChanging={isChanging}
+                                      updateFestival={updateFestival}/>
                         </Col>
                     </Row>
                 )

@@ -46,5 +46,10 @@ module.exports = {
             }
         }
         return error
+    },
+
+    // We check if the name of the festival is correct
+    checkFestivalName : (nameFestival) => {
+        return (nameFestival.length <= 2 || nameFestival.length >= 50)
     }
 }

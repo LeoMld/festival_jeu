@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import Axios from 'axios'
 
 import {
@@ -18,7 +18,7 @@ import Waiting from "../utils/Waiting";
 
 function CreateUpdateFestival(props) {
 
-    // A new emplacement
+    // A new row that is an emplacement
     const emptyRow = {
         libelleEmplacement: "",
         coutTable: "",
@@ -26,7 +26,7 @@ function CreateUpdateFestival(props) {
         nombreTablesPrevues: ""
     }
 
-    // Row to indicate the errors in an emplacement
+    // A new row to indicate the errors in an emplacement
     const emptyRowErr = {
         libelleEmplacementErr: 0,
         coutTableErr: 0,
@@ -34,17 +34,60 @@ function CreateUpdateFestival(props) {
         nombreTablesPrevuesErr: 0,
     }
 
-    // Emplacements
-    const [rowsInput, setRowInput] = useState([emptyRow])
-    const [nameFestival, setNameFestival] = useState("")
-    const [isCreating, setIsCreating] = useState(false)
+    // Init the fields with the festival info
+    const initInputsUpdate = (festival) => {
+        const emplacements = festival.emplacements
+        const rows = [emplacements.length]
+        for (let i = 0; i < emplacements.length; i++) {
+            rows[i] = [emptyRow]
+            rows[i].libelleEmplacement = emplacements[i].libelleEmplacement
+            rows[i].coutTable = emplacements[i].coutTable
+            rows[i].coutMetreCarre = emplacements[i].coutMetreCarre
+            rows[i].nombreTablesPrevues = emplacements[i].nombreTablesPrevues
+        }
+        return rows
+    }
+
+    // Init the errors for the festival
+    const initInputErrorsUpdate = (festival) => {
+        const emplacements = festival.emplacements
+        const rowsErr = {
+            nameFestivalErr: 0,
+            generalStatus: 0,
+            emplacementsErr: [emplacements.length]
+        }
+        for (let i = 0; i < emplacements.length; i++) {
+            rowsErr.emplacementsErr[i] = emptyRowErr
+        }
+        return rowsErr
+    }
+
+    // The festival displayed, if we're updating
+    const [festival, setFestival] = useState(props.festival)
+    // Name of the festival
+    const [nameFestival, setNameFestival] = useState(props.componentState === 1 ? festival.nameFestival : "")
+    // The inputs for the emplacements
+    const [rowsInput, setRowInput] = useState(props.componentState === 1 ? initInputsUpdate(festival) : [emptyRow])
     // To handle the errors the server spots
-    const [errInputs, setErrInputs] = useState({
-        idFestival: 0,
-        generalStatus: 0,
-        nameFestivalErr: 0,
-        emplacementsErr: [emptyRowErr]
-    })
+    const [errInputs, setErrInputs] = useState(props.componentState === 1 ? initInputErrorsUpdate(festival)
+        : {
+            generalStatus: 0,
+            nameFestivalErr: 0,
+            emplacementsErr: [emptyRowErr]
+        })
+    // Waiting for server action
+    const [isCharging, setIsCharging] = useState(false)
+
+    // We change the festival
+    useEffect(() => {
+        setFestival(props.festival)
+        if (props.componentState === 1) {
+            setNameFestival(props.festival.nameFestival)
+            setRowInput(initInputsUpdate(props.festival))
+            setErrInputs(initInputErrorsUpdate(props.festival))
+        }
+
+    }, [props.festival])
 
     // We add a new row, a new emplacement
     const addRow = () => {
@@ -66,7 +109,7 @@ function CreateUpdateFestival(props) {
         }
     }
 
-    // Update the content of the inputs
+    // Update the content of the emplacements inputs
     const updateInputState = (event, index) => {
         let newValue = [...rowsInput]
         newValue[index][event.target.id] = event.target.value
@@ -77,16 +120,27 @@ function CreateUpdateFestival(props) {
         setErrInputs(newErrInputs);
     }
 
+    // Clear all the inputs
+    const setDefaultInput = () => {
+        setRowInput([emptyRow])
+        setErrInputs({
+            idFestival: 0,
+            generalStatus: 0,
+            nameFestivalErr: 0,
+            emplacementsErr: [emptyRowErr]
+        })
+        setNameFestival("")
+    }
+
     // Send the request to the server to create the festival
     const createFestival = () => {
-        setIsCreating(true)
+        setIsCharging(true)
         const data = {
             nameFestival,
             emplacements: rowsInput
         }
         Axios.post('/api/gestion/createFestival', data)
             .then(({data}) => {
-                setIsCreating(false)
                 switch (data.generalStatus) {
                     case 0:
                         // We add the new festival in the parent component
@@ -106,19 +160,36 @@ function CreateUpdateFestival(props) {
                         setErrInputs(data)
                         break
                 }
+                setIsCharging(false)
             })
     }
 
-    // Clear all the inputs
-    const setDefaultInput = () => {
-        setRowInput([emptyRow])
-        setErrInputs({
-            idFestival: 0,
-            generalStatus: 0,
-            nameFestivalErr: 0,
-            emplacementsErr: [emptyRowErr]
-        })
-        setNameFestival("")
+    // Send a request to the server to update a festival
+    const updateNameFestival = () => {
+        setIsCharging(true)
+        const data = {
+            nameFestival,
+            idFestival: festival.idFestival
+        }
+        Axios.put('/api/gestion/updateFestival', data)
+            .then(({data}) => {
+                switch (data.generalStatus) {
+                    case 0:
+                        // Everything went perfectly
+                        props.setModalState(false)
+                        // We change it in the parent component
+
+                        props.updateFestival(festival.idFestival, nameFestival)
+                        break;
+                    case 1:
+                        // An error occured
+                        const newErrInputs = errInputs
+                        errInputs.nameFestivalErr = 1
+                        setErrInputs(newErrInputs)
+                        break;
+                }
+                setIsCharging(false)
+            })
     }
 
     return (
@@ -133,8 +204,9 @@ function CreateUpdateFestival(props) {
                     <Card className="bg-secondary shadow border-0">
                         <Form role="form">
                             <CardHeader className="bg-transparent pb-5">
-                                <h1 className="text-center text-xl-center font-weight-900">Créer un nouveau
-                                    festival</h1>
+                                <h1 className="text-center text-xl-center font-weight-900">{props.componentState == 0 ?
+                                    "Créer un nouveau festival" :
+                                    "Modifier un festival"}</h1>
                                 <div className="text-muted text-center mt-2 mb-3">
                                     Nom du Festival
                                 </div>
@@ -163,6 +235,7 @@ function CreateUpdateFestival(props) {
                                                 outline
                                                 color="success"
                                                 type="button"
+                                                onClick={() => updateNameFestival()}
                                             >
                                                 Sauvegarder
                                             </Button>
@@ -178,6 +251,7 @@ function CreateUpdateFestival(props) {
                                             nombre de tables prévues)
                                         </div>
                                     </Col>
+                                    {props.componentState === 0 &&
                                     <Col>
                                         <Button className="btn-icon btn-2" size="sm" color="danger" type="button"
                                                 onClick={() => deleteRow()}>
@@ -191,7 +265,7 @@ function CreateUpdateFestival(props) {
                                                 <i className="ni ni-fat-add"/>
                                             </span>
                                         </Button>
-                                    </Col>
+                                    </Col>}
                                 </Row>
 
                                 {rowsInput.map((input, index) => {
@@ -203,6 +277,7 @@ function CreateUpdateFestival(props) {
                                                     <Input
                                                         placeholder="Nom de l'emplacement ..."
                                                         type="text"
+                                                        disabled={props.componentState === 1 && "disabled"}
                                                         className={(errInputs.emplacementsErr[index].libelleEmplacementErr === 1 && 'is-invalid')}
                                                         id='libelleEmplacement'
                                                         value={input.libelleEmplacement}
@@ -217,6 +292,7 @@ function CreateUpdateFestival(props) {
                                                         placeholder="Coût par table ..."
                                                         id='coutTable'
                                                         type="text"
+                                                        disabled={props.componentState === 1 && "disabled"}
                                                         className={(errInputs.emplacementsErr[index].coutTableErr === 1 && 'is-invalid')}
                                                         value={input.coutTable}
                                                         onChange={(event) => updateInputState(event, index)}
@@ -229,6 +305,7 @@ function CreateUpdateFestival(props) {
                                                     <Input
                                                         placeholder="Coût par m² ..."
                                                         id='coutMetreCarre'
+                                                        disabled={props.componentState === 1 && "disabled"}
                                                         type="text"
                                                         className={(errInputs.emplacementsErr[index].coutMetreCarreErr === 1 && 'is-invalid')}
                                                         value={input.coutMetreCarre}
@@ -242,6 +319,7 @@ function CreateUpdateFestival(props) {
                                                     <Input
                                                         placeholder="Nombre de tables prévues ..."
                                                         id='nombreTablesPrevues'
+                                                        disabled={props.componentState === 1 && "disabled"}
                                                         type="text"
                                                         className={(errInputs.emplacementsErr[index].nombreTablesPrevuesErr === 1 && 'is-invalid')}
                                                         value={input.nombreTablesPrevues}
@@ -252,14 +330,19 @@ function CreateUpdateFestival(props) {
                                         </Row>
                                     )
                                 })}
-                                {isCreating ? <Waiting name = "Création du festival"/> :
+                                {isCharging ? <Waiting
+                                        name={props.componentState === 0 ? "Création du festival" : "Mise à jour du festival"}/> :
                                     <div className="btn-wrapper text-center my-4">
                                         <Button
                                             outline
                                             color="danger"
                                             onClick={() => {
                                                 props.setModalState(!props.modalState)
-                                                setDefaultInput()
+                                                if (props.componentState === 0) {
+                                                    setDefaultInput()
+                                                } else {
+                                                    setNameFestival(festival.nameFestival)
+                                                }
                                             }}
                                         >
                                             Annuler
@@ -268,9 +351,11 @@ function CreateUpdateFestival(props) {
                                             outline
                                             color="success"
                                             type="button"
-                                            onClick={() => createFestival()}
-                                        >
-                                            Sauvegarder
+                                            onClick={() => {
+                                                (props.componentState === 0) ? createFestival()
+                                                    : updateNameFestival()
+                                            }}>
+                                            {props.componentState === 0 ? "Créer" : "Sauvegarder"}
                                         </Button>
                                     </div>}
                             </CardBody>

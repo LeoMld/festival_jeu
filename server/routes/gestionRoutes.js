@@ -10,6 +10,7 @@ const personController = require("../controllers/personController");
 router.get('/AllFestivals', gestionController.getAllFestivals)
 router.put('/changeCurrentFestival/:id', gestionController.changeCurrentFestival)
 router.post('/createFestival', gestionController.createFestival)
+router.put('/updateFestival', gestionController.updateFestival)
 
 router.get('/editeurs/', personController.getAllEditors)
 router.get('/editeurs/:id', personController.getEditorPage)
