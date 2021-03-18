@@ -45,7 +45,7 @@ function GameList(props) {
 
                 </tr>
                 </thead>
-                <tbody>
+                <tbody className="hidden-xs-down">
 
                     {games && games.data.map((game, index) => {
                         return(
@@ -80,10 +80,7 @@ function GameList(props) {
             <Waiting name={"games"}/>
             }
 
-            <button type="button" className="btn btn-primary" data-toggle="modal"
-                    data-target=".bd-example-modal-lg" onClick={() => setModalState(!modalState)}>Large modal
-            </button>
-            <ModalGame game={gameModal} setGame={setGameModal} modalState={modalState} setModalState={setModalState}/>
+            {games && <ModalGame game={gameModal} setGame={setGameModal} modalState={modalState} setModalState={setModalState}/>}
 
 
 

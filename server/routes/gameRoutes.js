@@ -6,5 +6,6 @@ const gameController = require('../controllers/gameController');
 
 router.get('/allGames', gameController.getAllGames)
 router.put('/changePrototype', gameController.changePrototype)
+router.put('/changeGame', gameController.changeGame)
 
 module.exports = router;

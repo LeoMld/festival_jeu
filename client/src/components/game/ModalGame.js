@@ -12,17 +12,43 @@ import {
     InputGroupText,
     Label
 } from "reactstrap";
-import React,{useEffect} from "react";
-
+import React,{useEffect, useState} from "react";
+import Axios from "axios";
+import Waiting from "../utils/Waiting";
 
 
 function ModalGame(props){
 
-    let localGame = props.game
+    //
+    const localGame = {}
 
-    /*useEffect(()=>{
-        props.setGame(localGame)
-    },[props.game])*/
+
+
+    const [isChanging, setIsChanging] = useState(false)
+    const [error, setError] = useState(false)
+
+
+    const handleChange = (game)=>{
+        setIsChanging(true)
+
+        props.game.libelleJeu = localGame.libelleJeu
+        props.game.duree = localGame.duree
+        props.game.nombreJoueur = localGame.nombreJoueur
+        props.game.ageMinimum = localGame.ageMinimum
+
+        Axios.put('/api/game/changeGame', {game})
+            .then(res => {
+                props.setModalState(!props.modalState)
+
+            }).catch(e => {
+                console.log("OK CA MARCHE PAS")
+        })
+        setIsChanging(false)
+
+
+    }
+
+
     return(
 
         <Modal
@@ -31,7 +57,7 @@ function ModalGame(props){
             isOpen={props.modalState}
             toggle={() => props.setModalState(!props.modalState)}
         >
-            <div className="modal-body p-0">
+            {!isChanging && <div className="modal-body p-0">
                 <Card className="bg-secondary shadow border-0">
                     <CardHeader className="bg-transparent pb-5">
                         <div className="text-muted text-center mt-2 mb-3">
@@ -48,7 +74,7 @@ function ModalGame(props){
                                             <i className="ni ni-app" />
                                         </InputGroupText>
                                     </InputGroupAddon>
-                                    <Input id="libelle" value={localGame.libelleJeu} placeholder="libelle du Jeu" type="text" />
+                                    <Input id="libelle" onChange={e=>{localGame.libelleJeu = e.target.value}} defaultValue={props.game.libelleJeu} placeholder="libelle du Jeu" type="text" />
                                 </InputGroup>
                             </FormGroup>
                             <FormGroup className="mb-3">
@@ -60,7 +86,7 @@ function ModalGame(props){
                                         </InputGroupText>
                                     </InputGroupAddon>
 
-                                    <Input id="nombreJoueur" type="select" value={localGame.nombreJoueur}  name="select" >
+                                    <Input onChange={e=>{localGame.nombreJoueur = e.target.value}} id="nombreJoueur" type="select" defaultValue={props.game.nombreJoueur}  name="select" >
                                         <option>1</option>
                                         <option>2</option>
                                         <option>3</option>
@@ -81,7 +107,7 @@ function ModalGame(props){
                                         </InputGroupText>
                                     </InputGroupAddon>
 
-                                    <Input id="age" type="select" value={localGame.ageMinimum}  name="select" >
+                                    <Input onChange={e=>{localGame.ageMinimum = e.target.value}} id="age" type="select" defaultValue={props.game.ageMinimum}  name="select" >
                                         <option>2</option>
                                         <option>5</option>
                                         <option>8</option>
@@ -102,13 +128,13 @@ function ModalGame(props){
                                         </InputGroupText>
                                     </InputGroupAddon>
 
-                                    <Input value={localGame.duree} id="duree" placeholder="durée" type="text" />
+                                    <Input onChange={e=>{localGame.duree = e.target.value}} defaultValue={props.game.duree} id="duree" placeholder="durée" type="text" />
                                 </InputGroup>
                             </FormGroup>
 
                             <div className="text-center">
                                 <Button
-                                    onClick={()=>{props.setGame(localGame)}}
+                                    onClick={()=>{handleChange(props.game)}}
                                     className="my-4"
                                     color="primary"
                                     type="button"
@@ -119,8 +145,13 @@ function ModalGame(props){
                         </Form>}
                     </CardBody>
                 </Card>
-            </div>
+            </div>}
+            {isChanging && <Waiting className="mt-md" name={"Change"} />}
         </Modal>
+
+
+
+
     )
 }
 
