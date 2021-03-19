@@ -63,19 +63,39 @@ function Festival(props) {
                 </tr>
                 </thead>
                 <tbody>
-                {festival.emplacements && festival.emplacements.map((emplacement) => {
+                {festival.emplacements && festival.emplacements.map((emplacement, index) => {
                     return (
-                        <tr>
+                        <tr key={index}>
                             <td>{emplacement.libelleEmplacement}</td>
                             <td>{emplacement.nombreTablesPrevues}</td>
-                            <td>{emplacement.coutTable}</td>
-                            <td>{emplacement.coutMetreCarre}</td>
+                            <td>{emplacement.coutTable}€</td>
+                            <td>{emplacement.coutMetreCarre}€</td>
                             <td>{emplacement.numberTables}</td>
                             <td>{emplacement.numberSquareMeters}</td>
                             <td>{emplacement.availableTables}</td>
                         </tr>
                     )
                 })}
+                <tr className="">
+                    <th>
+                        Total :
+                    </th>
+                    <th>
+                        {festival.numberTablesTotal}
+                    </th>
+                    <th colSpan={2}>
+                        {festival.priceReservationTotal}€
+                    </th>
+                    <th>
+                        {festival.numberTablesReservedTotal}
+                    </th>
+                    <th>
+                        {festival.numberSquareMetersReservedTotal}
+                    </th>
+                    <th>
+                        {festival.availableTotal}
+                    </th>
+                </tr>
                 </tbody>
             </Table>
             <Button
