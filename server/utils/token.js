@@ -10,21 +10,29 @@ module.exports = {
         }, process.env.JWT_SIGN, {
             expiresIn: '1h'
         });
+
         return token
 
     },
 
-    isAdmin : async (token)=>{
-        jwt.verify(token, process.env.JWT_SIGN, function(err, decoded) {
-            console.log(decoded.type)
-            return decoded.type === 1
-        })
-    },
 
-    isOrganisateur: async (token)=>{
-        jwt.verify(token, process.env.JWT_SIGN, function(err, decoded) {
-            console.log(decoded.type)
-            return decoded.type === 0
-        })
+    getStatus: async (token)=>{
+        try{
+            const decoded = jwt.verify(token, process.env.JWT_SIGN)
+
+            if(decoded.type){
+                console.log(decoded.type)
+                return await decoded.type
+            }else{
+                console.log("je suis ici")
+                return 2
+            }
+        }catch (err){
+            return 2
+            console.log(err)
+        }
+
+
+
     }
 }

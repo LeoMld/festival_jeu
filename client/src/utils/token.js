@@ -9,5 +9,11 @@ module.exports = {
     //get the token from local storage
     getToken: ()=>{
         return(localStorage.getItem("token"))
+    },
+
+    //destroy the token
+    destroyToken: ()=>{
+        localStorage.removeItem("token")
     }
+
 }
