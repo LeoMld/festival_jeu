@@ -78,7 +78,7 @@ module.exports = {
     },
 
     // Update the name of a festival
-    updateFestival: async (idFestival, nameFestival, client) => {
+    updateNameFestival: async (idFestival, nameFestival, client) => {
         const clientUsed = await DB.getPoolClient(client)
         const queryText = 'UPDATE "Festival" SET "nameFestival" = $2 WHERE "idFestival" = $1;'
         const queryValues = [idFestival, nameFestival]

@@ -57,17 +57,17 @@ module.exports = {
             res.status(200).json(festivals)
         } catch (err) {
             // An error occured
-            res.status(503).json({error: "Une erreur est survenue, veuillez réessayer."})
+            res.status(503).json()
         }
     },
 
     // The client wants to update the current festival
     changeCurrentFestival: (req, res) => {
         const idFestival = req.params.id
-        Festival.changeCurrentFestival(idFestival).then(result => {
-            res.status(200).json({success: true})
-        }).catch((err) => {
-            res.status(503).json({error: "Une erreur est survenue, veuillez réessayer."})
+        Festival.changeCurrentFestival(idFestival).then(() => {
+            res.status(200).json()
+        }).catch(() => {
+            res.status(503).json()
         })
     },
 
@@ -102,30 +102,31 @@ module.exports = {
                         newFestival
                     })
                 })
-                .catch((err) => {
-                    res.status(503).json({error: "Une erreur est survenue, veuillez réessayer."})
+                .catch(() => {
+                    res.status(503).json()
                 })
         } else {
             res.status(200).json(err)
         }
     },
 
-    updateFestival: (req, res) => {
+    // The client wants to change the name of a festival
+    updateNameFestival: (req, res) => {
         const body = req.body
         const nameFestival = body.nameFestival
         const idFestival = body.idFestival
         const err = FestivalUtils.checkFestivalName(nameFestival)
         if (!err) {
             // The name is correct, we update
-            Festival.updateFestival(idFestival, nameFestival)
+            Festival.updateNameFestival(idFestival, nameFestival)
                 .then(() => {
                     // All good, we tell the client
                     res.status(200).json({
                         generalStatus: 0
                     })
                 })
-                .catch((err) => {
-                    res.status(503).json({error: "Une erreur est survenue, veuillez réessayer."})
+                .catch(() => {
+                    res.status(503).json()
                 })
         } else {
             // Name invalid

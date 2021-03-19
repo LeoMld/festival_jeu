@@ -12,7 +12,7 @@ import {
     Input,
     CardBody,
     Col,
-    Row
+    Row, Alert
 } from 'reactstrap';
 import Waiting from "../utils/Waiting";
 
@@ -77,6 +77,7 @@ function CreateUpdateFestival(props) {
         })
     // Waiting for server action
     const [isCharging, setIsCharging] = useState(false)
+    const [error, setError] = useState(null)
 
     // We change the festival
     useEffect(() => {
@@ -134,12 +135,13 @@ function CreateUpdateFestival(props) {
 
     // Send the request to the server to create the festival
     const createFestival = () => {
+        setError(null)
         setIsCharging(true)
         const data = {
             nameFestival,
             emplacements: rowsInput
         }
-        Axios.post('/api/gestion/createFestival', data)
+        Axios.post('/api/gestion/festival', data)
             .then(({data}) => {
                 switch (data.generalStatus) {
                     case 0:
@@ -156,16 +158,21 @@ function CreateUpdateFestival(props) {
                 }
                 setIsCharging(false)
             })
+            .catch((err) => {
+                setError(err.message)
+                setIsCharging(false)
+            })
     }
 
     // Send a request to the server to update a festival
     const updateNameFestival = () => {
+        setError(null)
         setIsCharging(true)
         const data = {
             nameFestival,
             idFestival: festival.idFestival
         }
-        Axios.put('/api/gestion/updateFestival', data)
+        Axios.put('/api/gestion/festival', data)
             .then(({data}) => {
                 switch (data.generalStatus) {
                     case 0:
@@ -181,6 +188,10 @@ function CreateUpdateFestival(props) {
                         setErrInputs(newErrInputs)
                         break;
                 }
+                setIsCharging(false)
+            })
+            .catch((err) => {
+                setError(err.message)
                 setIsCharging(false)
             })
     }
@@ -221,17 +232,21 @@ function CreateUpdateFestival(props) {
                                                 />
                                             </InputGroup>
                                         </Col>
-                                        {props.componentState === 1 &&
-                                        <Col>
-                                            <Button
-                                                outline
-                                                color="success"
-                                                type="button"
-                                                onClick={() => updateNameFestival()}
-                                            >
-                                                Sauvegarder
-                                            </Button>
-                                        </Col>}
+                                        {(props.componentState === 1) &&
+                                        ((!isCharging) ?
+                                            <Col>
+                                                <Button
+                                                    outline
+                                                    color="success"
+                                                    type="button"
+                                                    onClick={() => updateNameFestival()}
+                                                >
+                                                    Sauvegarder
+                                                </Button>
+                                            </Col> :
+                                            <Col>
+                                                <Waiting></Waiting>
+                                            </Col>)}
                                     </Row>
                                 </FormGroup>
                             </CardHeader>
@@ -343,34 +358,38 @@ function CreateUpdateFestival(props) {
                                         </Row>
                                     )
                                 })}
-                                {isCharging ? <Waiting
-                                        name={props.componentState === 0 ? "Création du festival" : "Mise à jour du festival"}/> :
-                                    <div className="btn-wrapper text-center my-4">
-                                        <Button
-                                            outline
-                                            color="danger"
-                                            onClick={() => {
-                                                props.setModalState(!props.modalState)
-                                                if (props.componentState === 0) {
-                                                    setDefaultInput()
-                                                } else {
-                                                    setNameFestival(festival.nameFestival)
-                                                }
-                                            }}
-                                        >
-                                            Annuler
-                                        </Button>
-                                        <Button
-                                            outline
-                                            color="success"
-                                            type="button"
-                                            onClick={() => {
-                                                (props.componentState === 0) ? createFestival()
-                                                    : updateNameFestival()
-                                            }}>
-                                            {props.componentState === 0 ? "Créer" : "Sauvegarder"}
-                                        </Button>
-                                    </div>}
+                                {error === null ?
+                                    (isCharging ? <Waiting
+                                            name={props.componentState === 0 ? "Création du festival" : "Mise à jour du festival"}/> :
+                                        <div className="btn-wrapper text-center my-4">
+                                            <Button
+                                                outline
+                                                color="danger"
+                                                onClick={() => {
+                                                    props.setModalState(!props.modalState)
+                                                    if (props.componentState === 0) {
+                                                        setDefaultInput()
+                                                    } else {
+                                                        setNameFestival(festival.nameFestival)
+                                                    }
+                                                }}
+                                            >
+                                                Annuler
+                                            </Button>
+                                            <Button
+                                                outline
+                                                color="success"
+                                                type="button"
+                                                onClick={() => {
+                                                    (props.componentState === 0) ? createFestival()
+                                                        : updateNameFestival()
+                                                }}>
+                                                {props.componentState === 0 ? "Créer" : "Sauvegarder"}
+                                            </Button>
+                                        </div>) :
+                                    <Alert color="danger" className="text-center">
+                                        {error}
+                                    </Alert>}
                             </CardBody>
                         </Form>
                     </Card>

@@ -6,11 +6,10 @@ import 'assets/scss/argon-design-system-react.scss';
 import Axios from 'axios';
 import { Switch, Route, Redirect } from 'react-router-dom';
 
-
-
 import Navigation from './components/navigation/Navigation';
 import Footer from './components/footer/Footer';
 
+// Pages of the application
 import Home from './views/Home';
 import FestivalChoice from "./views/FestivalChoice";
 import AllGames from "./views/AllGames";
