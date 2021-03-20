@@ -13,6 +13,7 @@ import Waiting from "../utils/Waiting";
 
 function Festival(props) {
 
+
     const [modalState, setModalState] = useState(false)
     const [festival, setFestival] = useState(props.festival)
     // Used to only have the spinner on the clicked festival
@@ -23,6 +24,11 @@ function Festival(props) {
         !props.isChanging && (setClick(false))
         setFestival(props.festival)
     })
+
+    // TODO Change the festival the user wants to see
+    const changeFestivalToSee = () => {
+
+    }
 
     return (
         <div
@@ -103,15 +109,28 @@ function Festival(props) {
                 </tr>
                 </tbody>
             </Table>
-            <Button
-                className="mb-3"
-                outline
-                color="default"
-                type="button"
-                onClick={() => setModalState(!modalState)}
-            >
-                Modifier
-            </Button>
+            <div className="btn-wrapper text-center mb-3">
+                <Button
+                    className="mb-3"
+                    outline
+                    color="default"
+                    type="button"
+                    onClick={() => setModalState(!modalState)}
+                >
+                    Modifier
+                </Button>
+                <Button
+                    className="mb-3"
+                    outline
+                    disabled={props.festivalToSee.idFestival === festival.idFestival}
+                    color="default"
+                    type="button"
+                    onClick={() => changeFestivalToSee()}
+                >
+                    Voir ce festival
+                </Button>
+
+            </div>
             <CreateUpdateFestival modalState={modalState}
                                   setModalState={setModalState}
                                   componentState={1}

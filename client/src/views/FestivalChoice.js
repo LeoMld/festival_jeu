@@ -17,6 +17,13 @@ function FestivalChoice() {
 
     // We get all the festivals
     const {data: festivals, setData: setFestivals, isPending, error} = useAxios('/api/gestion/festival');
+    // We get the festival to see of the user
+    const {
+        data: festivalToSee,
+        setData: setFestivalToSee,
+        isPending: isPendingFTS,
+        error: errorFTS
+    } = useAxios('/api/festival')
     // Change the current state of a festival
     const [isChanging, setIsChanging] = useState(false)
     const [errorChanging, setErrorChanging] = useState(null)
@@ -88,25 +95,28 @@ function FestivalChoice() {
                                       componentState={0}
                                       addNewFestival={addNewFestival}/>
             </Row>
-            {(error === null) ?
+            {(error === null && errorFTS === null) ?
                 (!isPending ? festivals.map((festival, index) => {
                     return (
                         <Row className="mb-5" key={index}>
-                            <Col>
+                            {(!isPendingFTS) &&
+                            (<Col>
                                 <Festival festival={festival}
                                           changeCurrentFestival={changeCurrentFestival}
                                           isChanging={isChanging}
                                           errorChanging={errorChanging}
-                                          updateFestival={updateFestival}/>
-                            </Col>
-                        </Row>
-                    )
+                                          updateFestival={updateFestival}
+                                          festivalToSee={festivalToSee}
+                                          setFestivalToSee={setFestivalToSee}/>
+                            </Col>)}
+                        </Row>)
                 }) : <Waiting name="festivals"/>)
                 : <Alert color="danger">
-                    {error}
+                    {error && error}
+                    {errorFTS && errorFTS}
                 </Alert>}
         </div>
     )
 }
 
-export default FestivalChoice
+export default FestivalChoice;

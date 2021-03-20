@@ -10,6 +10,7 @@ router.get('/', homeController.home)
 
 router.post('/login', homeController.login)
 
+router.get('/festival', homeController.getFestivalToDisplay)
 
 
 module.exports = router;
