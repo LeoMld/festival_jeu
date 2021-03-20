@@ -5,9 +5,6 @@ const jwt = require('../utils/token')
 
 
 module.exports = {
-    home: async (req,res) => {
-        res.json({ response : "Yes, it works, thanks." })
-    },
 
     //get the state of an user an send it to the client
     getStatus : async (req,res)=>{

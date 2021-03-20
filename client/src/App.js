@@ -23,10 +23,6 @@ function App() {
 
     const history = useHistory()
 
-  Axios.get('/api')
-      .then(res => {
-        console.log(res.data.response);
-      });
 
   return (
       <div className="App">
