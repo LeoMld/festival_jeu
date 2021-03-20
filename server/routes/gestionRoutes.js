@@ -13,7 +13,9 @@ router.post('/createFestival', gestionController.createFestival)
 router.put('/updateFestival', gestionController.updateFestival)
 
 router.get('/editeurs/', personController.getAllEditors)
+router.post('/editeurs/', personController.createPerson)
 router.get('/editeurs/:id', personController.getEditorPage)
+router.put('/editeurs/:id', personController.updatePerson)
 
 router.post('/contact', contactController.createContact)
 router.put('/contact/:id', contactController.updateContact)

@@ -8,16 +8,16 @@ import axios from "axios";
 function Selector(props){
     const[isON, setIsON] = useState(props.bool)
 
-    const changePrototype = ()=>{
+        const changePrototype = ()=>{
 
-        setIsON(!isON)
-        const bool = !isON
+            setIsON(!isON)
+            const bool = !isON
 
 
-        axios.put(props.url,{bool})
-            .catch(err => {
-                console.log("Erreur lors du changement " + err)
-            })
+            axios.put(props.url,{bool})
+                .catch(err => {
+                    console.log("Erreur lors du changement " + err)
+                })
     }
 
     return(
