@@ -13,7 +13,7 @@ router.get('/', gameController.getAllGames)
 router.use( async (req,res,next)=>{
     try {
 
-        if(await token.getStatus(req.headers.authorization) !== (1||0)){
+        if(await token.getStatus(req.headers.authorization) !== (1)){
             res.status(401).json({code: 0})
         }else{
             next();
