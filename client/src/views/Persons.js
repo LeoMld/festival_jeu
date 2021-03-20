@@ -31,7 +31,7 @@ function Persons(props){
         <div className={"container justify-content-center"}>
             {<Row className="mb-5 mt-5">
             <Col>
-                <h1 className="font-weight-900">Liste des Editeurs</h1>
+                <h1 className="font-weight-900">Liste des {props.type===1?"Editeurs":"Exposants"}</h1>
             </Col>
             <Col>
                 <Button
@@ -39,7 +39,7 @@ function Persons(props){
                     type="button"
                     onClick={() => setModalState(!modalState)}
                 >
-                    Nouvel Editeur
+                    Nouvel {props.type===1?"Editeur":"Exposant"}
                 </Button>
             </Col>
             <CreatePerson modalState = {modalState} setModalState = {setModalState} type={props.type} addPerson={addPerson}/>
@@ -65,7 +65,7 @@ function Persons(props){
                 </thead>
                 <tbody>
                 {isPending && <Waiting></Waiting>}
-                {persons && persons.map(p=>{
+                {persons!==null && persons.map(p=>{
                     return(<Person person={p} type={props.type}/>)
                 })}
                 </tbody>

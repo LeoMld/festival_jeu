@@ -5,10 +5,14 @@ const saltRounds = 10;
 const jwt = require('../utils/token')
 
 module.exports = {
-    home: async (req, res) => {
-        res.json({response: "Yes, it works, thanks."})
+
+    //get the state of an user an send it to the client
+    getStatus: async (req, res) => {
+        const status = await jwt.getStatus(req.headers.authorization)
+        res.status(200).json(status)
     },
 
+    //check the parameters of an user, generate the token and send it to the client
     login: async (req, res) => {
         let data = {exist: false, match: false}
 
@@ -27,8 +31,10 @@ module.exports = {
                 const match = await bcrypt.compare(password, user[0].mdpUtilisateur);
                 //if it's the good password
                 if (match) {
+
                     data.match = true
-                    token = jwt.connect(req, res, user[0].idUtilisateur, user[0].typeUtilisateur)
+                    token = await jwt.connect(req, res, user[0].idUtilisateur, user[0].typeUtilisateur)
+                    data.type = user[0].typeUtilisateur
                     res.status(200).json({token: token, data: data})
                 } else {
                     res.status(200).json({token: token, data: data})

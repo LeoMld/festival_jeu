@@ -8,20 +8,26 @@ function Person(props){
     const [exposant,setExposant]=useState(person.estExposant)
     const [editeur,setEditeur]=useState(person.estEditeur)
     const [inactif,setInactif]=useState(person.exposantInactif)
+    let url;
+    if(props.type===1){
+        url = "/api/gestion/editeurs/"
+    }else{
+        url = "/api/gestion/exposants/"
+    }
     const handleChangeExposant = (bool)=>{
-        axios.put("/api/gestion/editeurs/"+person.idPersonne,{estExposant:bool})
+        axios.put(url+person.idPersonne,{estExposant:bool})
             .then(()=>{
                 setPerson({...person,estExposant:bool})
             })
     }
     const handleChangeEditeur = (bool)=>{
-        axios.put("/api/gestion/editeurs/"+person.idPersonne,{estEditeur:bool})
+        axios.put(url+person.idPersonne,{estEditeur:bool})
             .then(()=>{
                 setPerson({...person,estEditeur:bool})
             })
     }
     const handleChangeExposantInactif = (bool)=>{
-        axios.put("/api/gestion/editeurs/"+person.idPersonne,{exposantInactif:bool})
+        axios.put(url+person.idPersonne,{exposantInactif:bool})
             .then(()=>{
                 setPerson({...person,exposantInactif:bool})
             })
@@ -32,7 +38,7 @@ function Person(props){
                 {person.nomPersonne}
             </td>
             {
-                props.type &&
+                props.type===1 &&
                 <td>
                     {person.statutEditeur}
                 </td>
