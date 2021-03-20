@@ -2,6 +2,7 @@ import React, {Component} from "react";
 import {Link} from "react-router-dom";
 
 import Headroom from "headroom.js";
+import token from "../../utils/token"
 
 import {
     UncontrolledCollapse,
@@ -19,6 +20,15 @@ import {
 } from "reactstrap";
 import logo from "../../assets/images/LogoFJM-couleur-seul.png";
 class Navigation extends Component {
+
+    constructor(props) {
+        super(props);
+        this.deconnexion = this.deconnexion.bind(this);
+    }
+
+
+
+
     componentDidMount() {
         let headroom = new Headroom(document.getElementById("navbar-main"));
         headroom.init();
@@ -36,17 +46,25 @@ class Navigation extends Component {
     };
 
     onExited = () => {
+
         this.setState({
             collapseClasses: ""
         });
     };
 
+
+    deconnexion(){
+        token.destroyToken()
+        this.props.history.push('/Connexion')
+        window.location.reload(false);
+    };
+
     render() {
 
 
-        switch (this.props.typeUser) {
+        switch (token.getType()) {
             //return the navbar for an administrator
-            case 1:
+            case 1||0:
                 return (
                     <Navbar
                         className="navbar-main navbar-transparent navbar-light headroom"
@@ -122,11 +140,11 @@ class Navigation extends Component {
 
                                     <NavItem>
                                         <Link className="nav-link" to="/"> <i className="ni ni-circle-08"/>
-                                            <span className="nav-link-inner--text d-lg-none ml-2">
-          Facebook
-          </span>
                                             Mon compte</Link>
-
+                                    </NavItem>
+                                    <NavItem>
+                                        <Link onClick={()=>{this.deconnexion()}} className="nav-link" to="/"> <i className="ni ni-button-power text-red"/>
+                                            </Link>
                                     </NavItem>
 
                                 </Nav>
@@ -184,6 +202,15 @@ class Navigation extends Component {
                                     <NavItem>
                                         <Link className="nav-link" to="/">Editeurs</Link>
                                     </NavItem>
+
+                                </Nav>
+                                <Nav className="align-items-lg-center ml-lg-auto" navbar>
+
+                                    <NavItem>
+                                        <Link className="nav-link" to="/Connexion">
+                                            Se connecter</Link>
+                                    </NavItem>
+
 
                                 </Nav>
 

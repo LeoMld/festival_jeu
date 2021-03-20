@@ -9,15 +9,15 @@ module.exports = {
         res.json({ response : "Yes, it works, thanks." })
     },
 
+    //get the state of an user an send it to the client
     getStatus : async (req,res)=>{
-        console.log(req.body.token)
-        const status = await jwt.getStatus(req.body.token)
-        console.log(status)
-        res.status(200).json({type : status})
+        const status = await jwt.getStatus(req.headers.authorization)
+        res.status(200).json(status)
     },
 
+    //check the parameters of an user, generate the token and send it to the client
     login : async (req, res)=>{
-        let data = {exist : false,match : false, type : 2}
+        let data = {exist : false,match : false}
 
         //sanitize the request
         const email = req.sanitize(req.body.email);

@@ -21,10 +21,8 @@ module.exports = {
             const decoded = jwt.verify(token, process.env.JWT_SIGN)
 
             if(decoded.type){
-                console.log(decoded.type)
                 return await decoded.type
             }else{
-                console.log("je suis ici")
                 return 2
             }
         }catch (err){

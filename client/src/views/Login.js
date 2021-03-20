@@ -3,8 +3,10 @@ import {Container, Button, Alert} from "reactstrap";
 import logo from "../assets/images/logo_FDJ_FINAL_800.png"
 import axios from "axios";
 import token from "../utils/token"
+import { useHistory } from "react-router-dom";
 
-function Login(props){
+function Login(){
+    const history = useHistory()
 
     const [stateEmail, setStateEmail] = useState("");
     const [stateIconEmail, setStateIconEmail] = useState("");
@@ -39,13 +41,19 @@ function Login(props){
 
     const onSubmit = () =>{
         axios.post('/api/login', {email, password}).then(res => {
-            props.setStatut(res.data.data.type)
-            token.setToken(res.data.token)
+            console.log(res.data)
+            if(res.data.data.exist && res.data.data.match ){
+                token.setToken(res.data.token)
+                let path = `/Accueil`;
+                history.push(path);
+                window.location.reload(false);
+            }else{
+                setErreurconnexion(true)
+            }
 
         }).catch(()=>{
-
         })
-        //add route avec email et password
+
     }
 
 

@@ -7,7 +7,7 @@ const homeController = require('../controllers/homeController');
 
 router.get('/', homeController.home)
 
-router.put('/token', homeController.getStatus)
+router.get('/token', homeController.getStatus)
 
 router.post('/login', homeController.login)
 
