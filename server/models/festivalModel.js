@@ -2,7 +2,6 @@ const DB = require('../config/config')
 
 const Zone = require('./zoneModel')
 const Emplacement = require('./emplacementModel')
-const EspaceReserve = require('./espaceReserveModel')
 
 // Update the festival that is the current one, and pass it at false
 changeCurrentStateFestival = async (client) => {
@@ -79,7 +78,7 @@ module.exports = {
     },
 
     // Update the name of a festival
-    updateFestival: async (idFestival, nameFestival, client) => {
+    updateNameFestival: async (idFestival, nameFestival, client) => {
         const clientUsed = await DB.getPoolClient(client)
         const queryText = 'UPDATE "Festival" SET "nameFestival" = $2 WHERE "idFestival" = $1;'
         const queryValues = [idFestival, nameFestival]
@@ -93,46 +92,10 @@ module.exports = {
         return (await clientUsed.query(queryText)).rows[0]
     },
 
-    // Retrieve all the festivals, their emplacements and the reserved space
-    retrieveFestivals: async () => {
-        const client = await DB.pool.connect()
-        let festivals = []
-        try {
-            // First, we retrieve all the festivals
-            let queryText = 'SELECT * FROM "Festival" ORDER BY "currentFestival" DESC, "dateCreation" DESC, "idFestival" DESC;'
-            festivals = (await client.query(queryText)).rows;
-            // Then all the emplacements of each festival
-            let emplacements
-            for (let i = 0; i < festivals.length; i++) {
-                // We retrieve the emplacements of the festival
-                emplacements = (await Emplacement.retrieveEmplacements(festivals[i].idFestival))
-                festivals[i].emplacements = emplacements
-                // Now we retrieve the reserved spaces from each emplacements
-                let reservedSpaces
-                let numberTables
-                let numberSquareMeters
-                for (let j = 0; j < emplacements.length; j++) {
-                    reservedSpaces = (await EspaceReserve.retrieveReservedSpaces(emplacements[j].idEmplacement, client))
-                    // Now we calculate how much tables and square meters reserved we have for each emplacement
-                    numberTables = 0
-                    numberSquareMeters = 0
-                    for (let z = 0; z < reservedSpaces.length; z++) {
-                        numberTables += reservedSpaces[z].nombreTables
-                        numberSquareMeters += reservedSpaces[z].metreCarres
-                    }
-                    festivals[i].emplacements[j].numberTables = numberTables
-                    festivals[i].emplacements[j].numberSquareMeters = numberSquareMeters
-                    festivals[i].emplacements[j].availableTables = emplacements[j].nombreTablesPrevues -
-                        (numberTables + (numberSquareMeters / 6))
-                }
-            }
-        } catch (err) {
-            // The controller will handle this
-            throw err
-        } finally {
-            // We release the client in the pool
-            client.release()
-        }
-        return festivals
+    // Retrieve all the festivals
+    retrieveFestivals: async (client) => {
+        const clientUsed = await DB.getPoolClient(client)
+        let queryText = 'SELECT * FROM "Festival" ORDER BY "currentFestival" DESC, "dateCreation" DESC, "idFestival" DESC;'
+        return (await clientUsed.query(queryText)).rows;
     }
 }

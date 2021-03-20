@@ -4,7 +4,8 @@ import Festival from "../components/festival/festival";
 import {
     Button,
     Col,
-    Row
+    Row,
+    Alert
 } from "reactstrap";
 
 import useAxios from "../utils/useAxios";
@@ -14,20 +15,28 @@ import CreateUpdateFestival from "../components/festival/createUpdateFestival";
 
 function FestivalChoice() {
 
-    const {data: festivals, setData: setFestivals, pending, error} = useAxios('/api/gestion/AllFestivals');
+    // We get all the festivals
+    const {data: festivals, setData: setFestivals, isPending, error} = useAxios('/api/gestion/festival');
+    // Change the current state of a festival
     const [isChanging, setIsChanging] = useState(false)
-
-    // TODO error
-
+    const [errorChanging, setErrorChanging] = useState(null)
     const [modalState, setModalState] = useState(false)
 
     // Change the current festival to the one given in parameter
     const changeCurrentFestival = (idFestival) => {
         setIsChanging(true)
-        Axios.put('/api/gestion/changeCurrentfestival/' + idFestival)
-            .then(res => {
+        Axios.put('/api/gestion/festival/' + idFestival)
+            .then(() => {
                 // We update the festivals here
                 changeViewCurrentFestival(idFestival)
+                setErrorChanging(null)
+                setIsChanging(false)
+            })
+            .catch(err => {
+                setErrorChanging({
+                    message: err.message,
+                    idFestival
+                })
                 setIsChanging(false)
             })
     }
@@ -35,11 +44,7 @@ function FestivalChoice() {
     const changeViewCurrentFestival = (idFestival) => {
         const updateFestivals = [...festivals];
         updateFestivals.forEach(f => {
-            if (f.idFestival === idFestival) {
-                f.currentFestival = true
-            } else {
-                f.currentFestival = false
-            }
+            f.currentFestival = (f.idFestival === idFestival);
         })
         setFestivals(updateFestivals)
     }
@@ -83,18 +88,23 @@ function FestivalChoice() {
                                       componentState={0}
                                       addNewFestival={addNewFestival}/>
             </Row>
-            {festivals ? festivals.map((festival, index) => {
-                return (
-                    <Row className="mb-5" key={index}>
-                        <Col>
-                            <Festival festival={festival}
-                                      changeCurrentFestival={changeCurrentFestival}
-                                      isChanging={isChanging}
-                                      updateFestival={updateFestival}/>
-                        </Col>
-                    </Row>
-                )
-            }) : <Waiting name="festivals"/>}
+            {(error === null) ?
+                (!isPending ? festivals.map((festival, index) => {
+                    return (
+                        <Row className="mb-5" key={index}>
+                            <Col>
+                                <Festival festival={festival}
+                                          changeCurrentFestival={changeCurrentFestival}
+                                          isChanging={isChanging}
+                                          errorChanging={errorChanging}
+                                          updateFestival={updateFestival}/>
+                            </Col>
+                        </Row>
+                    )
+                }) : <Waiting name="festivals"/>)
+                : <Alert color="danger">
+                    {error}
+                </Alert>}
         </div>
     )
 }

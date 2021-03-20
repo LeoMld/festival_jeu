@@ -8,21 +8,16 @@ const useAxios = (url) => {
     const [error, setError] = useState(null);
 
     useEffect(() => {
-
-            axios.get(url)
-                .then(({data}) => {
-                    setData(data);
-                    setIsPending(false);
-                    setError(null);
-
-
-                })
-                .catch(err => {
-                    setIsPending(false);
-                    setError(err.message)
-                })
-
-
+        axios.get(url)
+            .then(({data}) => {
+                setData(data);
+                setError(null);
+                setIsPending(false);
+            })
+            .catch(err => {
+                setError(err.message)
+                setIsPending(false);
+            })
     }, [url])
 
     return {data, setData, isPending, error};

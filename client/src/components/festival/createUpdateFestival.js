@@ -12,7 +12,7 @@ import {
     Input,
     CardBody,
     Col,
-    Row
+    Row, Alert
 } from 'reactstrap';
 import Waiting from "../utils/Waiting";
 
@@ -77,6 +77,7 @@ function CreateUpdateFestival(props) {
         })
     // Waiting for server action
     const [isCharging, setIsCharging] = useState(false)
+    const [error, setError] = useState(null)
 
     // We change the festival
     useEffect(() => {
@@ -134,23 +135,18 @@ function CreateUpdateFestival(props) {
 
     // Send the request to the server to create the festival
     const createFestival = () => {
+        setError(null)
         setIsCharging(true)
         const data = {
             nameFestival,
             emplacements: rowsInput
         }
-        Axios.post('/api/gestion/createFestival', data)
+        Axios.post('/api/gestion/festival', data)
             .then(({data}) => {
                 switch (data.generalStatus) {
                     case 0:
                         // We add the new festival in the parent component
-                        const newFestival = data.newFestival
-                        for (let i = 0; i < newFestival.emplacements.length; i++) {
-                            newFestival.emplacements[i].numberTables = 0
-                            newFestival.emplacements[i].numberSquareMeters = 0
-                            newFestival.emplacements[i].availableTables = newFestival.emplacements[i].nombreTablesPrevues
-                        }
-                        props.addNewFestival(newFestival)
+                        props.addNewFestival(data.newFestival)
                         props.setModalState(false)
                         // We clear the inputs
                         setDefaultInput()
@@ -162,23 +158,27 @@ function CreateUpdateFestival(props) {
                 }
                 setIsCharging(false)
             })
+            .catch((err) => {
+                setError(err.message)
+                setIsCharging(false)
+            })
     }
 
     // Send a request to the server to update a festival
     const updateNameFestival = () => {
+        setError(null)
         setIsCharging(true)
         const data = {
             nameFestival,
             idFestival: festival.idFestival
         }
-        Axios.put('/api/gestion/updateFestival', data)
+        Axios.put('/api/gestion/festival', data)
             .then(({data}) => {
                 switch (data.generalStatus) {
                     case 0:
                         // Everything went perfectly
                         props.setModalState(false)
                         // We change it in the parent component
-
                         props.updateFestival(festival.idFestival, nameFestival)
                         break;
                     case 1:
@@ -188,6 +188,10 @@ function CreateUpdateFestival(props) {
                         setErrInputs(newErrInputs)
                         break;
                 }
+                setIsCharging(false)
+            })
+            .catch((err) => {
+                setError(err.message)
                 setIsCharging(false)
             })
     }
@@ -204,7 +208,7 @@ function CreateUpdateFestival(props) {
                     <Card className="bg-secondary shadow border-0">
                         <Form role="form">
                             <CardHeader className="bg-transparent pb-5">
-                                <h1 className="text-center text-xl-center font-weight-900">{props.componentState == 0 ?
+                                <h1 className="text-center text-xl-center font-weight-900">{props.componentState === 0 ?
                                     "Créer un nouveau festival" :
                                     "Modifier un festival"}</h1>
                                 <div className="text-muted text-center mt-2 mb-3">
@@ -212,12 +216,11 @@ function CreateUpdateFestival(props) {
                                 </div>
                                 <FormGroup className="mb-3">
                                     <Row className="text-center">
-                                        <Col md="6" className={props.componentState === 0 && "center"}>
-                                            <InputGroup className={(errInputs.nameFestivalErr === 1 && 'has-danger')}>
-
+                                        <Col md="6" className={props.componentState === 0 ? 'center' : ''}>
+                                            <InputGroup className={errInputs.nameFestivalErr === 1 ? 'has-danger' : ''}>
                                                 <Input placeholder="Nom du festival ..."
                                                        type="text"
-                                                       className={(errInputs.nameFestivalErr === 1 && 'is-invalid')}
+                                                       className={errInputs.nameFestivalErr === 1 ? 'is-invalid' : ''}
                                                        name="nameFestival"
                                                        value={nameFestival}
                                                        onChange={(event) => {
@@ -229,26 +232,29 @@ function CreateUpdateFestival(props) {
                                                 />
                                             </InputGroup>
                                         </Col>
-                                        {props.componentState === 1 &&
-                                        <Col>
-                                            <Button
-                                                outline
-                                                color="success"
-                                                type="button"
-                                                onClick={() => updateNameFestival()}
-                                            >
-                                                Sauvegarder
-                                            </Button>
-                                        </Col>}
+                                        {(props.componentState === 1) &&
+                                        ((!isCharging) ?
+                                            <Col>
+                                                <Button
+                                                    outline
+                                                    color="success"
+                                                    type="button"
+                                                    onClick={() => updateNameFestival()}
+                                                >
+                                                    Sauvegarder
+                                                </Button>
+                                            </Col> :
+                                            <Col>
+                                                <Waiting></Waiting>
+                                            </Col>)}
                                     </Row>
                                 </FormGroup>
                             </CardHeader>
                             <CardBody className="px-lg-5 py-lg-5">
-                                <Row className="text-right">
+                                <Row className="text-right mb-3">
                                     <Col md="10">
                                         <div className="text-muted text-center mt-2 mb-3">
-                                            Emplacements du Festival (nom, coût/table, coût/mètre carré,
-                                            nombre de tables prévues)
+                                            Emplacements du Festival
                                         </div>
                                     </Col>
                                     {props.componentState === 0 &&
@@ -267,18 +273,40 @@ function CreateUpdateFestival(props) {
                                         </Button>
                                     </Col>}
                                 </Row>
+                                <Row>
+                                    <Col md="4">
+                                        <span className="text-muted">
+                                            Nom de l'emplacement
+                                        </span>
+                                    </Col>
+                                    <Col>
+                                        <span className="text-muted">
+                                            Coût par table
+                                        </span>
+                                    </Col>
+                                    <Col>
+                                        <span className="text-muted">
+                                            Coût par m²
+                                        </span>
+                                    </Col>
+                                    <Col>
+                                        <span className="text-muted">
+                                            Nombre de tables prévues
+                                        </span>
+                                    </Col>
+                                </Row>
 
                                 {rowsInput.map((input, index) => {
                                     return (
-                                        <Row>
+                                        <Row key={index}>
                                             <Col md="4">
                                                 <FormGroup
-                                                    className={(errInputs.emplacementsErr[index].libelleEmplacementErr === 1 && 'has-danger')}>
+                                                    className={errInputs.emplacementsErr[index].libelleEmplacementErr === 1 ? 'has-danger' : ''}>
                                                     <Input
                                                         placeholder="Nom de l'emplacement ..."
                                                         type="text"
                                                         disabled={props.componentState === 1 && "disabled"}
-                                                        className={(errInputs.emplacementsErr[index].libelleEmplacementErr === 1 && 'is-invalid')}
+                                                        className={errInputs.emplacementsErr[index].libelleEmplacementErr === 1 ? 'is-invalid' : ''}
                                                         id='libelleEmplacement'
                                                         value={input.libelleEmplacement}
                                                         onChange={(event) => updateInputState(event, index)}
@@ -287,13 +315,13 @@ function CreateUpdateFestival(props) {
                                             </Col>
                                             <Col>
                                                 <FormGroup
-                                                    className={(errInputs.emplacementsErr[index].coutTableErr === 1 && 'has-danger')}>
+                                                    className={errInputs.emplacementsErr[index].coutTableErr === 1 ? 'has-danger' : ''}>
                                                     <Input
                                                         placeholder="Coût par table ..."
                                                         id='coutTable'
                                                         type="text"
                                                         disabled={props.componentState === 1 && "disabled"}
-                                                        className={(errInputs.emplacementsErr[index].coutTableErr === 1 && 'is-invalid')}
+                                                        className={errInputs.emplacementsErr[index].coutTableErr === 1 ? 'is-invalid' : ''}
                                                         value={input.coutTable}
                                                         onChange={(event) => updateInputState(event, index)}
                                                     />
@@ -301,13 +329,13 @@ function CreateUpdateFestival(props) {
                                             </Col>
                                             <Col>
                                                 <FormGroup
-                                                    className={(errInputs.emplacementsErr[index].coutMetreCarreErr === 1 && 'has-danger')}>
+                                                    className={errInputs.emplacementsErr[index].coutMetreCarreErr === 1 ? 'has-danger' : ''}>
                                                     <Input
                                                         placeholder="Coût par m² ..."
                                                         id='coutMetreCarre'
                                                         disabled={props.componentState === 1 && "disabled"}
                                                         type="text"
-                                                        className={(errInputs.emplacementsErr[index].coutMetreCarreErr === 1 && 'is-invalid')}
+                                                        className={errInputs.emplacementsErr[index].coutMetreCarreErr === 1 ? 'is-invalid' : ''}
                                                         value={input.coutMetreCarre}
                                                         onChange={(event) => updateInputState(event, index)}
                                                     />
@@ -315,13 +343,13 @@ function CreateUpdateFestival(props) {
                                             </Col>
                                             <Col>
                                                 <FormGroup
-                                                    className={(errInputs.emplacementsErr[index].nombreTablesPrevuesErr === 1 && 'has-danger')}>
+                                                    className={errInputs.emplacementsErr[index].nombreTablesPrevuesErr === 1 ? 'has-danger' : ''}>
                                                     <Input
                                                         placeholder="Nombre de tables prévues ..."
                                                         id='nombreTablesPrevues'
                                                         disabled={props.componentState === 1 && "disabled"}
                                                         type="text"
-                                                        className={(errInputs.emplacementsErr[index].nombreTablesPrevuesErr === 1 && 'is-invalid')}
+                                                        className={errInputs.emplacementsErr[index].nombreTablesPrevuesErr === 1 ? 'is-invalid' : ''}
                                                         value={input.nombreTablesPrevues}
                                                         onChange={(event) => updateInputState(event, index)}
                                                     />
@@ -330,34 +358,38 @@ function CreateUpdateFestival(props) {
                                         </Row>
                                     )
                                 })}
-                                {isCharging ? <Waiting
-                                        name={props.componentState === 0 ? "Création du festival" : "Mise à jour du festival"}/> :
-                                    <div className="btn-wrapper text-center my-4">
-                                        <Button
-                                            outline
-                                            color="danger"
-                                            onClick={() => {
-                                                props.setModalState(!props.modalState)
-                                                if (props.componentState === 0) {
-                                                    setDefaultInput()
-                                                } else {
-                                                    setNameFestival(festival.nameFestival)
-                                                }
-                                            }}
-                                        >
-                                            Annuler
-                                        </Button>
-                                        <Button
-                                            outline
-                                            color="success"
-                                            type="button"
-                                            onClick={() => {
-                                                (props.componentState === 0) ? createFestival()
-                                                    : updateNameFestival()
-                                            }}>
-                                            {props.componentState === 0 ? "Créer" : "Sauvegarder"}
-                                        </Button>
-                                    </div>}
+                                {error === null ?
+                                    (isCharging ? <Waiting
+                                            name={props.componentState === 0 ? "Création du festival" : "Mise à jour du festival"}/> :
+                                        <div className="btn-wrapper text-center my-4">
+                                            <Button
+                                                outline
+                                                color="danger"
+                                                onClick={() => {
+                                                    props.setModalState(!props.modalState)
+                                                    if (props.componentState === 0) {
+                                                        setDefaultInput()
+                                                    } else {
+                                                        setNameFestival(festival.nameFestival)
+                                                    }
+                                                }}
+                                            >
+                                                Annuler
+                                            </Button>
+                                            <Button
+                                                outline
+                                                color="success"
+                                                type="button"
+                                                onClick={() => {
+                                                    (props.componentState === 0) ? createFestival()
+                                                        : updateNameFestival()
+                                                }}>
+                                                {props.componentState === 0 ? "Créer" : "Sauvegarder"}
+                                            </Button>
+                                        </div>) :
+                                    <Alert color="danger" className="text-center">
+                                        {error}
+                                    </Alert>}
                             </CardBody>
                         </Form>
                     </Card>

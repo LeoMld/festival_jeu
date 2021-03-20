@@ -4,7 +4,8 @@ import {
     Table,
     Button,
     Col,
-    Row
+    Row,
+    Alert
 } from 'reactstrap';
 
 import CreateUpdateFestival from "./createUpdateFestival";
@@ -33,7 +34,8 @@ function Festival(props) {
                 </Col>
                 <Col className="mt-2">
                     {!festival.currentFestival ?
-                        ((props.isChanging && click) ? <Waiting/> :
+                        ((props.errorChanging === null || festival.idFestival !== props.errorChanging.idFestival) ? (((props.isChanging && click) ?
+                            <Waiting/> :
                             <Button
                                 outline
                                 color="primary"
@@ -42,7 +44,10 @@ function Festival(props) {
                                     props.changeCurrentFestival(festival.idFestival)
                                 }}>
                                 Définir Festival Courant
-                            </Button>) :
+                            </Button>)) :
+                            <Alert color="danger">
+                                {props.errorChanging.message}
+                            </Alert>) :
                         <p className="text-primary font-weight-bold">Ce festival est le festival courant</p>}
                 </Col>
             </Row>
@@ -63,19 +68,39 @@ function Festival(props) {
                 </tr>
                 </thead>
                 <tbody>
-                {festival.emplacements && festival.emplacements.map((emplacement) => {
+                {festival.emplacements && festival.emplacements.map((emplacement, index) => {
                     return (
-                        <tr>
+                        <tr key={index}>
                             <td>{emplacement.libelleEmplacement}</td>
                             <td>{emplacement.nombreTablesPrevues}</td>
-                            <td>{emplacement.coutTable}</td>
-                            <td>{emplacement.coutMetreCarre}</td>
+                            <td>{emplacement.coutTable}€</td>
+                            <td>{emplacement.coutMetreCarre}€</td>
                             <td>{emplacement.numberTables}</td>
                             <td>{emplacement.numberSquareMeters}</td>
                             <td>{emplacement.availableTables}</td>
                         </tr>
                     )
                 })}
+                <tr className="">
+                    <th>
+                        Total :
+                    </th>
+                    <th>
+                        {festival.numberTablesTotal}
+                    </th>
+                    <th colSpan={2}>
+                        {festival.priceReservationTotal}€
+                    </th>
+                    <th>
+                        {festival.numberTablesReservedTotal}
+                    </th>
+                    <th>
+                        {festival.numberSquareMetersReservedTotal}
+                    </th>
+                    <th>
+                        {festival.availableTotal}
+                    </th>
+                </tr>
                 </tbody>
             </Table>
             <Button
