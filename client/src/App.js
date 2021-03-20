@@ -8,14 +8,16 @@ import { Switch, Route, Redirect } from 'react-router-dom';
 import token from "./utils/token"
 
 
+
 import Navigation from './components/navigation/Navigation';
 import Footer from './components/footer/Footer';
 
+// Pages of the application
 import Home from './views/Home';
 import FestivalChoice from "./views/FestivalChoice";
 import AllGames from "./views/AllGames";
 import Login from "./views/Login";
-import Person from "./views/Persons";
+import Persons from "./views/Persons";
 
 
 function App() {
@@ -40,11 +42,14 @@ function App() {
           </header>
 
           <Navigation typeUser ={1}  />
-
           <Switch>
             <Route path="/Accueil" exact component={Home}/>
             <Route path="/ChoixFestival" exact component={FestivalChoice}/>
             <Route path="/ListeJeux" exact component={AllGames}/>
+            <Route path="/Editeurs" exact component={ (props)=>
+                <Persons {...props} type={1}/>
+            }/>
+            <Route path="/login" exact component={Login}/>
             <Route path="/Editeurs" exact component={Person}/>
 
               {statut !== 2 ?

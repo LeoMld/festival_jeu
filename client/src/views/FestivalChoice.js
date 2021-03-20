@@ -4,7 +4,8 @@ import Festival from "../components/festival/festival";
 import {
     Button,
     Col,
-    Row
+    Row,
+    Alert
 } from "reactstrap";
 
 import useAxios from "../utils/useAxios";
@@ -14,28 +15,57 @@ import CreateUpdateFestival from "../components/festival/createUpdateFestival";
 
 function FestivalChoice() {
 
-    const {data: festivals, setData: setFestivals, pending, error} = useAxios('/api/gestion/AllFestivals');
-
-    // TODO error
-    // TODO add or update festival
-
+    // We get all the festivals
+    const {data: festivals, setData: setFestivals, isPending, error} = useAxios('/api/gestion/festival');
+    // Change the current state of a festival
+    const [isChanging, setIsChanging] = useState(false)
+    const [errorChanging, setErrorChanging] = useState(null)
     const [modalState, setModalState] = useState(false)
 
     // Change the current festival to the one given in parameter
     const changeCurrentFestival = (idFestival) => {
-        Axios.put('/api/gestion/changeCurrentfestival/' + idFestival)
-            .then(res => {
+        setIsChanging(true)
+        Axios.put('/api/gestion/festival/' + idFestival)
+            .then(() => {
                 // We update the festivals here
-                const updateFestivals = [...festivals];
-                updateFestivals.forEach(f => {
-                    if (f.idFestival === idFestival) {
-                        f.currentFestival = true
-                    } else {
-                        f.currentFestival = false
-                    }
-                })
-                setFestivals(updateFestivals)
+                changeViewCurrentFestival(idFestival)
+                setErrorChanging(null)
+                setIsChanging(false)
             })
+            .catch(err => {
+                setErrorChanging({
+                    message: err.message,
+                    idFestival
+                })
+                setIsChanging(false)
+            })
+    }
+
+    const changeViewCurrentFestival = (idFestival) => {
+        const updateFestivals = [...festivals];
+        updateFestivals.forEach(f => {
+            f.currentFestival = (f.idFestival === idFestival);
+        })
+        setFestivals(updateFestivals)
+    }
+
+    // We add the new festival on the view
+    const addNewFestival = async (newFestival) => {
+        // We make it current one
+        changeViewCurrentFestival(newFestival.idFestival)
+        // We update all the festivals
+        setFestivals([newFestival, ...festivals])
+    }
+
+    // Update the name of the festival on the view
+    const updateFestival = (idFestival, nameFestival) => {
+        const updateFestivals = [...festivals];
+        updateFestivals.forEach(f => {
+            if (f.idFestival === idFestival) {
+                f.nameFestival = nameFestival
+            }
+        })
+        setFestivals(updateFestivals)
     }
 
     return (
@@ -53,17 +83,28 @@ function FestivalChoice() {
                         Nouveau Festival
                     </Button>
                 </Col>
-                <CreateUpdateFestival modalState = {modalState} setModalState = {setModalState} componentState={0}/>
+                <CreateUpdateFestival modalState={modalState}
+                                      setModalState={setModalState}
+                                      componentState={0}
+                                      addNewFestival={addNewFestival}/>
             </Row>
-            {festivals ? festivals.map((festival, index) => {
-                return (
-                    <Row className="mb-5">
-                        <Col>
-                            <Festival festival={festival} changeCurrentFestival={changeCurrentFestival}/>
-                        </Col>
-                    </Row>
-                )
-            }) : <Waiting name = "Festivals"/>}
+            {(error === null) ?
+                (!isPending ? festivals.map((festival, index) => {
+                    return (
+                        <Row className="mb-5" key={index}>
+                            <Col>
+                                <Festival festival={festival}
+                                          changeCurrentFestival={changeCurrentFestival}
+                                          isChanging={isChanging}
+                                          errorChanging={errorChanging}
+                                          updateFestival={updateFestival}/>
+                            </Col>
+                        </Row>
+                    )
+                }) : <Waiting name="festivals"/>)
+                : <Alert color="danger">
+                    {error}
+                </Alert>}
         </div>
     )
 }

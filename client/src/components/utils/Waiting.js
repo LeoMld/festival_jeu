@@ -8,10 +8,10 @@ function Waiting(props){
                 <Row className="justify-content-center">
                     <Spinner color="primary" />
                 </Row>
+                {props.name &&
                 <Row className="justify-content-center mt-md mb-md">
                     <Badge color="primary">loading {props.name}...</Badge>
-
-                </Row>
+                </Row>}
             </Col>
         </div>
     )

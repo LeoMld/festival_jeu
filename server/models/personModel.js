@@ -11,9 +11,11 @@ module.exports={
             const queryText = `INSERT INTO "Personne" 
             ("nomPersonne", "adressePersonne", "statutEditeur", "estEditeur", "exposantInactif", "estExposant")
             VALUES('${nomPersonne}', '${adressePersonne}', '${statutEditeur}', '${estEditeur}', '${exposantInactif}', '${estExposant}') RETURNING *;`
-            const newPersonne = await client.query(queryText,[]);
+            const newPersonne = (await client.query(queryText,[])).rows[0];
+            console.log(newPersonne)
             await Contact.createContact(prenomContact, nomContact, mailContact, telFixeContact, telPortableContact, fonctionContact, principal, newPersonne.idPersonne,client);
             await client.query('COMMIT;')
+            return newPersonne
         }catch (e) {
             await client.query('ROLLBACK;')
             throw e;
