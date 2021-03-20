@@ -52,6 +52,15 @@ module.exports = {
             res.status(503).json({error: err})
         }
 
+    },
+
+    deleteGame : async (req,res)=>{
+        try{
+            await jeux.deleteJeu(req.params.id)
+            res.status(200).json('game deleted')
+        }catch (err){
+            res.status(503).json({error: err})
+        }
     }
 
 

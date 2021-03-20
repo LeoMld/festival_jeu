@@ -37,10 +37,10 @@ module.exports = {
                     data.type = user[0].typeUtilisateur
                     res.status(200).json({token: token, data: data})
                 } else {
-                    res.status(200).json({token: token, data: data})
+                    res.status(401).json({token: token, data: data})
                 }
             } else {
-                res.status(200).json({token: token, data: data})
+                res.status(401).json({token: token, data: data})
             }
         } catch (err) {
             res.status(503).json({error: err})
@@ -49,7 +49,7 @@ module.exports = {
     },
 
     // Retrieve the festival to display of the user
-    getFestivalToDisplay: (req, res) => {
+    getFestivalToDisplay: async (req, res) => {
         // TODO check le token, avec le token on a l'id utilisateur
         // Si hors ligne => on récupère le festival courant
         // Si en ligne, on récupère celui de l'utilisateur

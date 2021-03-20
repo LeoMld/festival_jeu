@@ -4,14 +4,12 @@ module.exports = {
 
     //generate a token, put him in localStorage
     connect: async (req,res,id,type)=> {
-        const token = await jwt.sign({
+        return await jwt.sign({
             userId: id,
             type: type
         }, process.env.JWT_SIGN, {
             expiresIn: '1h'
-        });
-
-        return token
+        })
 
     },
 

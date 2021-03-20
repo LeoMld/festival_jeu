@@ -6,6 +6,7 @@ import {
 import useAxios from "../../utils/useAxios";
 import Waiting from '../utils/Waiting'
 import ModalGame from '../game/ModalGame'
+import ModalDelete from '../game/ModalDelete'
 import Selector from "../utils/Selector";
 import Axios from "axios";
 
@@ -20,29 +21,27 @@ function GameList(props) {
     //state representing the game selected (displayed in the modal)
     const [gameModal, setGameModal] = useState()
 
+    //state representing the modal to delete a game
+    const [deleteModal, setDeleteModal] = useState(false)
+
     //states related to all the games
     const {data: games, setData: setGames, isPending, error} = useAxios("/api/games")
 
-    //if there is an error when deleting
-    const [errorDeleting , setErrorDeleting] = useState(false)
 
+
+    //open the modal to modify a game
     const openModal = (game) =>{
         setModalState(!modalState)
         setGameModal(game)
-
     };
 
-    //TODO delete a game
-    const deleteGame = (idJeu)=>{
-        /*Axios.delete('/api/games/'+idJeu)
-            .then(res => {
-                props.setModalState(!props.modalState)
-                setIsChanging(false)
-            }).catch(e => {
-            setIsChanging(false)
-            setError(true)
-        })*/
+    //open the modal to delete a game
+    const openDeleteModal = (game)=>{
+        setGameModal(game)
+        setDeleteModal(!deleteModal)
     }
+
+
 
 
     return(
@@ -76,11 +75,11 @@ function GameList(props) {
                                 {props.isAdmin && <td className="td-actions text-right d-flex">
                                     <button type="button" rel="tooltip" className="btn btn-info btn-icon btn-sm "
                                             data-original-title="" title="modify game" onClick={() => openModal(game)}>
-                                        <i className="ni ni-circle-08 pt-1"></i>
+                                        <i className="ni ni-circle-08 pt-1"/>
                                     </button>
                                     <button type="button" rel="tooltip" className="btn btn-danger btn-icon btn-sm "
-                                            data-original-title="" title="delete game">
-                                        <i className="ni ni-fat-remove pt-1"></i>
+                                            data-original-title="" title="delete game" onClick={() => openDeleteModal(game)}>
+                                        <i className="ni ni-fat-remove pt-1"/>
                                     </button>
                                 </td>}
 
@@ -98,6 +97,8 @@ function GameList(props) {
             }
 
             {games && <ModalGame game={gameModal} setGame={setGameModal} modalState={modalState} setModalState={setModalState}/>}
+            {games && gameModal && <ModalDelete games={games} setGames={setGames} game={gameModal}  deleteModal={deleteModal} setDeleteModal={setDeleteModal}/>}
+
             {error && <Alert color="danger">
                 Erreur lors du changement des données, veuillez recharger la page et réessayer
             </Alert> }

@@ -10,4 +10,6 @@ router.get('/', gameController.getAllGames)
 
 router.put('/:id', gameController.handleGame)
 
+router.delete('/:id', gameController.deleteGame)
+
 module.exports = router;
