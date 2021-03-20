@@ -71,6 +71,7 @@ function CreatePerson(props) {
 
     const createPerson = ()=>{
         axios.post("/api/gestion/editeurs",{
+            type:props.type,
             person:personDetail,
             contact:contactDetail
         }).then((result)=>{
@@ -250,7 +251,7 @@ function CreatePerson(props) {
                 </ModalBody>
                 <ModalFooter>
                     <Button color="primary" type="button" onClick={createPerson} >
-                        Créer Editeur
+                        Créer {props.type===1?"Editeur":"Exposant"}
                     </Button>
                 </ModalFooter>
             </Modal>

@@ -2,7 +2,8 @@ const Contact = require("../models/contactModel")
 const Person = require("../models/personModel")
 const utils = require("../utils/utils");
 
-checkInputs = (data)=>{
+
+const checkInputs = (data)=>{
     let error={
         nbError:0,
         nomPersonne:false,
@@ -17,6 +18,7 @@ checkInputs = (data)=>{
     }
     let contact=data.contact
     let person=data.person
+    //TODO REGEX sur mail et téléphone
     if(isNaN(parseInt(contact.telFixeContact))){
         error.telFixeContact=true
         error.nbError+=1
@@ -30,7 +32,7 @@ checkInputs = (data)=>{
         error.nomPersonne=true
         error.nbError+=1
 
-    }if(person.statutEditeur===""){
+    }if(person.statutEditeur==="" && data.type===1){
         error.statutEditeur=true
         error.nbError+=1
 
@@ -140,9 +142,9 @@ module.exports = {
         await Person.getExposants()
             .then((result)=>{
                 if(result.length===0){
-                    res.status(200).json({message:"Pas d'éditeurs dans la Base de données"})
+                    res.status(200).json("Pas d'éditeurs dans la Base de données")
                 }else{
-                    res.status(200).json({exposants: result})
+                    res.status(200).json(result)
                 }
             })
             .catch(error=>{
@@ -151,6 +153,7 @@ module.exports = {
     },
     //======================== CREATE ========================
     createPerson : async (req,res)=>{
+
         let body = req.body;
         let person = body.person
         let contact = body.contact

@@ -38,6 +38,9 @@ function App() {
             <Route path="/Editeurs" exact component={ (props)=>
                 <Persons {...props} type={1}/>
             }/>
+            <Route path="/Exposants" exact component={ (props)=>
+                <Persons {...props} type={0}/>
+            }/>
             <Route path="/login" exact component={Login}/>
 
             <Route path="/"><Redirect to="/Accueil" /></Route>
