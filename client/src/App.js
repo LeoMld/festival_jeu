@@ -17,45 +17,14 @@ import Home from './views/Home';
 import FestivalChoice from "./views/FestivalChoice";
 import AllGames from "./views/AllGames";
 import Login from "./views/Login";
-import Person from "./views/Persons";
-
-
+import Persons from "./views/Persons";
 
 function App() {
 
-
-    const history = useHistory();
-
-
-
-
-    console.log("Le type du token est "+ token.getType())
-
-    /*const checkTypeUser = async ()=>{
-        await Axios.get('/api/token',{headers: {
-                'Authorization': `${token.getToken()}`
-            }} )
-            .then(({data}) => {
-                console.log("type User actuel" + typeUser)
-                console.log(data)
-                if(typeUser !== data){
-                    setTypeUser(2)
-                    return false
-                    /!*token.destroyToken()*!/
-                }else{
-                    return true
-                }
-            }).catch(e => {
-            console.log(e)
-        })
-
-    }*/
-
-
-    useEffect(()=>{
-        console.log("j'active le useEffect")
-
-    })
+  Axios.get('/api')
+      .then(res => {
+        console.log(res.data.response);
+      });
 
   return (
       <div className="App">
@@ -75,7 +44,7 @@ function App() {
 
             <Route path="/ListeJeux" exact component={AllGames}/>
             <Route path="/Editeurs" exact component={ (props)=>
-                <Person {...props} type={1}/>
+                <Persons {...props} type={1}/>
             }/>
 
 
@@ -86,6 +55,10 @@ function App() {
               }
 
 
+            <Route path="/Exposants" exact component={ (props)=>
+                <Persons {...props} type={0}/>
+            }/>
+            <Route path="/login" exact component={Login}/>
 
               <Route path="/"><Redirect to="/Accueil" /></Route>
           </Switch>
