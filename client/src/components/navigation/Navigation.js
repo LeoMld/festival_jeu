@@ -123,7 +123,7 @@ class Navigation extends Component {
                                     </UncontrolledDropdown>
 
                                     <NavItem>
-                                        <Link className="nav-link" to="/">Liste des jeux</Link>
+                                        <Link className="nav-link" to="/ListeJeux">Liste des jeux</Link>
                                     </NavItem>
 
                                     <NavItem>

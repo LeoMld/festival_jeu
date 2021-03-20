@@ -16,6 +16,7 @@ import {
 import React,{useEffect, useState} from "react";
 import Axios from "axios";
 import Waiting from "../utils/Waiting";
+import token from "../../utils/token";
 
 
 function ModalGame(props){
@@ -36,13 +37,17 @@ function ModalGame(props){
         props.game.ageMinimum = document.getElementById("age").value
 
 
-        Axios.put('/api/games/'+game.idJeu, {game})
+        Axios.put('/api/games/'+game.idJeu, {game},{ headers: { Authorization: token.getToken() } })
             .then(res => {
                 props.setModalState(!props.modalState)
                 setIsChanging(false)
             }).catch(e => {
                 setIsChanging(false)
                 setError(true)
+                //if the token is not the good one
+                if(e.response.data.code === 0){
+                    token.destroyToken()
+                }
         })
 
 

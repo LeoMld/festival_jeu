@@ -1,5 +1,6 @@
 import React,{useState, useEffect} from "react";
 import axios from "axios";
+import token from "../../utils/token";
 
 //selector which takes 3 parameters:
 
@@ -14,9 +15,12 @@ function Selector(props){
             const bool = !isON
 
 
-            axios.put(props.url,{bool})
+            axios.put(props.url,{bool},{ headers: { Authorization: token.getToken() } })
                 .catch(err => {
                     console.log("Erreur lors du changement " + err)
+                    if(err.response.data.code === 0){
+                        token.destroyToken()
+                    }
                 })
     }
 

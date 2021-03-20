@@ -9,6 +9,7 @@ import ModalGame from '../game/ModalGame'
 import ModalDelete from '../game/ModalDelete'
 import Selector from "../utils/Selector";
 import Axios from "axios";
+import token from "../../utils/token";
 
 
 
@@ -56,8 +57,8 @@ function GameList(props) {
                     <th className="d-none d-lg-table-cell">Nombre de joueurs</th>
                     <th className="d-none d-lg-table-cell">Âge minimum</th>
                     <th className="d-none d-lg-table-cell">Durée</th>
-                    {props.isAdmin && <th >Prototype</th>}
-                    {props.isAdmin && <th >Action</th>}
+                    {token.getType() === 1 && <th >Prototype</th>}
+                    {token.getType() === 1 && <th >Action</th>}
 
                 </tr>
                 </thead>
@@ -71,8 +72,8 @@ function GameList(props) {
                                 <td className="d-none d-lg-table-cell">{game.nombreJoueur}</td>
                                 <td className="d-none d-lg-table-cell">{game.ageMinimum}</td>
                                 <td className="d-none d-lg-table-cell">{game.duree}</td>
-                                {props.isAdmin && <Selector url={'/api/games/'+game.idJeu} bool={game.prototype}/>}
-                                {props.isAdmin && <td className="td-actions text-right d-flex">
+                                {token.getType() === 1 && <Selector url={'/api/games/'+game.idJeu} bool={game.prototype}/>}
+                                {token.getType() === 1 && <td className="td-actions text-right d-flex">
                                     <button type="button" rel="tooltip" className="btn btn-info btn-icon btn-sm "
                                             data-original-title="" title="modify game" onClick={() => openModal(game)}>
                                         <i className="ni ni-circle-08 pt-1"/>

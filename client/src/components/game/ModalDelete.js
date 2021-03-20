@@ -16,6 +16,7 @@ import {
 import React,{useEffect, useState} from "react";
 import Axios from "axios";
 import Waiting from "../utils/Waiting";
+import token from "../../utils/token";
 
 function ModalDelete(props){
 
@@ -39,7 +40,7 @@ function ModalDelete(props){
 
     const deleteGame = ()=>{
         setIsChanging(true)
-        Axios.delete('/api/games/'+props.game.idJeu)
+        Axios.delete('/api/games/'+props.game.idJeu,{ headers: { Authorization: token.getToken() } })
             .then(res => {
                 deleteGameView()
                 props.setDeleteModal(!props.deleteModal)
@@ -47,7 +48,11 @@ function ModalDelete(props){
 
             }).catch(e => {
             console.log(e)
-                setErrorDeleting(true)
+            setErrorDeleting(true)
+            //if the token is not the good one
+            if(e.response.data.code === 0){
+                token.destroyToken()
+            }
         })
     }
 

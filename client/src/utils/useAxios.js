@@ -1,5 +1,6 @@
 import {useEffect, useState} from "react";
 import axios from "axios";
+import token from "./token";
 
 const useAxios = (url) => {
 
@@ -8,7 +9,7 @@ const useAxios = (url) => {
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        axios.get(url)
+        axios.get(url,{ headers: { Authorization: token.getToken() } })
             .then(({data}) => {
                 setData(data);
                 setError(null);
