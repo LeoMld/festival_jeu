@@ -1,11 +1,11 @@
-import React,{useState} from 'react'
+import React, {useState} from 'react'
 import {Container, Button, Alert} from "reactstrap";
 import logo from "../assets/images/logo_FDJ_FINAL_800.png"
 import axios from "axios";
 import token from "../utils/token"
-import { useHistory } from "react-router-dom";
+import {useHistory} from "react-router-dom";
 
-function Login(){
+function Login() {
     const history = useHistory()
 
     const [stateEmail, setStateEmail] = useState("");
@@ -23,71 +23,75 @@ function Login(){
     }
 
 
-
-
     const handleCheckMail = event => {
         setEmail(event.target.value)
-        if(email.length <= 1){
+        if (email.length <= 1) {
             setStateEmail("")
             setStateIconEmail("")
-        }else if(email.match(REGEXEMAIL)){
+        } else if (email.match(REGEXEMAIL)) {
             setStateEmail("is-valid")
             setStateIconEmail("has-success")
-        }else{
+        } else {
             setStateEmail("is-invalid")
             setStateIconEmail("has-danger")
         }
     }
 
-    const onSubmit = () =>{
+    const onSubmit = () => {
         axios.post('/api/login', {email, password}).then(res => {
             console.log(res.data)
-            if(res.data.data.exist && res.data.data.match ){
+            if (res.data.data.exist && res.data.data.match) {
                 token.setToken(res.data.token)
                 let path = `/Accueil`;
                 history.push(path);
                 window.location.reload(false);
-            }else{
+            } else {
                 setErreurconnexion(true)
             }
 
-        }).catch(()=>{
+        }).catch(() => {
+            setErreurconnexion(true)
         })
 
     }
 
 
-
-    return(
-        <Container className = "mt-md" >
+    return (
+        <Container className="mt-md">
             <div className="justify-content-center mb-lg">
                 <h1> Connexion</h1>
                 <div className="mt-md">
                     {erreurConnexion && <Alert color="danger">
                         Erreur, mauvaise combinaison login/mot de passe
-                    </Alert> }
+                    </Alert>}
                 </div>
                 <div className="row">
                     <div className="col-sm mr-md">
-                        <img style={{maxWidth : "450px"}} src={logo} alt="logo festival du jeu"/>
+                        <img style={{maxWidth: "450px"}} src={logo} alt="logo festival du jeu"/>
                     </div>
                     <div className="col-sm mt-md">
-                    <form onSubmit={onSubmit}>
-                        <div className={"form-group "+ stateIconEmail}>
-                            <input onChange={handleCheckMail} value={email} type="text" placeholder="Email" className={"form-control "+ stateEmail}/>
-                        </div>
-                        <div className="form-group ">
-                            <input onChange={handleChange(setPassword)} value={password} type="password" className="form-control " id="exampleFormControlInput1" placeholder="Mot de passe"/>
-                        </div>
-                        <button onClick={()=>{onSubmit()}} type="button" className="btn btn-success mt-sm-4" disabled={stateEmail === "" || stateEmail === "is-invalid"}>Se connecter</button>
-                    </form>
+                        <form onSubmit={onSubmit}>
+                            <div className={"form-group " + stateIconEmail}>
+                                <input onChange={handleCheckMail} value={email} type="text" placeholder="Email"
+                                       className={"form-control " + stateEmail}/>
+                            </div>
+                            <div className="form-group ">
+                                <input onChange={handleChange(setPassword)} value={password} type="password"
+                                       className="form-control " id="exampleFormControlInput1"
+                                       placeholder="Mot de passe"/>
+                            </div>
+                            <button onClick={() => {
+                                onSubmit()
+                            }} type="button" className="btn btn-success mt-sm-4"
+                                    disabled={stateEmail === "" || stateEmail === "is-invalid"}>Se connecter
+                            </button>
+                        </form>
 
                     </div>
                 </div>
 
             </div>
         </Container>
-
 
 
     )
