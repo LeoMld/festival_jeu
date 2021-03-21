@@ -1,22 +1,16 @@
 const jwt = require('../utils/token')
 const usersModel = require("../models/utilisateurModel")
+const Utils = require("../utils/utils")
 
 module.exports = {
 
     // Retrieve the festival to display of the user
-    getFestivalToDisplay: async (req, res) => {
-        const idUtilisateur = await jwt.getId(req.headers.authorization)
-        const noFestival = {idFestival: 0}
-        usersModel.retrieveFestivalUser(idUtilisateur)
+    getFestivalToDisplay: (req, res) => {
+        Utils.getFestivalToDisplay(req)
             .then((festivalToSee) => {
-                // In case there is no current festival
-                if (festivalToSee === undefined || festivalToSee.idFestival === null) {
-                    festivalToSee = noFestival
-                }
                 res.status(200).json(festivalToSee)
             })
             .catch(() => {
-                // An error occured
                 res.status(503).json()
             })
     },
