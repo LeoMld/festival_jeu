@@ -27,6 +27,7 @@ function ModalNewGame(props){
 
     let game = {}
 
+    const [errorLibelle, setErrorLibelle] = useState(false)
     const [isChanging, setIsChanging] = useState(false)
     const [errorPost, setErrorPost] = useState(false)
 
@@ -41,37 +42,44 @@ function ModalNewGame(props){
     }
 
     const handleChange = ()=>{
-        setIsChanging(true)
+        console.log(document.getElementById("libelle").value.length > 1)
+        if(document.getElementById("libelle").value.length > 1){
+            setIsChanging(true)
+            setErrorLibelle(false)
 
-        game.FK_idPersonne = parseInt(document.getElementById("proprietaire").value)
-        game.FK_idTypeJeu = parseInt(document.getElementById("typeJeu").value)
-        game.prototype = document.getElementById("prototype").checked
-        game.libelleJeu = document.getElementById("libelle").value
-        game.duree =document.getElementById("duree").value
-        game.nombreJoueur = document.getElementById("nombreJoueur").value
-        game.ageMinimum = parseInt(document.getElementById("age").value)
+            game.FK_idPersonne = parseInt(document.getElementById("proprietaire").value)
+            game.FK_idTypeJeu = parseInt(document.getElementById("typeJeu").value)
+            game.prototype = document.getElementById("prototype").checked
+            game.libelleJeu = document.getElementById("libelle").value
+            game.duree =document.getElementById("duree").value
+            game.nombreJoueur = document.getElementById("nombreJoueur").value
+            game.ageMinimum = parseInt(document.getElementById("age").value)
+            Axios.post('/api/games/', {game},{ headers: { Authorization: token.getToken() } })
+                .then(res => {
+                    try{
+                        addGameView(game)
+                    }catch (e){
+                        console.log(e)
+                    }
 
+                    props.setModalState(!props.modalState)
+                    setIsChanging(false)
 
-
-        Axios.post('/api/games/', {game},{ headers: { Authorization: token.getToken() } })
-            .then(res => {
-                try{
-                    addGameView(game)
-                }catch (e){
-                    console.log(e)
-                }
-
-                props.setModalState(!props.modalState)
-                setIsChanging(false)
-
-            }).catch(e => {
+                }).catch(e => {
                 setIsChanging(false)
                 setErrorPost(true)
                 //if the token is not the good one
                 if(e.response.data.code === 0){
                     token.destroyToken()
                 }
-        })
+            })
+        }else{
+            setErrorLibelle(true)
+
+        }
+
+
+
 
 
 
@@ -93,13 +101,14 @@ function ModalNewGame(props){
                             <h3>Ajouter un jeu</h3>
                         </div>
                     </CardHeader>
+
                     {(isPendingPersons || isPendingTypes ) && <Waiting className="mt-md" name={"Loading data"} />}
 
                     {!isPendingPersons && !isPendingTypes && <CardBody  className="px-lg-5 py-lg-5">
                         <Form role="form">
                             <FormGroup className="mb-3">
                                 <Label for="libelle">Libelle du jeu</Label>
-                                <InputGroup className="input-group-alternative">
+                                <InputGroup className="input-group-alternative is-invalid">
                                     <InputGroupAddon addonType="prepend">
                                         <InputGroupText>
                                             <i className="ni ni-app" />
@@ -217,7 +226,9 @@ function ModalNewGame(props){
                                     <Input id="duree" placeholder="durée" type="text" />
                                 </InputGroup>
                             </FormGroup>
-
+                            {errorLibelle && <Alert color="danger">
+                                Veuillez renseigner un libelle au jeu
+                            </Alert> }
                             {!isChanging && <div className="text-center">
                                 <Button
                                     onClick={()=>{handleChange(props.game)}}
@@ -228,6 +239,7 @@ function ModalNewGame(props){
                                     Créer un jeu
                                 </Button>
                             </div>}
+
                             {isChanging && <Waiting className="mt-md" name={"Change"} />}
                         </Form>
                     </CardBody>}
