@@ -10,6 +10,7 @@ import ModalDelete from '../game/ModalDelete'
 import Selector from "../utils/Selector";
 import Axios from "axios";
 import token from "../../utils/token";
+import ModalNewGame from "./ModalNewGame";
 
 
 
@@ -28,6 +29,14 @@ function GameList(props) {
     //states related to all the games
     const {data: games, setData: setGames, isPending, error} = useAxios("/api/games")
 
+    //the state to see "add a game" view trough a modal
+    const [modalStateAddGame, setModalStateAddGame] = useState(false)
+
+    //open the modal to add a game
+    const openModalAddGame = () =>{
+        setModalStateAddGame(!modalStateAddGame)
+
+    };
 
 
     //open the modal to modify a game
@@ -48,7 +57,11 @@ function GameList(props) {
     return(
 
         <Container className="justify-content-center" >
-
+            <div className="d-flex flex-row-reverse mb-sm-3">
+                {games && token.getType() === 1 && <Button onClick={() => openModalAddGame()} color="success" outline type="button">
+                    Ajouter un jeu
+                </Button>}
+            </div>
             <table className="table table-striped">
                 <thead>
                 <tr>
@@ -99,6 +112,8 @@ function GameList(props) {
 
             {games && <ModalGame game={gameModal} setGame={setGameModal} modalState={modalState} setModalState={setModalState}/>}
             {games && gameModal && <ModalDelete games={games} setGames={setGames} game={gameModal}  deleteModal={deleteModal} setDeleteModal={setDeleteModal}/>}
+            {games && token.getType() === 1 && <ModalNewGame setGames={setGames} games={games} modalState={modalStateAddGame} setModalState={setModalStateAddGame} />}
+
 
             {error && <Alert color="danger">
                 Erreur lors du changement des données, veuillez recharger la page et réessayer

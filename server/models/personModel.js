@@ -68,6 +68,11 @@ module.exports={
         const queryText = `SELECT * FROM "Personne" WHERE "idPersonne"=${idPersonne};`
         let result = await clientUsed.query(queryText,[])
         return result.rows[0]
+    },
+    getAllPersons: async (client)=>{
+        const clientUsed = await DB.getPoolClient(client)
+        const queryText = `SELECT * FROM "Personne";`
+        return (await clientUsed.query(queryText)).rows
     }
 
 

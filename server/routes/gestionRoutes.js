@@ -25,6 +25,8 @@ router.get('/exposants/', personController.getAllExposants)
 router.post('/exposants/', personController.createPerson)
 router.put('/exposants/:id', personController.updatePerson)
 
+router.get('/personnes', personController.getAllPersons)
+
 router.post('/contact', contactController.createContact)
 router.put('/contact/:id', contactController.updateContact)
 router.delete('/contact/:id', contactController.deleteContact)
