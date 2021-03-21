@@ -9,7 +9,6 @@ import {
 } from "reactstrap";
 
 import useAxios from "../utils/useAxios";
-import Axios from "axios";
 import Waiting from "../components/utils/Waiting";
 import CreateUpdateFestival from "../components/festival/createUpdateFestival";
 
@@ -23,30 +22,9 @@ function FestivalChoice() {
         setData: setFestivalToSee,
         isPending: isPendingFTS,
         error: errorFTS
-    } = useAxios('/api/festival')
+    } = useAxios('/api/user/festival')
     // Change the current state of a festival
-    const [isChanging, setIsChanging] = useState(false)
-    const [errorChanging, setErrorChanging] = useState(null)
     const [modalState, setModalState] = useState(false)
-
-    // Change the current festival to the one given in parameter
-    const changeCurrentFestival = (idFestival) => {
-        setIsChanging(true)
-        Axios.put('/api/gestion/festival/' + idFestival)
-            .then(() => {
-                // We update the festivals here
-                changeViewCurrentFestival(idFestival)
-                setErrorChanging(null)
-                setIsChanging(false)
-            })
-            .catch(err => {
-                setErrorChanging({
-                    message: err.message,
-                    idFestival
-                })
-                setIsChanging(false)
-            })
-    }
 
     const changeViewCurrentFestival = (idFestival) => {
         const updateFestivals = [...festivals];
@@ -102,9 +80,7 @@ function FestivalChoice() {
                             {(!isPendingFTS) &&
                             (<Col>
                                 <Festival festival={festival}
-                                          changeCurrentFestival={changeCurrentFestival}
-                                          isChanging={isChanging}
-                                          errorChanging={errorChanging}
+                                          changeViewCurrentFestival={changeViewCurrentFestival}
                                           updateFestival={updateFestival}
                                           festivalToSee={festivalToSee}
                                           setFestivalToSee={setFestivalToSee}/>
