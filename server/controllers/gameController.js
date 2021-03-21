@@ -1,4 +1,5 @@
 const jeux = require("../models/jeuxModel")
+const utils = require("../utils/utils");
 
 const changePrototype= async (req,res) => {
 
@@ -36,7 +37,35 @@ module.exports = {
         })
 
     },
+    //return all the games
+    getGame: async (req,res) => {
+        await jeux.getGame(req.body.idJeu).then(result => {
+            if(result.length===0){
+                res.status(200).json('No game')
+            }else{
+                res.status(200).json({data:result})
 
+            }
+        }).catch((error)=>{
+            res.status(503).json({error: error})
+        })
+
+    },
+
+    //return all the types of games
+    getTypesJeux: async (req,res) => {
+        await jeux.getTypesJeux().then(result => {
+            if(result.length===0){
+                res.status(200).json('No types')
+            }else{
+                res.status(200).json({data:result})
+
+            }
+        }).catch((error)=>{
+            res.status(503).json({error: error})
+        })
+
+    },
 
 
 
@@ -61,7 +90,42 @@ module.exports = {
         }catch (err){
             res.status(503).json({error: err})
         }
-    }
+    },
+
+    //Create a game
+    createGame: async (req,res)=>{
+        try{
+            const body = req.body;
+            console.log(body)
+            let ageMinimum = parseInt(body.game.ageMinimum);
+            let FK_idPersonne = parseInt(body.game.FK_idPersonne);
+            let FK_idTypeJeu = parseInt(body.game.FK_idTypeJeu);
+            if(isNaN(ageMinimum)){
+                utils.sendErrorNumber(req,res,Object.keys({FK_idTypeJeu})[0])
+            }
+            else if(isNaN(FK_idPersonne)){
+                utils.sendErrorNumber(req,res,Object.keys({FK_idPersonne})[0])
+            }
+            else if(isNaN(ageMinimum)){
+                utils.sendErrorNumber(req,res,Object.keys({ageMinimum})[0])
+            }
+            else{
+                console.log(FK_idTypeJeu)
+                await jeux.createJeu(body.game.libelleJeu,body.game.nombreJoueur,ageMinimum,body.game.duree,body.game.prototype,FK_idTypeJeu,FK_idPersonne)
+                    .then(()=>{
+                        res.status(201).json({inserted:true})
+                    }).catch((error)=>{
+                        res.status(503).json({
+                            error:error,
+                            inserted:false
+                        })
+                    })
+            }
+        }catch (err){
+            res.status(503).json({error: err})
+        }
+
+    },
 
 
 }

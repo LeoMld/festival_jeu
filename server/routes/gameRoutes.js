@@ -11,7 +11,13 @@ router.get('/', gameController.getAllGames)
 
 router.use(token.privateRoute);
 
+router.get('/TypesJeux', gameController.getTypesJeux)
+
+router.post('/', gameController.createGame)
+
+
 router.put('/:id', gameController.handleGame)
+router.get('/:id', gameController.getGame)
 
 router.delete('/:id', gameController.deleteGame)
 

@@ -62,4 +62,21 @@ module.exports={
         return (await clientUsed.query(queryText)).rows
     },
 
+    // Retrieve a game
+    getGame: async (idJeu,client) => {
+        const clientUsed = await DB.getPoolClient(client)
+        const queryText = 'SELECT * FROM "Jeu" WHERE "idJeu"=$1;'
+        const queryValues = [idJeu]
+        return (await clientUsed.query(queryText,queryValues)).rows
+    },
+
+    // Retrieve all types
+    getTypesJeux: async (idJeu,client) => {
+        const clientUsed = await DB.getPoolClient(client)
+        const queryText = 'SELECT * FROM "TypeJeu";'
+        return (await clientUsed.query(queryText)).rows
+    },
+
+
+
 }

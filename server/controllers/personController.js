@@ -151,6 +151,21 @@ module.exports = {
                 res.status(503).json({error: error})
             })
     },
+
+    getAllPersons: async (req,res)=>{
+        await Person.getAllPersons()
+            .then((result)=>{
+                if(result.length===0){
+                    res.status(200).json("Pas de personne")
+                }else{
+                    res.status(200).json(result)
+                }
+            })
+            .catch(error=>{
+                res.status(503).json({error: error})
+            })
+    },
+
     //======================== CREATE ========================
     createPerson : async (req,res)=>{
 
