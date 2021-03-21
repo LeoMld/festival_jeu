@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 
+// Retrieve the status of the user connected, if there is any
 getStatus = async (token) => {
     try {
         const decoded = jwt.verify(token, process.env.JWT_SIGN)
@@ -27,15 +28,29 @@ module.exports = {
 
     },
 
-
+    // Retrieve the status of the user connected, if there is any
     getStatus: async (token) => {
         return await getStatus(token)
     },
 
+    // Retrieve the id of the user connected, if there is any
+    getId: async (token) => {
+        try {
+            const decoded = jwt.verify(token, process.env.JWT_SIGN)
+
+            if (decoded.userId) {
+                return await decoded.userId
+            } else {
+                return 0
+            }
+        } catch (err) {
+            return 0
+        }
+    },
 
     privateRoute: async (req, res, next) => {
         try {
-            if (await getStatus(req.headers.authorization) !== (1)) {
+            if (await getStatus(req.headers.authorization) !== (1 || 0)) {
                 res.status(401).json({code: 0})
             } else {
                 next();
