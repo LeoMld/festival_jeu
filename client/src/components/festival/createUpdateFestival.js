@@ -15,6 +15,7 @@ import {
     Row, Alert
 } from 'reactstrap';
 import Waiting from "../utils/Waiting";
+import token from "../../utils/token";
 
 function CreateUpdateFestival(props) {
 
@@ -87,7 +88,6 @@ function CreateUpdateFestival(props) {
             setRowInput(initInputsUpdate(props.festival))
             setErrInputs(initInputErrorsUpdate(props.festival))
         }
-
     }, [props.festival])
 
     // We add a new row, a new emplacement
@@ -141,7 +141,7 @@ function CreateUpdateFestival(props) {
             nameFestival,
             emplacements: rowsInput
         }
-        Axios.post('/api/gestion/festival', data)
+        Axios.post('/api/gestion/festival', data, {headers: {Authorization: token.getToken()}})
             .then(({data}) => {
                 switch (data.generalStatus) {
                     case 0:
@@ -161,6 +161,9 @@ function CreateUpdateFestival(props) {
             .catch((err) => {
                 setError(err.message)
                 setIsCharging(false)
+                if (err.response.data.code === 0) {
+                    token.destroyToken()
+                }
             })
     }
 
@@ -172,7 +175,7 @@ function CreateUpdateFestival(props) {
             nameFestival,
             idFestival: festival.idFestival
         }
-        Axios.put('/api/gestion/festival', data)
+        Axios.put('/api/gestion/festival', data, {headers: {Authorization: token.getToken()}})
             .then(({data}) => {
                 switch (data.generalStatus) {
                     case 0:
@@ -193,6 +196,9 @@ function CreateUpdateFestival(props) {
             .catch((err) => {
                 setError(err.message)
                 setIsCharging(false)
+                if (err.response.data.code === 0) {
+                    token.destroyToken()
+                }
             })
     }
 
@@ -245,7 +251,7 @@ function CreateUpdateFestival(props) {
                                                 </Button>
                                             </Col> :
                                             <Col>
-                                                <Waiting></Waiting>
+                                                <Waiting/>
                                             </Col>)}
                                     </Row>
                                 </FormGroup>
