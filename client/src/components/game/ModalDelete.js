@@ -18,6 +18,9 @@ import Axios from "axios";
 import Waiting from "../utils/Waiting";
 import token from "../../utils/token";
 
+import among_sage from "../../assets/images/amongus/among-sage.png"
+import among_green from "../../assets/images/amongus/among-green.png";
+
 function ModalDelete(props){
 
     //if there is an error when deleting
@@ -80,10 +83,17 @@ function ModalDelete(props){
                 >
                     <span aria-hidden={true}>×</span>
                 </button>
+
             </div>
+
             <div className="modal-body">
                 <div className="py-3 text-center">
-                    <i className="ni ni-bell-55 ni-3x" />
+                    <img
+                        style={{height : "80px"}}
+                        alt="logo"
+                        className="img-fluid floating"
+                        src={among_sage}
+                    />
                     <h4 className="heading mt-4">Veuillez confirmer la deletion</h4>
                     <p>
                         Vous aller supprimer le jeu "{props.game.libelleJeu}"

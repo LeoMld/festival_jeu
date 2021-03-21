@@ -21,6 +21,8 @@ import Waiting from "../utils/Waiting";
 import token from "../../utils/token";
 import useAxios from "../../utils/useAxios";
 
+import among_green from "../../assets/images/amongus/among-green.png"
+
 
 function ModalNewGame(props){
 
@@ -99,6 +101,12 @@ function ModalNewGame(props){
                     <CardHeader className="bg-transparent pb-5">
                         <div className="text-muted text-center mt-2 mb-3">
                             <h3>Ajouter un jeu</h3>
+                            <img
+                                style={{height : "80px"}}
+                                alt="logo"
+                                className="img-fluid floating"
+                                src={among_green}
+                            />
                         </div>
                     </CardHeader>
 

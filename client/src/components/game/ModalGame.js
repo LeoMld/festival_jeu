@@ -18,6 +18,8 @@ import Axios from "axios";
 import Waiting from "../utils/Waiting";
 import token from "../../utils/token";
 
+import among_modify from "../../assets/images/amongus/among_modify.png"
+import among_sage from "../../assets/images/amongus/among-sage.png";
 
 function ModalGame(props){
 
@@ -68,7 +70,14 @@ function ModalGame(props){
                     <CardHeader className="bg-transparent pb-5">
                         <div className="text-muted text-center mt-2 mb-3">
                             <h3>Modifier le jeu</h3>
+                            <img
+                                style={{height : "100px"}}
+                                alt="logo"
+                                className="img-fluid floating"
+                                src={among_modify}
+                            />
                         </div>
+
                     </CardHeader>
                     <CardBody  className="px-lg-5 py-lg-5">
                         {props.game != null && <Form role="form">
