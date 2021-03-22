@@ -193,6 +193,16 @@ module.exports = {
             })
     },
 
+    getPerson :async (req,res)=>{
+        let idPerson =req.params.id
+        await Person.getPerson(idPerson)
+            .then((result)=>{
+               res.status(200).json(result);
+            }).catch(err=>{
+                res.status(503).json(err);
+            })
+    },
+
     //======================== CREATE ========================
     createPerson : async (req,res)=>{
 
