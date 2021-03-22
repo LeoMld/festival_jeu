@@ -124,7 +124,7 @@ function ContactModal(props){
                                     id="nom"
                                     name="nomContact"
                                     disabled={!update}
-                                    className={errorDetail.nomContact && "is-invalid"}
+                                    className={errorDetail.nomContact ? "is-invalid" :""}
                                     value={contact.nomContact}
                                     onChange={(event)=>{setContact({...contact,nomContact:event.target.value})}}
                                     placeholder="Nom Contact"
@@ -137,7 +137,7 @@ function ContactModal(props){
                                     id="prenom"
                                     name="prenomContact"
                                     disabled={!update}
-                                    className={errorDetail.prenomContact && "is-invalid"}
+                                    className={errorDetail.prenomContact ? "is-invalid" :""}
                                     value={contact && contact.prenomContact}
                                     onChange={(event)=>{setContact({...contact,prenomContact:event.target.value})}}
                                     placeholder="Prénom"
@@ -151,7 +151,7 @@ function ContactModal(props){
                                     id="mail"
                                     name="mailContact"
                                     disabled={!update}
-                                    className={errorDetail.mailContact && "is-invalid"}
+                                    className={errorDetail.mailContact ? "is-invalid" :""}
                                     value={contact && contact.mailContact}
                                     onChange={(event)=>{setContact({...contact,mailContact:event.target.value})}}
                                     placeholder="Mail"
@@ -164,7 +164,7 @@ function ContactModal(props){
                                     id="fonction"
                                     name="fonctionContact"
                                     disabled={!update}
-                                    className={errorDetail.fonctionContact && "is-invalid"}
+                                    className={errorDetail.fonctionContact ? "is-invalid" : ""}
                                     value={contact && contact.fonctionContact}
                                     onChange={(event)=>{setContact({...contact,fonctionContact:event.target.value})}}
                                     placeholder="Mail"
@@ -179,7 +179,7 @@ function ContactModal(props){
                                     id="telPortableContact"
                                     name="telPortableContact"
                                     disabled={!update}
-                                    className={errorDetail.telPortableContact && "is-invalid"}
+                                    className={errorDetail.telPortableContact ? "is-invalid" : ""}
                                     value={contact && contact.telPortableContact}
                                     onChange={(event)=>{setContact({...contact,telPortableContact:event.target.value})}}
                                     placeholder="Téléphone Portable"
@@ -192,7 +192,7 @@ function ContactModal(props){
                                     id="telFixeContact"
                                     name="telFixeContact"
                                     disabled={!update}
-                                    className={errorDetail.telFixeContact && "is-invalid"}
+                                    className={errorDetail.telFixeContact ? "is-invalid" :""}
                                     value={contact && contact.telFixeContact}
                                     onChange={(event)=>{setContact({...contact,telFixeContact:event.target.value})}}
                                     placeholder="Téléphone Fixe"

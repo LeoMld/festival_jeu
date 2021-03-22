@@ -4,7 +4,7 @@ import PersonDetails from "../../views/PersonDetails";
 function Contact(props){
 
     return(
-        <tr onClick={()=>{props.openModal(props.c,0)}}>
+        <tr key={props.index} onClick={()=>{props.openModal(props.c,0)}}>
             <td>{props.c.nomContact+" - "+props.c.prenomContact}</td>
             <td>
                 {props.c.mailContact}

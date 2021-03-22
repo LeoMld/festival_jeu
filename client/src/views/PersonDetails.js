@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import axios from "axios";
 import useAxios from "../utils/useAxios";
 import {Button, Card, CardBody, CardHeader, Col, Collapse, Input, Label, Row, Table} from "reactstrap";
@@ -9,19 +9,15 @@ import ContactModal from "../components/contact/contactModal";
 
 
 const PersonDetails=React.memo(function PersonDetails(props){
-    const initPersonDetail = (person)=>{
-        return {
-            nomPersonne:person.nomPersonne,
-            adressePersonne:person.adressePersonne,
-            statutEditeur:person.statutEditeur,
-            estEditeur:person.estEditeur,
-            estExposant:person.estExposant,
-            exposantInactif:person.exposantInactif
-        }
+    const [localPerson,setLocalPerson] = useState(props.location.personProps)
+
+    const initPersonDetail = ()=>{
+        setLocalPerson(props.location.personProps)
     }
     let typePerson = props.type===1?"editeurs":"exposants"
     const{data:info,setData:setInfo,isPending,error}= useAxios("/api/gestion/"+typePerson+"/"+props.match.params.idPerson)
     //state for the collapse
+
 
     const [editPerson,setEditPerson]=useState(false)
     const [errorDetail,setErrorDetail]=useState({
@@ -52,11 +48,8 @@ const PersonDetails=React.memo(function PersonDetails(props){
     }
     let [modalState,setModalState] = useState(false)
     let [contact,setContact] = useState()
-    const [localPerson,setLocalPerson] = useState()
     const updatePersonDetail = (event)=>{
         setLocalPerson({...localPerson,[event.target.id]:event.target.value})
-        console.log(localPerson)
-        event.preventDefault()
     }
     const updateSelector = (event)=>{
         setLocalPerson({...localPerson,[event.target.id]:event.target.checked})
@@ -95,7 +88,6 @@ const PersonDetails=React.memo(function PersonDetails(props){
         return (<Waiting/>)
     }
     else if(info!== null){
-
         return (
 
             <div>
@@ -122,7 +114,7 @@ const PersonDetails=React.memo(function PersonDetails(props){
                                                         color="danger"
                                                         type="button"
                                                         onClick={()=>{
-                                                            setLocalPerson(info.person)
+                                                            initPersonDetail()
                                                             setEditPerson(!editPerson)}}
                                                     >Annuler </Button>
                                                 </div>
@@ -145,8 +137,8 @@ const PersonDetails=React.memo(function PersonDetails(props){
                                                             name="nomPersonne"
                                                             placeholder="Nom"
                                                             disabled={!editPerson}
-                                                            className={errorDetail.nomPersonne && "is-invalid"}
-                                                            defaultValue={info.person.nomPersonne}
+                                                            className={errorDetail.nomPersonne ? "is-invalid" : ""}
+                                                            value={localPerson.nomPersonne}
                                                             onChange={
                                                                 (event) => {
                                                                     updatePersonDetail(event)
@@ -163,8 +155,8 @@ const PersonDetails=React.memo(function PersonDetails(props){
                                                             name="adressePersonne"
                                                             placeholder="Adresse"
                                                             disabled={!editPerson}
-                                                            className={errorDetail.adressePersonne && "is-invalid"}
-                                                            defaultValue={info.person.adressePersonne}
+                                                            className={errorDetail.adressePersonne ? "is-invalid" : ""}
+                                                            value={localPerson.adressePersonne}
                                                             onChange={
                                                                 (event) => {
                                                                     updatePersonDetail(event)
@@ -181,8 +173,8 @@ const PersonDetails=React.memo(function PersonDetails(props){
                                                             name="statutEditeur"
                                                             placeholder="Taille"
                                                             disabled={!editPerson}
-                                                            className={errorDetail.statutEditeur && "is-invalid"}
-                                                            defaultValue={info.person.statutEditeur}
+                                                            className={errorDetail.statutEditeur ? "is-invalid" : ""}
+                                                            value={localPerson.statutEditeur}
                                                             onChange={
                                                                 (event) => {
                                                                     updatePersonDetail(event)
@@ -202,7 +194,7 @@ const PersonDetails=React.memo(function PersonDetails(props){
                                                                 onChange={(event)=> {updateSelector(event)}}
                                                                 disabled={!editPerson}
                                                                 type="checkbox"
-                                                                defaultChecked={info.person.estEditeur}/>
+                                                                checked={localPerson.estEditeur}/>
                                                             <span className="custom-toggle-slider rounded-circle"></span>
                                                         </label>
                                                     </div>
@@ -216,7 +208,7 @@ const PersonDetails=React.memo(function PersonDetails(props){
                                                                 onChange={(event)=> {updateSelector(event)}}
                                                                 disabled={!editPerson}
                                                                 type="checkbox"
-                                                                defaultChecked={info.person.estExposant}/>
+                                                                checked={localPerson.estExposant}/>
                                                             <span className="custom-toggle-slider rounded-circle"></span>
                                                         </label>
                                                     </div>
@@ -230,7 +222,7 @@ const PersonDetails=React.memo(function PersonDetails(props){
                                                                 onChange={(event)=> {updateSelector(event)}}
                                                                 disabled={!editPerson}
                                                                 type="checkbox"
-                                                                defaultChecked={info.person.exposantInactif}/>
+                                                                checked={localPerson.exposantInactif}/>
                                                             <span className="custom-toggle-slider rounded-circle"></span>
                                                         </label>
                                                     </div>
@@ -264,8 +256,8 @@ const PersonDetails=React.memo(function PersonDetails(props){
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                {info.contacts.map((c)=>{
-                                                    return(<Contact c={c} openModal={openModal}/>)
+                                                {info.contacts.map((c,index)=>{
+                                                    return(<Contact c={c} openModal={openModal} index={index}/>)
                                                 })}
                                                 </tbody>
                                             </Table>

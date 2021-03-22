@@ -3,6 +3,7 @@ import axios from 'axios';
 import Persons from "../../views/Persons";
 import Selector from "../utils/Selector";
 import {Link} from "react-router-dom";
+import token from "../../utils/token";
 
 function Person(props){
     const [person,setPerson]=useState(props.person)
@@ -17,27 +18,30 @@ function Person(props){
 
     }
     const handleChangeExposant = (bool)=>{
-        axios.put(url+person.idPersonne,{estExposant:bool})
+        axios.put(url+person.idPersonne,{estExposant:bool},{ headers: { Authorization: token.getToken() } })
             .then(()=>{
                 setPerson({...person,estExposant:bool})
             })
     }
     const handleChangeEditeur = (bool)=>{
-        axios.put(url+person.idPersonne,{estEditeur:bool})
+        axios.put(url+person.idPersonne,{estEditeur:bool},{ headers: { Authorization: token.getToken() } })
             .then(()=>{
                 setPerson({...person,estEditeur:bool})
             })
     }
     const handleChangeExposantInactif = (bool)=>{
-        axios.put(url+person.idPersonne,{exposantInactif:bool})
+        axios.put(url+person.idPersonne,{exposantInactif:bool},{ headers: { Authorization: token.getToken() } })
             .then(()=>{
                 setPerson({...person,exposantInactif:bool})
             })
     }
     return(
-        <tr>
+        <tr key={props.index}>
             <td>
-                <Link to={"/"+typePerson+"/"+person.idPersonne}>{person.nomPersonne}</Link>
+                <Link to={{
+                    pathname: "/" + typePerson + "/" + person.idPersonne,
+                    personProps:person
+                }}>{person.nomPersonne}</Link>
             </td>
             {
                 props.type===1 &&
@@ -48,13 +52,13 @@ function Person(props){
             <td >
                 <label className="custom-toggle">
                     <input onChange={()=> {handleChangeEditeur(!person.estEditeur)}} checked={person.estEditeur} type="checkbox" defaultChecked={person.estEditeur}/>
-                    <span className="custom-toggle-slider rounded-circle"></span>
+                    <span className="custom-toggle-slider rounded-circle"/>
                 </label>
             </td>
             <td >
                 <label className="custom-toggle">
                     <input onChange={()=> {handleChangeExposant(!person.estExposant)}} checked={person.estExposant} type="checkbox" defaultChecked={person.estExposant}/>
-                    <span className="custom-toggle-slider rounded-circle"></span>
+                    <span className="custom-toggle-slider rounded-circle"/>
                 </label>
             </td>
             <td >

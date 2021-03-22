@@ -57,6 +57,7 @@ function App() {
                 <Persons {...props} type={0}/>
             }/>
             <Route path="/Editeurs/:idPerson" exact component={(props)=> <PersonDetails {...props} type={1}/>}/>
+            <Route path="/Exposants/:idPerson" exact component={(props)=> <PersonDetails {...props} type={0}/>}/>
             <Route path="/login" exact component={Login}/>
 
                 <Route path="/"><Redirect to="/Accueil"/></Route>
