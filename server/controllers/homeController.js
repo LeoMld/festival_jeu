@@ -1,7 +1,5 @@
 const usersModel = require("../models/utilisateurModel")
-const Festival = require("../models/festivalModel")
 const bcrypt = require('bcrypt');
-const saltRounds = 10;
 const jwt = require('../utils/token')
 
 module.exports = {
@@ -47,46 +45,5 @@ module.exports = {
             res.status(503).json({error: err})
         }
 
-    },
-
-    // Retrieve the festival to display of the user
-    getFestivalToDisplay: async (req, res) => {
-        // TODO check le token, avec le token on a l'id utilisateur
-        // Si hors ligne => on récupère le festival courant
-        // Si en ligne, on récupère celui de l'utilisateur
-        const status = 1
-        const noFestival = {idFestival: 0}
-        switch (status) {
-            case 1:
-            case 0:
-                // User connected
-                usersModel.retrieveFestivalUser(1)
-                    .then((festivalToSee) => {
-                        // In case there is no current festival
-                        if (festivalToSee.idFestival === null) {
-                            festivalToSee = noFestival
-                        }
-                        res.status(200).json(festivalToSee)
-                    })
-                    .catch(() => {
-                        // An error occured
-                        res.status(503).json()
-                    })
-                break;
-            // User not connected
-            default:
-                Festival.retrieveCurrentFestival()
-                    .then((festivalToSee) => {
-                        // In case there is no current festival
-                        if (festivalToSee.idFestival === null) {
-                            festivalToSee = noFestival
-                        }
-                        res.status(200).json(festivalToSee)
-                    })
-                    .catch(() => {
-                        // An error occured
-                        res.status(503).json()
-                    })
-        }
     }
 }

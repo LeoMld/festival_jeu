@@ -1,6 +1,5 @@
 const DB = require('../config/config')
 
-const Contact = require('./contactModel');
 const Festival = require('./festivalModel');
 
 
@@ -31,7 +30,7 @@ module.exports = {
         const queryValues = [idUtilisateur]
         let festivalToSee = (await clientUsed.query(queryText, queryValues)).rows[0]
         // If it's null, it's automatically the current one
-        if (festivalToSee.idFestival === null) {
+        if (festivalToSee === undefined || festivalToSee.idFestival === null) {
             festivalToSee = await Festival.retrieveCurrentFestival()
         }
         return festivalToSee

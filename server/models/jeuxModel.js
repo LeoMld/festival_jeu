@@ -18,6 +18,14 @@ module.exports={
         clientUsed.query(text,queryValues)
     },
 
+    //delete a type
+    deleteType : async (idJeu, client) =>{
+        const clientUsed = await DB.getPoolClient(client)
+        const text = 'DELETE FROM "TypeJeu" WHERE "idTypeJeu" = $1'
+        const queryValues = [idJeu]
+        clientUsed.query(text,queryValues)
+    },
+
     //modify the prototype value of a game (boolean)
     modifyPrototypeJeu : async (idJeu, isPrototype, client) =>{
 

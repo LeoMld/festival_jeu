@@ -7,6 +7,10 @@ const contactController = require("../controllers/contactController");
 const zoneController = require("../controllers/zoneController");
 const personController = require("../controllers/personController");
 
+const token = require('../utils/token')
+
+router.use(token.privateRoute);
+
 router.get('/festival', festivalController.getAllFestivals)
 router.post('/festival', festivalController.createFestival)
 router.put('/festival', festivalController.updateNameFestival)
@@ -17,13 +21,11 @@ router.post('/editeurs/', personController.createPerson)
 router.get('/editeurs/:id', personController.getPersonPage)
 router.put('/editeurs/:id', personController.updatePerson)
 
-router.get('/exposants/',personController.getAllExposants)
+router.get('/exposants/', personController.getAllExposants)
 router.post('/exposants/', personController.createPerson)
 router.put('/exposants/:id', personController.updatePerson)
 
-
 router.get('/personnes', personController.getAllPersons)
-
 
 router.post('/contact', contactController.createContact)
 router.put('/contact/:id', contactController.updateContact)

@@ -32,8 +32,9 @@ import {
 class Footer extends React.Component {
   render() {
     return (
+
       <>
-        <footer className=" footer">
+        <footer className=" footer has-cards">
           <Container>
             <Row className=" row-grid align-items-center mb-5">
               <Col lg="6">

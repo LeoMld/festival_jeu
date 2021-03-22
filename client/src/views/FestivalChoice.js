@@ -9,7 +9,6 @@ import {
 } from "reactstrap";
 
 import useAxios from "../utils/useAxios";
-import Axios from "axios";
 import Waiting from "../components/utils/Waiting";
 import CreateUpdateFestival from "../components/festival/createUpdateFestival";
 
@@ -23,30 +22,9 @@ function FestivalChoice() {
         setData: setFestivalToSee,
         isPending: isPendingFTS,
         error: errorFTS
-    } = useAxios('/api/festival')
+    } = useAxios('/api/user/festival')
     // Change the current state of a festival
-    const [isChanging, setIsChanging] = useState(false)
-    const [errorChanging, setErrorChanging] = useState(null)
     const [modalState, setModalState] = useState(false)
-
-    // Change the current festival to the one given in parameter
-    const changeCurrentFestival = (idFestival) => {
-        setIsChanging(true)
-        Axios.put('/api/gestion/festival/' + idFestival)
-            .then(() => {
-                // We update the festivals here
-                changeViewCurrentFestival(idFestival)
-                setErrorChanging(null)
-                setIsChanging(false)
-            })
-            .catch(err => {
-                setErrorChanging({
-                    message: err.message,
-                    idFestival
-                })
-                setIsChanging(false)
-            })
-    }
 
     const changeViewCurrentFestival = (idFestival) => {
         const updateFestivals = [...festivals];
@@ -77,24 +55,23 @@ function FestivalChoice() {
 
     return (
         <div className="container justify-content-center">
-            <Row className="mb-5 mt-5">
-                <Col>
-                    <h1 className="font-weight-900">Liste des festivals</h1>
-                </Col>
-                <Col>
-                    <Button
-                        color="success"
-                        type="button"
-                        onClick={() => setModalState(!modalState)}
-                    >
-                        Nouveau Festival
-                    </Button>
-                </Col>
-                <CreateUpdateFestival modalState={modalState}
-                                      setModalState={setModalState}
-                                      componentState={0}
-                                      addNewFestival={addNewFestival}/>
-            </Row>
+            <h1 className="font-weight-900 mt-5 mb-5">Liste des festivals</h1>
+            <div className="d-flex flex-row-reverse mb-sm-3">
+                <Button
+                    color="success"
+                    outline
+                    type="button"
+                    onClick={() => setModalState(!modalState)}
+                >
+                    Nouveau Festival
+                </Button>
+            </div>
+
+            <CreateUpdateFestival modalState={modalState}
+                                  setModalState={setModalState}
+                                  componentState={0}
+                                  addNewFestival={addNewFestival}/>
+
             {(error === null && errorFTS === null) ?
                 (!isPending ? festivals.map((festival, index) => {
                     return (
@@ -102,9 +79,7 @@ function FestivalChoice() {
                             {(!isPendingFTS) &&
                             (<Col>
                                 <Festival festival={festival}
-                                          changeCurrentFestival={changeCurrentFestival}
-                                          isChanging={isChanging}
-                                          errorChanging={errorChanging}
+                                          changeViewCurrentFestival={changeViewCurrentFestival}
                                           updateFestival={updateFestival}
                                           festivalToSee={festivalToSee}
                                           setFestivalToSee={setFestivalToSee}/>

@@ -37,7 +37,6 @@ module.exports = {
     getId: async (token) => {
         try {
             const decoded = jwt.verify(token, process.env.JWT_SIGN)
-
             if (decoded.userId) {
                 return await decoded.userId
             } else {
