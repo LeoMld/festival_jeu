@@ -30,14 +30,27 @@ function ModalDelete(props){
     const [isChanging, setIsChanging] = useState(false)
 
     const deleteGameView = ()=>{
-        const newGames = {data:[]}
-        props.games.data.forEach(game =>{
-            if(game.idJeu !== props.game.idJeu){
-                //get  "game" index
-                newGames.data.push(game)
-            }
-        } )
-        props.setGames(newGames)
+        if(props.type===1){
+            const newGames=[]
+            props.games.games.forEach(game => {
+                if (game.idJeu !== props.game.idJeu) {
+                    //get  "game" index
+                    newGames.push(game)
+                }
+            })
+            props.setGames({...props.games,games:newGames})
+
+
+        }else{
+            const newGames = {data:[]}
+            props.games.data.forEach(game =>{
+                if(game.idJeu !== props.game.idJeu){
+                    //get  "game" index
+                    newGames.data.push(game)
+                }
+            } )
+            props.setGames(newGames)
+        }
 
 
     }
@@ -56,7 +69,7 @@ function ModalDelete(props){
             console.log(e)
             setErrorDeleting(true)
             //if the token is not the good one
-            if(e.response.data.code === 0){
+            if(e.response && e.response.data.code === 0){
                 token.destroyToken()
             }
         })

@@ -67,7 +67,15 @@ function Game(props){
                         <i className="ni ni-circle-08 pt-1"/>
                     </button>
                     <button type="button" rel="tooltip" className="btn btn-danger btn-icon btn-sm "
-                            data-original-title="" title="delete game" onClick={() => openDeleteModal(props.game)}>
+                            data-original-title="" title="delete game" onClick={() => {
+                                if(props.type===1){
+                                    props.openDeleteModal(props.game)
+                                }else{
+
+                                    openDeleteModal(props.game)
+                                }
+                            }
+                    }>
                         <i className="ni ni-fat-remove pt-1"/>
                     </button>
                 </td>}
