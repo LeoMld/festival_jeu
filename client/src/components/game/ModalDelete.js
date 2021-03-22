@@ -96,7 +96,7 @@ function ModalDelete(props){
                     />
                     <h4 className="heading mt-4">Veuillez confirmer la deletion</h4>
                     <p>
-                        Vous aller supprimer le jeu "{props.game.libelleJeu}"
+                        Vous allez supprimer le jeu "{props.game.libelleJeu}"
                     </p>
                 </div>
             </div>

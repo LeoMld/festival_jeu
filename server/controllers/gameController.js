@@ -69,6 +69,7 @@ module.exports = {
 
 
 
+
     handleGame: async (req,res) => {
         try{
             //si il y a un jeu dans la requête, cela indique que l'on veut modifier tout le jeu
@@ -87,6 +88,15 @@ module.exports = {
         try{
             await jeux.deleteJeu(req.params.id)
             res.status(200).json('game deleted')
+        }catch (err){
+            res.status(503).json({error: err})
+        }
+    },
+
+    deleteType : async (req,res)=>{
+        try{
+            await jeux.deleteType(req.params.id)
+            res.status(200).json('type deleted')
         }catch (err){
             res.status(503).json({error: err})
         }
@@ -121,6 +131,30 @@ module.exports = {
                         })
                     })
             }
+        }catch (err){
+            res.status(503).json({error: err})
+        }
+
+    },
+    //Create a game
+    createType: async (req,res)=>{
+        try{
+            const body = req.body
+            if(body.newType.length < 1){
+                res.status(400).json({error: "Veuillez insérer un type"})
+            }else{
+                await jeux.createTypeGame(body.newType)
+                    .then(()=>{
+                        res.status(201).json({inserted:true})
+                    }).catch((error)=>{
+                        res.status(503).json({
+                            error:error,
+                            inserted:false
+                        })
+                    })
+            }
+
+
         }catch (err){
             res.status(503).json({error: err})
         }

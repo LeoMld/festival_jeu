@@ -12,6 +12,8 @@ router.get('/', gameController.getAllGames)
 router.use(token.privateRoute);
 
 router.get('/TypesJeux', gameController.getTypesJeux)
+router.post('/TypesJeux', gameController.createType)
+router.delete('/TypesJeux/:id', gameController.deleteType)
 
 router.post('/', gameController.createGame)
 
