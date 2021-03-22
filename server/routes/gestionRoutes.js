@@ -31,6 +31,7 @@ router.post('/contact', contactController.createContact)
 router.put('/contact/:id', contactController.updateContact)
 router.delete('/contact/:id', contactController.deleteContact)
 
+router.get('/zone', zoneController.getAllZonesFestival)
 router.post('/zone/', zoneController.createNewZone)
 router.put('/zone/:id', zoneController.updateZone)
 router.delete('/zone/:id', zoneController.deleteZone)

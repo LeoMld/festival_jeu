@@ -32,7 +32,7 @@ module.exports = {
             // We execute the query and stock the new festival created
             const newFestival = (await client.query(queryText, queryValues)).rows[0]
             // We need to create a first zone "undefined" in the festival
-            await Zone.createNewZone("Zone - Indéfinie", newFestival.idFestival, client)
+            await Zone.createNewZone("Indéfinie", newFestival.idFestival, client)
             // We need to create the emplacements
             let emp
             newFestival.emplacements = [emplacements.length]
