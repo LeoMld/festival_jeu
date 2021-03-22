@@ -1,8 +1,4 @@
 const DB = require('../config/config')
-
-const Contact = require('./contactModel');
-
-//Create an editor and his contact
 module.exports={
 
     // We create a new game
@@ -59,6 +55,13 @@ module.exports={
     getAllGames: async (client) => {
         const clientUsed = await DB.getPoolClient(client)
         const queryText = 'SELECT * FROM "Jeu" ;'
+        return (await clientUsed.query(queryText)).rows
+    },
+    //retrieve all games from an editor
+    getEditorGames: async (idEditor,client) => {
+        const clientUsed = await DB.getPoolClient(client)
+        const queryText = `SELECT j."idJeu", "libelleJeu", "nombreJoueur", "ageMinimum", duree, prototype, "FK_idPersonne",t."libelleTypeJeu" FROM "Jeu" j JOIN "TypeJeu" t ON t."idTypeJeu" = j."FK_idTypeJeu" 
+        WHERE j."FK_idPersonne"=${idEditor} ;`
         return (await clientUsed.query(queryText)).rows
     },
 

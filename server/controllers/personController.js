@@ -1,8 +1,8 @@
 const Contact = require("../models/contactModel")
 const Person = require("../models/personModel")
 const utils = require("../utils/utils");
-
-
+const Games = require("../models/jeuxModel")
+const Reservation = require("../models/reservationModel")
 const checkInputs = (data)=>{
     let error={
         nbError:0,
@@ -97,32 +97,59 @@ module.exports = {
     //======================== GETTER ========================
 
     //retrieve all the editor's info and his contacts
-    getEditorPage : async (req,res)=>{
+    getPersonPage : async (req,res)=>{
         let idEditor = req.params.id;
+        console.log(req.params)
         if(isNaN(idEditor)){
             utils.sendErrorNumber(req,res,Object.keys({idEditor})[0])
         }else{
             let info = {}
+            let error={}
+            //retrieve the person info
             await Person.getPerson(idEditor)
                 .then((result)=>{
-                    info=result;
-                }).catch(error=>{
-
-                    res.status(503).json({error: error})
+                    info.person=result;
+                }).catch(err=>{
+                    error.person=err
                 })
-            await Contact.getContactsOf(idEditor)
-                .then((result)=>{
-                    if(result.length===0){
-                        info.contacts="No Contacts"
-                        res.status(200).json(info)
-                    }else{
+            if(info.person!==undefined){
+                //retrieve his contacts
+                await Contact.getContactsOf(idEditor)
+                    .then((result)=>{
                         info.contacts=result
-                        res.status(200).json(info)
-                    }
-                })
-                .catch((error)=>{
-                    res.status(503).json({error: error})
-                })
+                    })
+                    .catch((err)=>{
+                        error.contacts=err
+
+                    })
+                if(info.person.estEditeur){
+                    await Games.getEditorGames(idEditor)
+                        .then((result)=>{
+                            info.games=result
+                        }).catch((err)=>{
+                            error.games = err
+                        })
+                }
+                if(info.person.estExposant){
+                    await Reservation.getPersonReservations(idEditor)
+                        .then((result)=>{
+                            info.reservations=result
+                        })
+                        .catch(err=>{
+                            console.log(err)
+                            console.log("ERROR")
+                            error.reservations=err
+                        })
+                }
+                if(error.person !== undefined || error.contacts !== undefined ||error.games !== undefined || error.reservations !== undefined){
+                    res.status(503).json(error)
+                }else{
+                    res.status(200).json(info)
+                }
+            }else{
+                res.status(404).json({msg:"Mauvaise requete"})
+            }
+
         }
     },
     getAllEditors: async (req,res)=>{

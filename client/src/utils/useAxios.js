@@ -19,9 +19,12 @@ const useAxios = (url) => {
                 setError(err.message)
                 setIsPending(false);
                 //if the token is not the good one
-                if(err.response.data.code === 0){
+                if(err.response && err.response.code === 0){
                     token.destroyToken()
                 }
+                /*if(err.response.data.code === 0){
+                    token.destroyToken()
+                }*/
             })
     }, [url])
 

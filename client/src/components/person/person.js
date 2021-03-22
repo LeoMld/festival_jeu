@@ -2,17 +2,19 @@ import React, {useState, useEffect} from 'react'
 import axios from 'axios';
 import Persons from "../../views/Persons";
 import Selector from "../utils/Selector";
+import {Link} from "react-router-dom";
 
 function Person(props){
     const [person,setPerson]=useState(props.person)
-    const [exposant,setExposant]=useState(person.estExposant)
-    const [editeur,setEditeur]=useState(person.estEditeur)
-    const [inactif,setInactif]=useState(person.exposantInactif)
     let url;
+    let typePerson
     if(props.type===1){
         url = "/api/gestion/editeurs/"
+        typePerson = "Editeurs"
     }else{
         url = "/api/gestion/exposants/"
+        typePerson = "Exposants"
+
     }
     const handleChangeExposant = (bool)=>{
         axios.put(url+person.idPersonne,{estExposant:bool})
@@ -35,7 +37,7 @@ function Person(props){
     return(
         <tr>
             <td>
-                {person.nomPersonne}
+                <Link to={"/"+typePerson+"/"+person.idPersonne}>{person.nomPersonne}</Link>
             </td>
             {
                 props.type===1 &&

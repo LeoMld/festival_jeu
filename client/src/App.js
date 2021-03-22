@@ -18,6 +18,7 @@ import FestivalChoice from "./views/FestivalChoice";
 import AllGames from "./views/AllGames";
 import Login from "./views/Login";
 import Persons from "./views/Persons";
+import PersonDetails from "./views/PersonDetails";
 
 function App() {
 
@@ -56,6 +57,7 @@ function App() {
             <Route path="/Exposants" exact component={ (props)=>
                 <Persons {...props} type={0}/>
             }/>
+            <Route path="/Editeurs/:idPerson" exact component={(props)=> <PersonDetails {...props} type={1}/>}/>
             <Route path="/login" exact component={Login}/>
 
               <Route path="/"><Redirect to="/Accueil" /></Route>
