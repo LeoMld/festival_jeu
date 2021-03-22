@@ -38,10 +38,15 @@ function ModalNewGame(props){
     const {data: persons, setData: setPersons, isPending : isPendingPersons, error : errorPersons} = useAxios("/api/gestion/personnes")
 
     const addGameView = (game)=>{
-        const newGames = props.games
-        newGames.push(game)
-        props.setGames(newGames)
-    }
+        if(props.type===1){
+            const newGames = props.games.games
+            newGames.push(game)
+            props.setGames({...props.games,games:newGames})
+        }else{
+            const newGames = props.games
+            newGames.push(game)
+            props.setGames(newGames)
+        }
 
     const handleChange = ()=>{
         if(document.getElementById("libelle").value.length > 1){

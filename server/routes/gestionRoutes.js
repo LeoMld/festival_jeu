@@ -9,6 +9,9 @@ const personController = require("../controllers/personController");
 
 const token = require('../utils/token')
 
+router.get('/editeurs/:id', personController.getPersonPage)
+
+
 router.use(token.privateRoute);
 
 router.get('/festival', festivalController.getAllFestivals)
@@ -18,7 +21,6 @@ router.put('/festival/:id', festivalController.changeCurrentFestival)
 
 router.get('/editeurs/', personController.getAllEditors)
 router.post('/editeurs/', personController.createPerson)
-router.get('/editeurs/:id', personController.getPersonPage)
 router.put('/editeurs/:id', personController.updatePerson)
 
 router.get('/exposants/', personController.getAllExposants)

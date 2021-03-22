@@ -107,7 +107,10 @@ function ContactModal(props){
     return(
         <div>
             <Modal toggle={
-                () => {props.setModalState(!props.modalState)}
+                () => {
+                    props.setModalState(!props.modalState)
+                    props.initError()
+                }
             } isOpen={props.modalState}>
 
                 <div className=" modal-header">

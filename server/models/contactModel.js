@@ -8,7 +8,6 @@ module.exports = {
             const queryText = `INSERT INTO "Contact" 
 ("prenomContact","nomContact","mailContact","telFixeContact","telPortableContact","fonctionContact","principal","FK_idPersonne") 
 VALUES ('${prenomContact}','${nomContact}','${mailContact}',${telFixeContact},${telPortableContact},'${fonctionContact}',${principal},${FK_idPersonne});`
-            console.log(queryText)
             await clientUsed.query(queryText,[])
         }catch (e) {
             throw e
@@ -41,7 +40,6 @@ VALUES ('${prenomContact}','${nomContact}','${mailContact}',${telFixeContact},${
                 throw {error:"No contact with that id"}
             }
         }catch (e) {
-            console.log(typeof e)
             throw e
         }
 

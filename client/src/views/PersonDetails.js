@@ -1,11 +1,14 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
 import useAxios from "../utils/useAxios";
-import {Button, Card, CardBody, CardHeader, Col, Collapse, Input, Label, Row, Table} from "reactstrap";
+import {Button, Card, CardBody, CardHeader, Col, Collapse, Container, Input, Label, Row, Table} from "reactstrap";
 import Waiting from "../components/utils/Waiting";
 import token from "../utils/token";
 import Contact from "../components/contact/contact";
 import ContactModal from "../components/contact/contactModal";
+import Game from "../components/game/Game";
+import ModalNewGame from "../components/game/ModalNewGame";
+import ModalDelete from "../components/game/ModalDelete";
 
 
 function PersonDetails(props) {
@@ -30,15 +33,15 @@ function PersonDetails(props) {
     } = useAxios("/api/gestion/" + typePerson + "/" + props.match.params.idPerson)
     //state for the collapse
 
-
+    const initError = ()=> {return{
+            nbError: 0,
+            nomPersonne: false,
+            adressePersonne: false,
+            statutEditeur: false,
+    }}
 
     const [editPerson, setEditPerson] = useState(false)
-    const [errorDetail, setErrorDetail] = useState({
-        nbError: 0,
-        nomPersonne: false,
-        adressePersonne: false,
-        statutEditeur: false,
-    })
+    const [errorDetail, setErrorDetail] = useState(initError)
     const [openDetail, setOpenDetail] = useState(true)
     const [openContact, setOpenContact] = useState(false)
     const [openJeux, setOpenJeux] = useState(false)
@@ -60,9 +63,13 @@ function PersonDetails(props) {
         }
     }
     let [modalState, setModalState] = useState(false)
+    let [modalStateAddGame,setModalStateAddGame] =useState(false)
+
+
     let [contact, setContact] = useState()
     const handleSubmit = () => {
         let localPerson={
+            idPersonne:info.person.idPersonne,
             nomPersonne:document.getElementById("nomPersonne").value,
             adressePersonne:document.getElementById("adressePersonne").value,
             statutEditeur:document.getElementById("statutEditeur").value,
@@ -71,8 +78,7 @@ function PersonDetails(props) {
             exposantInactif:document.getElementById("exposantInactif").checked
         }
         console.log(localPerson)
-
-        axios.put("/api/gestion/" + typePerson + "/" + props.match.params.idPerson, localPerson, {headers: {Authorization: token.getToken()}})
+        axios.put("/api/gestion/" + typePerson + "/" + props.match.params.idPerson, localPerson,{headers: {Authorization: token.getToken()}})
             .then((res) => {
                 setEditPerson(!editPerson)
             })
@@ -80,7 +86,7 @@ function PersonDetails(props) {
                 if (e.response && e.response.data.code === 0) {
                     token.destroyToken()
                 }
-                setErrorDetail(e)
+                setErrorDetail(e.response.data)
             })
     }
     const handleCancel = ()=>{
@@ -199,8 +205,7 @@ function PersonDetails(props) {
                                                                 disabled={!editPerson}
                                                                 type="checkbox"
                                                                 defaultChecked={info.person.estEditeur}/>
-                                                            <span
-                                                                className="custom-toggle-slider rounded-circle"></span>
+                                                            <span className="custom-toggle-slider rounded-circle"/>
                                                         </label>
                                                     </div>
                                                 </Col>
@@ -213,8 +218,7 @@ function PersonDetails(props) {
                                                                 disabled={!editPerson}
                                                                 type="checkbox"
                                                                 defaultChecked={info.person.estExposant}/>
-                                                            <span
-                                                                className="custom-toggle-slider rounded-circle"></span>
+                                                            <span className="custom-toggle-slider rounded-circle"/>
                                                         </label>
                                                     </div>
                                                 </Col>
@@ -227,8 +231,7 @@ function PersonDetails(props) {
                                                                 disabled={!editPerson}
                                                                 type="checkbox"
                                                                 defaultChecked={info.person.exposantInactif}/>
-                                                            <span
-                                                                className="custom-toggle-slider rounded-circle"></span>
+                                                            <span className="custom-toggle-slider rounded-circle"/>
                                                         </label>
                                                     </div>
                                                 </Col>
@@ -270,12 +273,58 @@ function PersonDetails(props) {
                                             </Table>
                                             <ContactModal setInfo={setInfo} info={info} modalState={modalState}
                                                           setModalState={setModalState} contact={contact}
-                                                          state={state}/>
+                                                          state={state} initError={initError}/>
                                         </CardBody>
                                     </Card>
                                 </Collapse>
                             </Col>
                         </Row>
+                        {(info.games || info.reservations.length !== 0 ) &&
+                            <Row className="m-2 inline-flex">
+                                {info.games.length!==0 &&
+                                <Col className="w-50 p-2">
+                                    <Button color="link" onClick={() => setOpenJeux(!openJeux)}
+                                            className=" w-100 text-primary text-center border">Jeux</Button>
+                                    <Collapse isOpen={openJeux}>
+                                        <Card>
+                                            <CardBody>
+                                                {token.getType() === 1 && <Button onClick={() => setModalStateAddGame(!modalStateAddGame)
+                                                } color="success" outline type="button">
+                                                    Ajouter un jeu
+                                                </Button>}
+                                                <table className="table table-striped">
+                                                    <thead>
+                                                        <tr>
+                                                            <th className="text-center">#</th>
+                                                            <th>Titre</th>
+                                                            <th className="d-none d-lg-table-cell">Nombre de joueurs</th>
+                                                            <th className="d-none d-lg-table-cell">Âge minimum</th>
+                                                            <th className="d-none d-lg-table-cell">Durée</th>
+                                                            {token.getType() === 1 && <th >Prototype</th>}
+                                                            {token.getType() === 1 && <th >Action</th>}
+
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    {info.games.map((g,index)=>{
+                                                        return(
+                                                            <Game games={info} setGames={setInfo} index={index} game={g} type={1}/>
+                                                        )
+                                                    })
+                                                    }
+                                                    </tbody>
+                                                </table>
+
+
+                                            </CardBody>
+                                        </Card>
+                                    </Collapse>
+                                    {info.games && modalStateAddGame && token.getType() === 1 && <ModalNewGame setGames={setInfo} games={info} modalState={modalStateAddGame} setModalState={setModalStateAddGame} type={1} />}
+                                </Col>}
+
+                            </Row>
+                        }
+
 
 
                     </div>

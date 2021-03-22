@@ -3,6 +3,31 @@ const Person = require("../models/personModel")
 const utils = require("../utils/utils");
 const Games = require("../models/jeuxModel")
 const Reservation = require("../models/reservationModel")
+const checkPersonInputs = (data)=>{
+    let person = data
+    let error= {
+        nbError: 0,
+        nomPersonne: false,
+        adressePersonne: false,
+        statutEditeur: false,
+    }
+
+    if(person.nomPersonne===""){
+        error.nomPersonne=true
+        error.nbError+=1
+
+    }if(person.statutEditeur==="" && person.estEditeur===true){
+        error.statutEditeur=true
+        error.nbError+=1
+
+    }
+    if(person.adressePersonne===""){
+        error.adressePersonne=true
+        error.nbError+=1
+
+    }
+    return error
+}
 const checkInputs = (data)=>{
     let error={
         nbError:0,
@@ -99,7 +124,6 @@ module.exports = {
     //retrieve all the editor's info and his contacts
     getPersonPage : async (req,res)=>{
         let idEditor = req.params.id;
-        console.log(req.params)
         if(isNaN(idEditor)){
             utils.sendErrorNumber(req,res,Object.keys({idEditor})[0])
         }else{
@@ -136,8 +160,6 @@ module.exports = {
                             info.reservations=result
                         })
                         .catch(err=>{
-                            console.log(err)
-                            console.log("ERROR")
                             error.reservations=err
                         })
                 }
@@ -234,7 +256,11 @@ module.exports = {
     //======================== UPDATE ========================
     updatePerson : async (req,res)=>{
         let body = req.body;
-        if(body.nomPersonne!==undefined){
+        let err = checkPersonInputs(body)
+        if(err.nbError!==0){
+            res.status(503).json(err)
+
+        }else if(body.nomPersonne!==undefined){
           await Person.updatePerson(body.idPersonne,body.nomPersonne, body.adressePersonne, body.statutEditeur, body.estEditeur, body.exposantInactif, body.estExposant)
               .then(()=>{
                   res.status(200).json({updated: true})
@@ -245,19 +271,16 @@ module.exports = {
 
             await updatePersonEditeur(req, res)
               .catch((err)=>{
-                  console.log("Erreur lors du changement " + err)
                   res.status(503).json({updated: false})
 
               })
         }else if(body.estExposant!==undefined){
           await updatePersonExposant(req, res).catch((err)=>{
-              console.log("Erreur lors du changement " + err)
               res.status(503).json({updated: false})
 
           })
         }else if(body.exposantInactif!==undefined){
             await updatePersonInactif(req, res).catch((err)=>{
-              console.log("Erreur lors du changement " + err)
               res.status(503).json({updated: false})
 
           })

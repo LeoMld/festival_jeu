@@ -21,7 +21,6 @@ const useAxios = (url) => {
                 //if the token is not the good one
 
                 if(err.response.data.code === 0){
-                    console.log("DANSLEIF")
                     token.destroyToken()
                 }
                 /*if(err.response.data.code === 0){

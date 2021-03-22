@@ -51,7 +51,6 @@ function Game(props){
         setGameModal(game)
         setDeleteModal(!deleteModal)
     }
-
     return(
 
             <tr key={props.index}>
@@ -67,20 +66,21 @@ function Game(props){
                         <i className="ni ni-circle-08 pt-1"/>
                     </button>
                     <button type="button" rel="tooltip" className="btn btn-danger btn-icon btn-sm "
-                            data-original-title="" title="delete game" onClick={() => openDeleteModal(props.game)}>
+                            data-original-title="" title="delete game" onClick={() => {
+                                    openDeleteModal(props.game)
+                            }
+                    }>
                         <i className="ni ni-fat-remove pt-1"/>
                     </button>
                 </td>}
-                {props.games && token.getType() === 1 && <ModalGame games={props.games} setGames={props.setGames} game={props.game} setGame={props.setGame} modalState={modalState} setModalState={setModalState}/>}
-                {props.games && gameModal && token.getType() === 1 && <ModalDelete games={props.games} setGames={props.setGames} game={props.game}  deleteModal={deleteModal} setDeleteModal={setDeleteModal}/>}
+                {props.games && token.getType() === 1 && <ModalGame games={props.games} setGames={props.setGames} game={props.game} setGame={props.setGame} modalState={modalState} setModalState={setModalState} type={props.type}/>}
+                {props.games && gameModal && token.getType() === 1 && <ModalDelete games={props.games} setGames={props.setGames} game={props.game}  deleteModal={deleteModal} setDeleteModal={setDeleteModal} type={props.type}/>}
 
 
             </tr>
 
 
 
-)
-
+    )
 }
-
 export default Game

@@ -79,7 +79,6 @@ module.exports ={
             idPersonne:1
         }*/
         const body = req.body;
-        console.log(body)
         let err=checkContactInputs(body)
         if(err.nbError){
             res.status(400).json(err)
@@ -98,7 +97,6 @@ module.exports ={
     },
     //Update a contact
     updateContact: async (req,res)=>{
-        console.log("OK")
         /* let params = {
                     idContact:1,
                     prenomContact:'testUPDATEContact',
@@ -110,7 +108,6 @@ module.exports ={
                     principal:true,
                 }*/
         const body = req.body;
-        console.log(body)
         let idContact = req.params.id;
         let telFixeContact = body.telFixeContact;
         let telPortableContact = body.telPortableContact;

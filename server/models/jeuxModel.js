@@ -68,7 +68,7 @@ module.exports={
     //retrieve all games from an editor
     getEditorGames: async (idEditor,client) => {
         const clientUsed = await DB.getPoolClient(client)
-        const queryText = `SELECT j."idJeu", "libelleJeu", "nombreJoueur", "ageMinimum", duree, prototype, "FK_idPersonne",t."libelleTypeJeu" FROM "Jeu" j JOIN "TypeJeu" t ON t."idTypeJeu" = j."FK_idTypeJeu" 
+        const queryText = `SELECT * FROM "Jeu" j JOIN "TypeJeu" t ON t."idTypeJeu" = j."FK_idTypeJeu" 
         WHERE j."FK_idPersonne"=${idEditor} ;`
         return (await clientUsed.query(queryText)).rows
     },
