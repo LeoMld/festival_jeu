@@ -64,14 +64,7 @@ function PersonDetails(props) {
     }
     let [modalState, setModalState] = useState(false)
     let [modalStateAddGame,setModalStateAddGame] =useState(false)
-    const [gameState,setGameState] =useState()
-    const [gameModal, setGameModal] = useState()
-    const [deleteModal, setDeleteModal] = useState(false)
 
-    const openDeleteModal = (game)=>{
-        setGameState(game)
-        setDeleteModal(true)
-    }
 
     let [contact, setContact] = useState()
     const handleSubmit = () => {
@@ -317,7 +310,7 @@ function PersonDetails(props) {
                                                     <tbody>
                                                     {info.games.map((g,index)=>{
                                                         return(
-                                                            <Game games={info.games} setGames={setInfo} index={index} game={g} openDeleteModal={openDeleteModal}/>
+                                                            <Game games={info} setGames={setInfo} index={index} game={g} type={1}/>
                                                         )
                                                     })
                                                     }
@@ -329,8 +322,6 @@ function PersonDetails(props) {
                                         </Card>
                                     </Collapse>
                                     {info.games && modalStateAddGame && token.getType() === 1 && <ModalNewGame setGames={setInfo} games={info} modalState={modalStateAddGame} setModalState={setModalStateAddGame} type={1} />}
-                                    {props.games && gameModal && token.getType() === 1 && <ModalDelete games={info} setGames={setInfo} game={gameState}  deleteModal={deleteModal} setDeleteModal={setDeleteModal} type={1}/>}
-
                                 </Col>}
 
                             </Row>
