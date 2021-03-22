@@ -42,7 +42,6 @@ function ModalNewGame(props){
             const newGames = props.games.games
             newGames.push(game)
             props.setGames({...props.games,games:newGames})
-            console.log(props.games)
         }else{
             const newGames = props.games
             newGames.data.push(game)

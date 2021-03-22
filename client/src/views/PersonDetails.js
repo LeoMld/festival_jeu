@@ -80,11 +80,9 @@ function PersonDetails(props) {
         console.log(localPerson)
         axios.put("/api/gestion/" + typePerson + "/" + props.match.params.idPerson, localPerson,{headers: {Authorization: token.getToken()}})
             .then((res) => {
-                console.log("OK")
                 setEditPerson(!editPerson)
             })
             .catch(e => {
-                console.log("OKOK")
                 if (e.response && e.response.data.code === 0) {
                     token.destroyToken()
                 }

@@ -106,7 +106,6 @@ module.exports = {
     createGame: async (req,res)=>{
         try{
             const body = req.body;
-            console.log(body)
             let ageMinimum = parseInt(body.game.ageMinimum);
             let FK_idPersonne = parseInt(body.game.FK_idPersonne);
             let FK_idTypeJeu = parseInt(body.game.FK_idTypeJeu);

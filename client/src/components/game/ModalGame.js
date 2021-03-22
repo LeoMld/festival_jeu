@@ -26,7 +26,6 @@ function ModalGame(props){
     const [isChanging, setIsChanging] = useState(false)
     const [error, setError] = useState(false)
 
-    console.log(props.game)
     const handleChange = (game)=>{
         setIsChanging(true)
 

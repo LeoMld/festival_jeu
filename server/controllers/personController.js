@@ -124,7 +124,6 @@ module.exports = {
     //retrieve all the editor's info and his contacts
     getPersonPage : async (req,res)=>{
         let idEditor = req.params.id;
-        console.log(req.params)
         if(isNaN(idEditor)){
             utils.sendErrorNumber(req,res,Object.keys({idEditor})[0])
         }else{
@@ -161,8 +160,6 @@ module.exports = {
                             info.reservations=result
                         })
                         .catch(err=>{
-                            console.log(err)
-                            console.log("ERROR")
                             error.reservations=err
                         })
                 }
@@ -274,19 +271,16 @@ module.exports = {
 
             await updatePersonEditeur(req, res)
               .catch((err)=>{
-                  console.log("Erreur lors du changement " + err)
                   res.status(503).json({updated: false})
 
               })
         }else if(body.estExposant!==undefined){
           await updatePersonExposant(req, res).catch((err)=>{
-              console.log("Erreur lors du changement " + err)
               res.status(503).json({updated: false})
 
           })
         }else if(body.exposantInactif!==undefined){
             await updatePersonInactif(req, res).catch((err)=>{
-              console.log("Erreur lors du changement " + err)
               res.status(503).json({updated: false})
 
           })

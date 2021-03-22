@@ -33,7 +33,6 @@ function ModalDelete(props){
         if(props.type===1){
             const newGames=[]
             let games=props.games.games
-            console.log(games)
             games.forEach(game => {
                 if (game.idJeu !== props.game.idJeu) {
                     //get  "game" index
@@ -63,13 +62,11 @@ function ModalDelete(props){
         setIsChanging(true)
         Axios.delete('/api/games/'+props.game.idJeu,{ headers: { Authorization: token.getToken() } })
             .then(res => {
-                console.log(props.games.games)
                 deleteGameView()
                 props.setDeleteModal(!props.deleteModal)
                 setIsChanging(false)
 
             }).catch(e => {
-            console.log(e)
             setErrorDeleting(true)
             //if the token is not the good one
             if(e.response && e.response.data.code === 0){
