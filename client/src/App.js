@@ -41,9 +41,16 @@ function App() {
                 }
 
                 <Route path="/ListeJeux" exact component={AllGames}/>
-                <Route path="/Editeurs" exact component={(props) =>
-                    <Persons {...props} type={1}/>
-                }/>
+
+
+
+                {token.getType() !== 2 ?
+                    <Route path="/Editeurs" exact component={(props) =>
+                        <Persons {...props} type={1}/>
+                    }/>
+                    :
+                    <Route path="/Editeurs" exact><Redirect to="/Connexion"/></Route>
+                }
 
 
                 {token.getType() !== 2 ?
@@ -52,12 +59,26 @@ function App() {
                     <Route path="/Connexion" exact component={Login}/>
                 }
 
+                {token.getType() !== 2 ?
+                    <Route path="/Exposants" exact component={ (props)=>
+                        <Persons {...props} type={0}/>
+                    }/>
+                    :
+                    <Route path="/Exposants" exact><Redirect to="/Connexion"/></Route>
+                }
 
-            <Route path="/Exposants" exact component={ (props)=>
-                <Persons {...props} type={0}/>
-            }/>
-            <Route path="/Editeurs/:idPerson" exact component={(props)=> <PersonDetails {...props} type={1}/>}/>
-            <Route path="/Exposants/:idPerson" exact component={(props)=> <PersonDetails {...props} type={0}/>}/>
+                {token.getType() !== 2 ?
+                    <Route path="/Editeurs/:idPerson" exact component={(props)=> <PersonDetails {...props} type={1}/>}/>
+
+                    :
+                    <Route path="/Editeurs/:idPerson" exact><Redirect to="/Connexion"/></Route>
+                }
+                {token.getType() !== 2 ?
+                    <Route path="/Exposants/:idPerson" exact component={(props)=> <PersonDetails {...props} type={0}/>}/>
+
+                    :
+                    <Route path="/Exposants/:idPerson" exact><Redirect to="/Connexion"/></Route>
+                }
             <Route path="/login" exact component={Login}/>
 
                 <Route path="/"><Redirect to="/Accueil"/></Route>
