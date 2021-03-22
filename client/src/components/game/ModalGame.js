@@ -23,9 +23,6 @@ import among_sage from "../../assets/images/amongus/among-sage.png";
 
 function ModalGame(props){
 
-
-
-
     const [isChanging, setIsChanging] = useState(false)
     const [error, setError] = useState(false)
 
@@ -34,12 +31,12 @@ function ModalGame(props){
         setIsChanging(true)
 
         props.game.libelleJeu = document.getElementById("libelle").value
-        props.game.duree =document.getElementById("duree").value
+        props.game.duree = document.getElementById("duree").value
         props.game.nombreJoueur = document.getElementById("nombreJoueur").value
         props.game.ageMinimum = document.getElementById("age").value
 
 
-        Axios.put('/api/games/'+game.idJeu, {game},{ headers: { Authorization: token.getToken() } })
+        Axios.put('/api/games/'+props.game.idJeu, {game},{ headers: { Authorization: token.getToken() } })
             .then(res => {
                 props.setModalState(!props.modalState)
                 setIsChanging(false)

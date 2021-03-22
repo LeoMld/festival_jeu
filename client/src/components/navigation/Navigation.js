@@ -109,11 +109,11 @@ class Navigation extends Component {
                                         </DropdownToggle>
 
                                         <DropdownMenu>
-                                            <DropdownItem to="/landing-page" tag={Link}>
-                                                gestion des éditeurs
+                                            <DropdownItem to="/Editeurs" tag={Link}>
+                                                Editeurs
                                             </DropdownItem>
-                                            <DropdownItem to="/profile-page" tag={Link}>
-                                                gestion des exposants
+                                            <DropdownItem to="/Exposants" tag={Link}>
+                                                Exposants
                                             </DropdownItem>
                                             <DropdownItem to="/login-page" tag={Link}>
                                                 gestion des jeux

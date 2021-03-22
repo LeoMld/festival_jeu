@@ -27,11 +27,12 @@ module.exports = {
             if (user[0]) {
                 data.exist = true
                 const match = await bcrypt.compare(password, user[0].mdpUtilisateur);
-                //if it's the good password
                 if (match) {
-
                     data.match = true
+
                     token = await jwt.connect(req, res, user[0].idUtilisateur, user[0].typeUtilisateur)
+                    //if it's the good password
+                    console.log("token : "+token)
                     data.type = user[0].typeUtilisateur
                     res.status(200).json({token: token, data: data})
                 } else {

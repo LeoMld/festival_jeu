@@ -69,6 +69,7 @@ module.exports = {
 
 
 
+
     handleGame: async (req,res) => {
         try{
             //si il y a un jeu dans la requête, cela indique que l'on veut modifier tout le jeu
@@ -92,6 +93,15 @@ module.exports = {
         }
     },
 
+    deleteType : async (req,res)=>{
+        try{
+            await jeux.deleteType(req.params.id)
+            res.status(200).json('type deleted')
+        }catch (err){
+            res.status(503).json({error: err})
+        }
+    },
+
     //Create a game
     createGame: async (req,res)=>{
         try{
@@ -110,8 +120,30 @@ module.exports = {
                 utils.sendErrorNumber(req,res,Object.keys({ageMinimum})[0])
             }
             else{
-                console.log(FK_idTypeJeu)
-                await jeux.createJeu(body.game.libelleJeu,body.game.nombreJoueur,ageMinimum,body.game.duree,body.game.prototype,FK_idTypeJeu,FK_idPersonne)
+
+                jeux.createJeu(body.game.libelleJeu,body.game.nombreJoueur,ageMinimum,body.game.duree,body.game.prototype,FK_idTypeJeu,FK_idPersonne)
+                    .then((result)=>{
+                        res.status(201).json({inserted:true,idJeu:result})
+                    }).catch((error)=>{
+                        res.status(503).json({
+                            error:error,
+                            inserted:false
+                        })
+                    })
+            }
+        }catch (err){
+            res.status(503).json({error: err})
+        }
+
+    },
+    //Create a game
+    createType: async (req,res)=>{
+        try{
+            const body = req.body
+            if(body.newType.length < 1){
+                res.status(400).json({error: "Veuillez insérer un type"})
+            }else{
+                await jeux.createTypeGame(body.newType)
                     .then(()=>{
                         res.status(201).json({inserted:true})
                     }).catch((error)=>{
@@ -121,6 +153,8 @@ module.exports = {
                         })
                     })
             }
+
+
         }catch (err){
             res.status(503).json({error: err})
         }

@@ -18,14 +18,16 @@ router.put('/festival/:id', festivalController.changeCurrentFestival)
 
 router.get('/editeurs/', personController.getAllEditors)
 router.post('/editeurs/', personController.createPerson)
-router.get('/editeurs/:id', personController.getEditorPage)
+router.get('/editeurs/:id', personController.getPersonPage)
 router.put('/editeurs/:id', personController.updatePerson)
 
 router.get('/exposants/', personController.getAllExposants)
 router.post('/exposants/', personController.createPerson)
+router.get('/exposants/:id', personController.getPersonPage)
 router.put('/exposants/:id', personController.updatePerson)
 
 router.get('/personnes', personController.getAllPersons)
+router.get("/personne/:id",personController.getPerson)
 
 router.post('/contact', contactController.createContact)
 router.put('/contact/:id', contactController.updateContact)

@@ -17,6 +17,7 @@ import FestivalChoice from "./views/FestivalChoice";
 import AllGames from "./views/AllGames";
 import Login from "./views/Login";
 import Persons from "./views/Persons";
+import PersonDetails from "./views/PersonDetails";
 import Zones from "./views/Zones"
 
 function App() {
@@ -47,9 +48,16 @@ function App() {
 
 
                 <Route path="/ListeJeux" exact component={AllGames}/>
-                <Route path="/Editeurs" exact component={(props) =>
-                    <Persons {...props} type={1}/>
-                }/>
+
+
+
+                {token.getType() !== 2 ?
+                    <Route path="/Editeurs" exact component={(props) =>
+                        <Persons {...props} type={1}/>
+                    }/>
+                    :
+                    <Route path="/Editeurs" exact><Redirect to="/Connexion"/></Route>
+                }
 
 
                 {token.getType() !== 2 ?
@@ -58,11 +66,27 @@ function App() {
                     <Route path="/Connexion" exact component={Login}/>
                 }
 
+                {token.getType() !== 2 ?
+                    <Route path="/Exposants" exact component={ (props)=>
+                        <Persons {...props} type={0}/>
+                    }/>
+                    :
+                    <Route path="/Exposants" exact><Redirect to="/Connexion"/></Route>
+                }
 
-                <Route path="/Exposants" exact component={(props) =>
-                    <Persons {...props} type={0}/>
-                }/>
-                <Route path="/login" exact component={Login}/>
+                {token.getType() !== 2 ?
+                    <Route path="/Editeurs/:idPerson" exact component={(props)=> <PersonDetails {...props} type={1}/>}/>
+
+                    :
+                    <Route path="/Editeurs/:idPerson" exact><Redirect to="/Connexion"/></Route>
+                }
+                {token.getType() !== 2 ?
+                    <Route path="/Exposants/:idPerson" exact component={(props)=> <PersonDetails {...props} type={0}/>}/>
+
+                    :
+                    <Route path="/Exposants/:idPerson" exact><Redirect to="/Connexion"/></Route>
+                }
+            <Route path="/login" exact component={Login}/>
 
                 <Route path="/"><Redirect to="/Accueil"/></Route>
             </Switch>

@@ -44,7 +44,6 @@ function ModalNewGame(props){
     }
 
     const handleChange = ()=>{
-        console.log(document.getElementById("libelle").value.length > 1)
         if(document.getElementById("libelle").value.length > 1){
             setIsChanging(true)
             setErrorLibelle(false)
@@ -59,6 +58,7 @@ function ModalNewGame(props){
             Axios.post('/api/games/', {game},{ headers: { Authorization: token.getToken() } })
                 .then(res => {
                     try{
+                        game.idJeu = res.data.idJeu
                         addGameView(game)
                     }catch (e){
                         console.log(e)

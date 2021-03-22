@@ -65,8 +65,8 @@ function Persons(props){
                 </thead>
                 <tbody>
                 {isPending && <Waiting></Waiting>}
-                {persons!==null && persons.map(p=>{
-                    return(<Person person={p} type={props.type}/>)
+                {persons!==null && persons.map((p,index)=>{
+                    return(<Person person={p} type={props.type} index={index}/>)
                 })}
                 </tbody>
             </Table>

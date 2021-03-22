@@ -15,5 +15,11 @@ module.exports = {
             totalAmount += prices[i].prixReservation
         }
         return totalAmount.toFixed(2);
+    },
+    //get Reservation from person
+    getPersonReservations : async (idPerson,client)=>{
+        const clientUsed = await DB.getPoolClient(client)
+        const queryText =`SELECT * FROM "Reservation" WHERE "FK_idPersonne"=${idPerson};`
+        return (await clientUsed.query(queryText, [])).rows
     }
 }
