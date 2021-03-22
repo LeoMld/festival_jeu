@@ -1,60 +1,87 @@
 const Zone = require("../models/zoneModel");
 const utils = require("../utils/utils");
+
 module.exports = {
-    createNewZone : async (req,res)=>{
-        let body = req.body;
-        let idFestival = params.idFestival
-        if(isNaN(idFestival)){
-            utils.sendErrorNumber(req,res,idFestival,Object.keys({idFestival})[0])
-        }else{
-            await Zone.createNewZone(body.libelleZone,idFestival)
-                .then(()=>{
-                    res.status(201).json({inserted:true})
-                })
-                .catch((error)=>{
-                    res.status(503).json({
-                        error:error,
-                        insert:false
-                    })
-                })
+
+    // Retrieve all the zones of a festival
+    getAllZonesFestival: async (req, res) => {
+        try {
+            const idFestival = await utils.getFestivalToDisplay(req)
+            const zones = await Zone.getAFestivalZones(idFestival)
+            // We need the games in each zones
+            for (let i = 0; i < zones.length; i++) {
+                zones[i].games = []
+                // TODO retrieve all the games of the zone
+            }
+
+            res.status(200).json(zones)
+
+        } catch (err) {
+            // An error occured
+            res.status(503).json()
         }
     },
-    updateZone : async (req,res)=>{
-        let params = req.params;
-        let idZone = params.id
-        let body = req.body
-        if(isNaN(idZone)){
 
-            utils.sendErrorNumber(req,res,idZone,Object.keys({idZone})[0])
-        }else{
-            await Zone.updateZone(idZone,body.libelleZone)
-                .then(()=>{
-                    res.status(201).json({updated:true})
+    // Create a new zone for the given festival with the given name
+    createNewZone: async (req, res) => {
+        try {
+            const body = req.body;
+            const idFestival = await utils.getFestivalToDisplay(req)
+            const nameZone = body.libelleZone
+            // We check the length of the zone
+            if (nameZone.length > 2 && nameZone.length < 50) {
+                // It's okay, we create the zone
+                const newZone = await Zone.createNewZone(nameZone, idFestival)
+                res.status(201).json({
+                    status: 0,
+                    newZone
                 })
-                .catch(error=>{
-                    res.status(503).json({
-                        error:error,
-                        updated:false
-                    })
+            } else {
+                // Not good
+                res.status(200).json({
+                    status: 1
                 })
+            }
+        } catch (err) {
+            // An error occured
+            res.status(503).json()
         }
     },
-    deleteZone : async (req,res)=>{
-        let idZone = req.params.id
-        if(isNaN(idZone)){
-            utils.sendErrorNumber(req,res,idZone,Object.keys({idZone})[0])
-        }
-        else{
-            await Zone.deleteZone(idZone)
-                .then(()=>{
-                    res.status(201).json({deleted:true})
 
-                }).catch((error)=>{
-                    res.status(503).json({
-                        error:error,
-                        deleted:false
-                    })
+    // The client wants to update a zone
+    updateZone: async (req, res) => {
+        try {
+            const idZone = req.params.id
+            const body = req.body
+            const libelleZone = body.libelleZone
+            if (libelleZone.length > 2 && libelleZone.length < 50) {
+                // All good
+                await Zone.updateZone(idZone, libelleZone)
+                res.status(200).json({
+                    status: 0
                 })
+            } else {
+                // Not good
+                res.status(200).json({
+                    status: 1
+                })
+            }
+        } catch (err) {
+            // An error occured
+            res.status(503).json()
+        }
+    },
+
+    // The client wants to delete a zone
+    deleteZone: async (req, res) => {
+        try {
+            let idZone = req.params.id
+            let idFestival = req.body.idFestival
+            await Zone.deleteZone(idZone, idFestival)
+            res.status(200).json()
+        } catch (err) {
+            // An error occured
+            res.status(503).json()
         }
     }
 }

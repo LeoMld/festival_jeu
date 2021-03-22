@@ -19,14 +19,13 @@ import {
     Col,
 } from "reactstrap";
 import logo from "../../assets/images/LogoFJM-couleur-seul.png";
+
 class Navigation extends Component {
 
     constructor(props) {
         super(props);
         this.deconnexion = this.deconnexion.bind(this);
     }
-
-
 
 
     componentDidMount() {
@@ -53,7 +52,7 @@ class Navigation extends Component {
     };
 
 
-    deconnexion(){
+    deconnexion() {
         token.destroyToken()
         this.props.history.push('/Connexion')
         window.location.reload(false);
@@ -64,7 +63,7 @@ class Navigation extends Component {
 
         switch (token.getType()) {
             //return the navbar for an administrator
-            case 1||0:
+            case 1 || 0:
                 return (
                     <Navbar
                         className="navbar-main navbar-transparent navbar-light headroom"
@@ -73,7 +72,7 @@ class Navigation extends Component {
                     >
                         <Container>
                             <NavbarBrand className="mr-lg-5" to="/" tag={Link}>
-                                <img style={{maxHeight : "40%"}} src={logo} alt="logo du festival"/>
+                                <img style={{maxHeight: "40%"}} src={logo} alt="logo du festival"/>
                             </NavbarBrand>
                             <button className="navbar-toggler" id="navbar_global">
                                 <span className="navbar-toggler-icon"/>
@@ -129,10 +128,10 @@ class Navigation extends Component {
                                     <NavItem>
                                         <Link className="nav-link" to="/">Exposants</Link>
                                     </NavItem><NavItem>
-                                        <Link className="nav-link" to="/">Facturation</Link>
-                                    </NavItem><NavItem>
-                                        <Link className="nav-link" to="/">Zones</Link>
-                                    </NavItem>
+                                    <Link className="nav-link" to="/">Facturation</Link>
+                                </NavItem><NavItem>
+                                    <Link className="nav-link" to="/Zones">Zones</Link>
+                                </NavItem>
 
                                 </Nav>
 
@@ -143,8 +142,10 @@ class Navigation extends Component {
                                             Mon compte</Link>
                                     </NavItem>
                                     <NavItem>
-                                        <Link onClick={()=>{this.deconnexion()}} className="nav-link" to="/"> <i className="ni ni-button-power text-red"/>
-                                            </Link>
+                                        <Link onClick={() => {
+                                            this.deconnexion()
+                                        }} className="nav-link" to="/"> <i className="ni ni-button-power text-red"/>
+                                        </Link>
                                     </NavItem>
 
                                 </Nav>
@@ -196,7 +197,7 @@ class Navigation extends Component {
                                     </NavItem>
 
                                     <NavItem>
-                                        <Link className="nav-link" to="/">Zones</Link>
+                                        <Link className="nav-link" to="/Zones">Zones</Link>
                                     </NavItem>
 
                                     <NavItem>

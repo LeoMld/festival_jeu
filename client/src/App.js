@@ -18,6 +18,7 @@ import AllGames from "./views/AllGames";
 import Login from "./views/Login";
 import Persons from "./views/Persons";
 import PersonDetails from "./views/PersonDetails";
+import Zones from "./views/Zones"
 
 function App() {
 
@@ -39,6 +40,12 @@ function App() {
                     :
                     <Route path="/ChoixFestival" exact><Redirect to="/Connexion"/></Route>
                 }
+                {token.getType() !== 2 ?
+                    <Route path="/Zones" exact component={Zones}/>
+                    :
+                    <Route path="/Zones" exact><Redirect to="/Connexion"/></Route>
+                }
+
 
                 <Route path="/ListeJeux" exact component={AllGames}/>
 

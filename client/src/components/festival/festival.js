@@ -124,7 +124,7 @@ function Festival(props) {
                         </tr>
                     )
                 })}
-                <tr className="">
+                <tr>
                     <th>
                         Total :
                     </th>
