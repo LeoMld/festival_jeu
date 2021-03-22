@@ -120,10 +120,10 @@ module.exports = {
                 utils.sendErrorNumber(req,res,Object.keys({ageMinimum})[0])
             }
             else{
-                console.log(FK_idTypeJeu)
-                await jeux.createJeu(body.game.libelleJeu,body.game.nombreJoueur,ageMinimum,body.game.duree,body.game.prototype,FK_idTypeJeu,FK_idPersonne)
-                    .then(()=>{
-                        res.status(201).json({inserted:true})
+
+                jeux.createJeu(body.game.libelleJeu,body.game.nombreJoueur,ageMinimum,body.game.duree,body.game.prototype,FK_idTypeJeu,FK_idPersonne)
+                    .then((result)=>{
+                        res.status(201).json({inserted:true,idJeu:result})
                     }).catch((error)=>{
                         res.status(503).json({
                             error:error,

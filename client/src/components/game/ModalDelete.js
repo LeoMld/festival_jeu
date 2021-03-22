@@ -23,20 +23,23 @@ import among_green from "../../assets/images/amongus/among-green.png";
 
 function ModalDelete(props){
 
+
+
     //if there is an error when deleting
     const [errorDeleting , setErrorDeleting] = useState(false)
     const [isChanging, setIsChanging] = useState(false)
 
     const deleteGameView = ()=>{
-        const newGames = props.games
-        newGames.data.forEach(game =>{
-            if(game.idJeu === props.game.idJeu){
+        const newGames = {data:[]}
+        props.games.data.forEach(game =>{
+            if(game.idJeu !== props.game.idJeu){
                 //get  "game" index
-                const i = newGames.data.indexOf(game);
-                newGames.data.splice(i, 1);
+                newGames.data.push(game)
             }
         } )
         props.setGames(newGames)
+
+
     }
 
 
