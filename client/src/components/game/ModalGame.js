@@ -26,16 +26,33 @@ function ModalGame(props){
     const [isChanging, setIsChanging] = useState(false)
     const [error, setError] = useState(false)
 
+    const changeGame = (editedGame)=>{
+        const editedGames = []
+        props.games.map(game => {
+            if(editedGame.idJeu !== game.idJeu){
+                editedGames.push(game)
+            }else{
+                editedGames.push(editedGame)
+            }
+        })
+        props.setGames(editedGames)
+    }
 
     const handleChange = (game)=>{
         setIsChanging(true)
-
-        props.game.libelleJeu = document.getElementById("libelle").value
+        const editedGame = {}
+        editedGame.libelleJeu = document.getElementById("libelle").value
+        editedGame.duree = document.getElementById("duree").value
+        editedGame.nombreJoueur = document.getElementById("nombreJoueur").value
+        editedGame.ageMinimum = document.getElementById("age").value
+        editedGame.idJeu = props.game.idJeu
+        changeGame(editedGame)
+        /*props.game.libelleJeu = document.getElementById("libelle").value
         props.game.duree = document.getElementById("duree").value
         props.game.nombreJoueur = document.getElementById("nombreJoueur").value
-        props.game.ageMinimum = document.getElementById("age").value
+        props.game.ageMinimum = document.getElementById("age").value*/
 
-
+        console.log(editedGame)
         Axios.put('/api/games/'+props.game.idJeu, {game},{ headers: { Authorization: token.getToken() } })
             .then(res => {
                 props.setModalState(!props.modalState)

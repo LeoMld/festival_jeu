@@ -29,7 +29,7 @@ module.exports = {
             if(result.length===0){
                 res.status(200).json('No games')
             }else{
-                res.status(200).json({data:result})
+                res.status(200).json(result)
 
             }
         }).catch((error)=>{

@@ -33,63 +33,67 @@ function App() {
             </header>
 
             <Navigation history={history}/>
-            <Switch>
-                <Route path="/Accueil" exact component={Home}/>
-                {token.getType() !== 2 ?
-                    <Route path="/ChoixFestival" exact component={FestivalChoice}/>
-                    :
-                    <Route path="/ChoixFestival" exact><Redirect to="/Connexion"/></Route>
-                }
-                {token.getType() !== 2 ?
-                    <Route path="/Zones" exact component={Zones}/>
-                    :
-                    <Route path="/Zones" exact><Redirect to="/Connexion"/></Route>
-                }
+            <div className="minHeight">
+                <Switch>
+                    <Route path="/Accueil" exact component={Home}/>
+                    {token.getType() !== 2 ?
+                        <Route path="/ChoixFestival" exact component={FestivalChoice}/>
+                        :
+                        <Route path="/ChoixFestival" exact><Redirect to="/Connexion"/></Route>
+                    }
+                    {token.getType() !== 2 ?
+                        <Route path="/Zones" exact component={Zones}/>
+                        :
+                        <Route path="/Zones" exact><Redirect to="/Connexion"/></Route>
+                    }
 
 
-                <Route path="/ListeJeux" exact component={AllGames}/>
+                    <Route path="/ListeJeux" exact component={AllGames}/>
 
 
 
-                {token.getType() !== 2 ?
-                    <Route path="/Editeurs" exact component={(props) =>
-                        <Persons {...props} type={1}/>
-                    }/>
-                    :
-                    <Route path="/Editeurs" exact><Redirect to="/Connexion"/></Route>
-                }
+                    {token.getType() !== 2 ?
+                        <Route path="/Editeurs" exact component={(props) =>
+                            <Persons {...props} type={1}/>
+                        }/>
+                        :
+                        <Route path="/Editeurs" exact><Redirect to="/Connexion"/></Route>
+                    }
 
 
-                {token.getType() !== 2 ?
-                    <Route path="/Connexion" exact><Redirect to="/Accueil"/></Route>
-                    :
-                    <Route path="/Connexion" exact component={Login}/>
-                }
+                    {token.getType() !== 2 ?
+                        <Route path="/Connexion" exact><Redirect to="/Accueil"/></Route>
+                        :
+                        <Route path="/Connexion" exact component={Login}/>
+                    }
 
-                {token.getType() !== 2 ?
-                    <Route path="/Exposants" exact component={ (props)=>
-                        <Persons {...props} type={0}/>
-                    }/>
-                    :
-                    <Route path="/Exposants" exact><Redirect to="/Connexion"/></Route>
-                }
+                    {token.getType() !== 2 ?
+                        <Route path="/Exposants" exact component={ (props)=>
+                            <Persons {...props} type={0}/>
+                        }/>
+                        :
+                        <Route path="/Exposants" exact><Redirect to="/Connexion"/></Route>
+                    }
 
-                {token.getType() !== 2 ?
-                    <Route path="/Editeurs/:idPerson" exact component={(props)=> <PersonDetails {...props} type={1}/>}/>
+                    {token.getType() !== 2 ?
+                        <Route path="/Editeurs/:idPerson" exact component={(props)=> <PersonDetails {...props} type={1}/>}/>
 
-                    :
-                    <Route path="/Editeurs/:idPerson" exact><Redirect to="/Connexion"/></Route>
-                }
-                {token.getType() !== 2 ?
-                    <Route path="/Exposants/:idPerson" exact component={(props)=> <PersonDetails {...props} type={0}/>}/>
+                        :
+                        <Route path="/Editeurs/:idPerson" exact><Redirect to="/Connexion"/></Route>
+                    }
+                    {token.getType() !== 2 ?
+                        <Route path="/Exposants/:idPerson" exact component={(props)=> <PersonDetails {...props} type={0}/>}/>
 
-                    :
-                    <Route path="/Exposants/:idPerson" exact><Redirect to="/Connexion"/></Route>
-                }
-            <Route path="/login" exact component={Login}/>
+                        :
+                        <Route path="/Exposants/:idPerson" exact><Redirect to="/Connexion"/></Route>
+                    }
+                    <Route path="/login" exact component={Login}/>
 
-                <Route path="/"><Redirect to="/Accueil"/></Route>
-            </Switch>
+                    <Route path="/"><Redirect to="/Accueil"/></Route>
+                </Switch>
+
+            </div>
+
 
             <Footer/>
         </div>

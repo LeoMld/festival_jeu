@@ -61,7 +61,7 @@ function GameList() {
                 <UncontrolledCollapse toggler="#toggler">
                     <Card>
                         <CardBody>
-                            <CollapseFilter games={games} setGames={setGames}/>
+                            {games && <CollapseFilter games={games} setGames={setGames}/>}
                         </CardBody>
                     </Card>
                 </UncontrolledCollapse>
@@ -81,7 +81,7 @@ function GameList() {
                 </thead>
                 <tbody>
 
-                    {games && games.data.map((game, index) => {
+                    {games && games.map((game, index) => {
                         return(
                             <Game games={games} setGames={setGames} index={index} game={game}/>
 

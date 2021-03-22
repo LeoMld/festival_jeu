@@ -71,7 +71,7 @@ function Game(props){
                         <i className="ni ni-fat-remove pt-1"/>
                     </button>
                 </td>}
-                {props.games && token.getType() === 1 && <ModalGame game={props.game} setGame={props.setGame} modalState={modalState} setModalState={setModalState}/>}
+                {props.games && token.getType() === 1 && <ModalGame games={props.games} setGames={props.setGames} game={props.game} setGame={props.setGame} modalState={modalState} setModalState={setModalState}/>}
                 {props.games && gameModal && token.getType() === 1 && <ModalDelete games={props.games} setGames={props.setGames} game={props.game}  deleteModal={deleteModal} setDeleteModal={setDeleteModal}/>}
 
 

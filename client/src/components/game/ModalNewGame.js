@@ -39,7 +39,7 @@ function ModalNewGame(props){
 
     const addGameView = (game)=>{
         const newGames = props.games
-        newGames.data.push(game)
+        newGames.push(game)
         props.setGames(newGames)
     }
 
