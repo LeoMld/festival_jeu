@@ -8,7 +8,7 @@ module.exports = {
     getFestivalToDisplay: (req, res) => {
         Utils.getFestivalToDisplay(req)
             .then((festivalToSee) => {
-                res.status(200).json(festivalToSee)
+                res.status(200).json({idFestival: festivalToSee})
             })
             .catch(() => {
                 res.status(503).json()

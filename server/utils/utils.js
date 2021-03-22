@@ -11,15 +11,17 @@ module.exports = {
         })
     },
 
-    // Retrieve the festival to display of the user
+    // Retrieve the id of the festival to display for the user
     getFestivalToDisplay: async (req) => {
         const idUtilisateur = await jwt.getId(req.headers.authorization)
-        const noFestival = {idFestival: 0}
+        const noFestival = 0
         return await usersModel.retrieveFestivalUser(idUtilisateur)
             .then((festivalToSee) => {
                 // In case there is no current festival
                 if (festivalToSee === undefined || festivalToSee.idFestival === null) {
                     festivalToSee = noFestival
+                } else {
+                    festivalToSee = festivalToSee.idFestival
                 }
                 return festivalToSee
             })
