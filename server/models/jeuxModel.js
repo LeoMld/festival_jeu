@@ -8,10 +8,10 @@ module.exports={
     // We create a new game
     createJeu : async (libellejeu,nombreJoueur,ageMinimum, duree,prototype, FK_idTypeJeu, FK_idPersonne, client) => {
         const clientUsed = await DB.getPoolClient(client)
-        const text = 'INSERT INTO "Jeu" ("libelleJeu","nombreJoueur","ageMinimum",' +
-            '"duree","prototype", "FK_idTypeJeu", "FK_idPersonne") VALUES ($1,$2,$3,$4,$5,$6,$7);'
+        const text = 'INSERT INTO "Jeu" ("libelleJeu","nombreJoueur","ageMinimum","duree","prototype", "FK_idTypeJeu", "FK_idPersonne") VALUES ($1,$2,$3,$4,$5,$6,$7) RETURNING "idJeu";'
         const queryValues = [ libellejeu,nombreJoueur,ageMinimum, duree,prototype, FK_idTypeJeu, FK_idPersonne]
-        clientUsed.query(text,queryValues)
+
+        return (await clientUsed.query(text,queryValues)).rows[0].idJeu
     },
 
     //delete a game
