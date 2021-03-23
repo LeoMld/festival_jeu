@@ -3,6 +3,7 @@ import WorkFlowSelector from "../utils/WorkFlowSelector";
 import React, {useState} from "react";
 import token from "../../utils/token";
 import axios from "axios";
+import pdf from "../../utils/pdf"
 
 function Reservation(props){
     let [r,setR] = useState(props.r)
@@ -124,7 +125,7 @@ function Reservation(props){
 
                 </Row>
                 <Row className="justify-content-center mt-md">
-                    <Button className="btn-icon btn-3" color="danger"  type="button">
+                    <Button onClick={()=>{pdf.createPDF(r)}}  className="btn-icon btn-3" color="danger"  type="button">
                               <span className="btn-inner--icon">
                                 <i className="ni ni-paper-diploma" />
                               </span>
