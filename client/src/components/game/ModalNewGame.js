@@ -54,6 +54,7 @@ function ModalNewGame(props) {
             props.setGames({...props.games, games: newGames})
         } else {
             const newGames = props.games
+            console.log(game)
             newGames.push(game)
             props.setGames(newGames)
         }
@@ -71,6 +72,10 @@ function ModalNewGame(props) {
                 game.duree = document.getElementById("duree").value
                 game.nombreJoueur = document.getElementById("nombreJoueur").value
                 game.ageMinimum = parseInt(document.getElementById("age").value)
+                game.libelleTypeJeu = document.getElementById("typeJeu"+game.FK_idTypeJeu).text
+                game.nomPersonne = document.getElementById("proprietaire"+game.FK_idPersonne).text
+
+
                 Axios.post('/api/games/', {game}, {headers: {Authorization: token.getToken()}})
                     .then(res => {
                         try {
@@ -110,6 +115,17 @@ function ModalNewGame(props) {
             >
                 <div className="modal-body p-0">
                     <Card className="bg-secondary shadow border-0">
+                        <div className="mr-sm-3 mt-sm-3">
+                            <button
+                                aria-label="Close"
+                                className="close"
+                                data-dismiss="modal"
+                                type="button"
+                                onClick={() => props.setModalState(!props.modalState)}
+                            >
+                                <span aria-hidden={true}>×</span>
+                            </button>
+                        </div>
                         <CardHeader className="bg-transparent pb-5">
                             <div className="text-muted text-center mt-2 mb-3">
                                 <h3>Ajouter un jeu</h3>
@@ -170,7 +186,7 @@ function ModalNewGame(props) {
                                         <Input id="proprietaire" type="select" name="select">
                                             {persons.map((person, index) => {
                                                 return (
-                                                    <option key={index}
+                                                    <option id={"proprietaire"+person.idPersonne} key={index}
                                                             value={person.idPersonne}>{person.nomPersonne}</option>
                                                 )
 
@@ -186,7 +202,7 @@ function ModalNewGame(props) {
                                     </Col>
                                     <Col>
                                         <label htmlFor="prototype" className="custom-toggle">
-                                            <input id="prototype" type="checkbox"/>
+                                            <input id="prototype" type="checkbox" />
                                             <span className="custom-toggle-slider rounded-circle"/>
                                         </label>
                                     </Col>
@@ -205,7 +221,7 @@ function ModalNewGame(props) {
                                         <Input id="typeJeu" type="select" name="select">
                                             {types.data.map((type, index) => {
                                                 return (
-                                                    <option key={index}
+                                                    <option id={"typeJeu"+type.idTypeJeu} key={index}
                                                             value={type.idTypeJeu}>{type.libelleTypeJeu}</option>
                                                 )
 
@@ -254,7 +270,7 @@ function ModalNewGame(props) {
                                 {!isChanging && <div className="text-center">
                                     <Button
                                         onClick={() => {
-                                            handleChange(props.game)
+                                            handleChange()
                                         }}
                                         className="my-4"
                                         color="primary"

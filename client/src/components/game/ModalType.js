@@ -91,6 +91,17 @@ function ModalType(props){
 
             {!isPendingTypes && <div className="modal-body p-0">
                 <Card className="bg-secondary shadow border-0">
+                    <div className="mr-sm-3 mt-sm-3">
+                        <button
+                            aria-label="Close"
+                            className="close"
+                            data-dismiss="modal"
+                            type="button"
+                            onClick={() => props.setModalState(!props.modalState)}
+                        >
+                            <span aria-hidden={true}>×</span>
+                        </button>
+                    </div>
                     <CardHeader className="bg-transparent pb-5">
                         <div className="text-muted text-center mt-2 mb-3">
                             <h3>Gestion des types</h3>
@@ -112,7 +123,7 @@ function ModalType(props){
                         </div>
                         <div className="text-muted text-center mt-2 ">
                             <Form role="form">
-                                <FormGroup className="mb-3">
+                                {types && <FormGroup className="mb-3">
 
                                     <InputGroup className="input-group-alternative">
                                         <InputGroupAddon addonType="prepend">
@@ -132,7 +143,7 @@ function ModalType(props){
 
                                         </Input>
                                     </InputGroup>
-                                </FormGroup>
+                                </FormGroup>}
                                 <div className="text-center">
                                     {!isChangingDelete && <Button
                                         onClick={()=>{handleChangeDelete()}}
@@ -189,4 +200,4 @@ function ModalType(props){
     )
 }
 
-export default ModalType;
+export default ModalType

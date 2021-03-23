@@ -124,6 +124,7 @@ module.exports = {
                     .then((result)=>{
                         res.status(201).json({inserted:true,idJeu:result})
                     }).catch((error)=>{
+                    console.log(error)
                         res.status(503).json({
                             error:error,
                             inserted:false

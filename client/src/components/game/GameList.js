@@ -24,6 +24,10 @@ function GameList() {
     //states related to all the games
     const {data: games, setData: setGames, isPending, error} = useAxios("/api/games")
 
+    //get all types of game
+    const {data: types} = useAxios("/api/games/TypesJeux")
+
+
     //the state to see "add a game" view trough a modal
     const [modalStateAddGame, setModalStateAddGame] = useState(false)
 
@@ -61,19 +65,21 @@ function GameList() {
                 <UncontrolledCollapse toggler="#toggler">
                     <Card>
                         <CardBody>
-                            {games && <CollapseFilter games={games} setGames={setGames}/>}
+                            {games && types && <CollapseFilter types={types.data} games={games} setGames={setGames}/>}
                         </CardBody>
                     </Card>
                 </UncontrolledCollapse>
             </div>
-            <table className="table table-striped">
+            <table className="table table-striped table-responsive-sm">
                 <thead>
                 <tr>
                     <th className="text-center">#</th>
                     <th>Titre</th>
-                    <th className="d-none d-lg-table-cell">Nombre de joueurs</th>
-                    <th className="d-none d-lg-table-cell">Âge minimum</th>
-                    <th className="d-none d-lg-table-cell">Durée</th>
+                    <th>Nombre de joueurs</th>
+                    <th>Âge minimum</th>
+                    <th>Durée</th>
+                    <th>Editeur</th>
+                    <th>Type</th>
                     {token.getType() === 1 && <th >Prototype</th>}
                     {token.getType() === 1 && <th >Action</th>}
 

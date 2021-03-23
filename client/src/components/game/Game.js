@@ -56,10 +56,12 @@ function Game(props){
             <tr key={props.index}>
                 <td className="text-center">{props.index}</td>
                 <td>{props.game.libelleJeu}</td>
-                <td className="d-none d-lg-table-cell">{props.game.nombreJoueur}</td>
-                <td className="d-none d-lg-table-cell">{props.game.ageMinimum}</td>
-                <td className="d-none d-lg-table-cell">{props.game.duree}</td>
-                {token.getType() === 1 && <Selector url={'/api/games/'+props.game.idJeu} bool={props.game.prototype}/>}
+                <td>{props.game.nombreJoueur}</td>
+                <td>{props.game.ageMinimum}</td>
+                <td>{props.game.duree}</td>
+                <td>{props.game.nomPersonne}</td>
+                <td>{props.game.libelleTypeJeu}</td>
+                {token.getType() === 1 && <Selector game={props.game} games={props.games} setGames={props.setGames}  url={'/api/games/'+props.game.idJeu} bool={props.game.prototype}/>}
                 {token.getType() === 1 && <td className="td-actions text-right d-flex">
                     <button type="button" rel="tooltip" className="btn btn-info btn-icon btn-sm "
                             data-original-title="" title="modify game" onClick={() => openModal(props.game)}>

@@ -9,9 +9,11 @@ const gameController = require('../controllers/gameController');
 
 router.get('/', gameController.getAllGames)
 
+router.get('/TypesJeux', gameController.getTypesJeux)
+
 router.use(token.privateRoute);
 
-router.get('/TypesJeux', gameController.getTypesJeux)
+
 router.post('/TypesJeux', gameController.createType)
 router.delete('/TypesJeux/:id', gameController.deleteType)
 
