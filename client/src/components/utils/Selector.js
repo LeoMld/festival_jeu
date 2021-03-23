@@ -7,14 +7,15 @@ import token from "../../utils/token";
 //- value of the boolean to update
 //- url to call in the back with the parameter "id"
 function Selector(props){
-    const[isON, setIsON] = useState(props.bool)
+
 
         const changePrototype = ()=>{
 
-            setIsON(!isON)
-            const bool = !isON
+            props.game.prototype = !props.game.prototype
 
+            props.setGames(prev => ([...prev, ...[]]))
 
+            const bool = props.game.prototype
             axios.put(props.url,{bool},{ headers: { Authorization: token.getToken() } })
                 .catch(err => {
                     console.log("Erreur lors du changement " + err)
@@ -27,7 +28,7 @@ function Selector(props){
     return(
         <td >
             <label className="custom-toggle">
-                <input onChange={()=> {changePrototype()}} checked={isON} type="checkbox" defaultChecked={isON}/>
+                <input onChange={()=> {changePrototype()}} checked={props.game.prototype} type="checkbox" />
                 <span className="custom-toggle-slider rounded-circle"></span>
             </label>
         </td>

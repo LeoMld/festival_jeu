@@ -43,11 +43,11 @@ function ModalDelete(props){
 
 
         }else{
-            const newGames = {data:[]}
-            props.games.data.forEach(game =>{
+            const newGames = []
+            props.games.forEach(game =>{
                 if(game.idJeu !== props.game.idJeu){
                     //get  "game" index
-                    newGames.data.push(game)
+                    newGames.push(game)
                 }
             } )
             props.setGames(newGames)

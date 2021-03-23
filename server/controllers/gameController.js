@@ -29,7 +29,7 @@ module.exports = {
             if(result.length===0){
                 res.status(200).json('No games')
             }else{
-                res.status(200).json({data:result})
+                res.status(200).json(result)
 
             }
         }).catch((error)=>{
@@ -124,6 +124,7 @@ module.exports = {
                     .then((result)=>{
                         res.status(201).json({inserted:true,idJeu:result})
                     }).catch((error)=>{
+                    console.log(error)
                         res.status(503).json({
                             error:error,
                             inserted:false
