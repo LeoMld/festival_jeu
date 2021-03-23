@@ -25,9 +25,18 @@ module.exports = {
     //Get a festival reservations
     getFestivalReservations : async (idFestival,client)=>{
         const clientUsed = await DB.getPoolClient(client)
-        const text = 'SELECT * FROM "Reservation" JOIN "Personne" ON "Reservation"."FK_idPersonne"="Personne"."idPersonne" LEFT JOIN "Note" ON "Reservation"."idReservation"="Note"."FK_idReservation" JOIN "EspaceReserve" ON "EspaceReserve"."FK_idReservation"="Reservation"."idReservation" JOIN "Emplacement" E on E."idEmplacement" = "EspaceReserve"."FK_idEmplacement" WHERE "Reservation"."FK_idFestival"=$1;'
-        const values = [idFestival]
-        return (await clientUsed.query(text,values)).rows
+        let text = 'SELECT * FROM "Reservation" JOIN "Personne" ON "Reservation"."FK_idPersonne"="Personne"."idPersonne" LEFT JOIN "Note" ON "Reservation"."idReservation"="Note"."FK_idReservation"  WHERE "Reservation"."FK_idFestival"=$1;'
+        let values = [idFestival]
+        let info=(await clientUsed.query(text,values)).rows
+        let data=[]
+        for(let i =0;i<info.length;i++){
+            text = 'SELECT * FROM  "EspaceReserve" JOIN "Emplacement" E on E."idEmplacement" = "EspaceReserve"."FK_idEmplacement" WHERE "EspaceReserve"."FK_idReservation"=$1;'
+            let values = [info[i].idReservation]
+            let espace = (await clientUsed.query(text,values)).rows
+            info[i]["espace"]=espace
+        }
+        console.log(info)
+        return info
 
     },
     getAReservations : async (idReservation,client)=>{
