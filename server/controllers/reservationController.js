@@ -8,7 +8,6 @@ module.exports={
         console.log(idFestival)
         await Reservation.getFestivalReservations(idFestival)
             .then((result)=>{
-                console.log(result)
                 res.status(200).json(result)
             })
             .catch((e)=>{
@@ -19,12 +18,10 @@ module.exports={
         body=req.body
         if(body.remiseReservation){
             //update the whole reservation
-            console.log("Ok")
         }else{
+            console.log(body)
             let colName = Object.keys(body)[0]
             let value= body[colName]
-            console.log(colName)
-            console.log(value)
             await Reservation.updateSingleCol(req.params.id,colName,value)
                 .then((result)=>{
                     res.status(200).json(result.rowCount)

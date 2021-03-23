@@ -6,20 +6,30 @@ import axios from "axios";
 
 function Reservation(props){
     let [r,setR] = useState(props.r)
+
+
     const handleChanges = async (event)=>{
         let info={}
         let value= event.target.value
-        if(value==="on"){
-            value=true
-        }
-        if(value==="off"){
-            value=false
-        }
         info[event.target.id]=value
         console.log(info)
         axios.put("/api/gestion/reservations/"+r.idReservation,info,{ headers: { Authorization: token.getToken() } })
             .then((res)=>{
                 setR({...r,[event.target.name]:value})
+            })
+            .catch(()=>{
+                setR(props.r)
+            })
+    }
+    const handleSelector = async (event,val)=>{
+        let info={}
+        info[event.target.id]=val
+        setR({...r,[event.target.id]:val})
+
+        console.log(info)
+        axios.put("/api/gestion/reservations/"+r.idReservation,info,{ headers: { Authorization: token.getToken() } })
+            .then((res)=>{
+                setR({...r,[event.target.id]:val})
             })
             .catch(()=>{
                 setR(props.r)
@@ -69,8 +79,8 @@ function Reservation(props){
                         <label className="custom-toggle">
                             <input id="estPlaceReservation"
                                    type="checkbox"
-                                   defaultChecked={r.estPlaceReservation}
-                                   onChange={(event)=>handleChanges(event)}/>
+                                   checked={r.estPlaceReservation}
+                                   onChange={(event)=>handleSelector(event,!(r.estPlaceReservation))}/>
                             <span className="custom-toggle-slider rounded-circle"/>
                         </label>
                     </Col>
@@ -79,8 +89,8 @@ function Reservation(props){
                         <label className="custom-toggle">
                             <input id="seDeplaceReservation"
                                    type="checkbox"
-                                   defaultChecked={r.seDeplaceReservation}
-                                   onChange={(event)=>handleChanges(event)}/>
+                                   checked={r.seDeplaceReservation}
+                                   onChange={(event)=>handleSelector(event,!r.seDeplaceReservation)}/>
                             <span className="custom-toggle-slider rounded-circle"/>
                         </label>
                     </Col>
@@ -89,8 +99,8 @@ function Reservation(props){
                         <label className="custom-toggle">
                             <input id="besoinAnimateurReservation"
                                    type="checkbox"
-                                   defaultChecked={r.besoinAnimateurReservation}
-                                   onChange={(event)=>handleChanges(event)}/>
+                                   checked={r.besoinAnimateurReservation}
+                                   onChange={(event)=>handleSelector(event,!(r.besoinAnimateurReservation))}/>
                             <span className="custom-toggle-slider rounded-circle"/>
                         </label>
                     </Col>
