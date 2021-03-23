@@ -26,33 +26,17 @@ function ModalGame(props){
     const [isChanging, setIsChanging] = useState(false)
     const [error, setError] = useState(false)
 
-    const changeGame = (editedGame)=>{
-        const editedGames = []
-        props.games.map(game => {
-            if(editedGame.idJeu !== game.idJeu){
-                editedGames.push(game)
-            }else{
-                editedGames.push(editedGame)
-            }
-        })
-        props.setGames(editedGames)
-    }
+
 
     const handleChange = (game)=>{
         setIsChanging(true)
-        const editedGame = {}
-        editedGame.libelleJeu = document.getElementById("libelle").value
-        editedGame.duree = document.getElementById("duree").value
-        editedGame.nombreJoueur = document.getElementById("nombreJoueur").value
-        editedGame.ageMinimum = document.getElementById("age").value
-        editedGame.idJeu = props.game.idJeu
-        changeGame(editedGame)
-        /*props.game.libelleJeu = document.getElementById("libelle").value
+
+        props.game.libelleJeu = document.getElementById("libelleChamp").value
         props.game.duree = document.getElementById("duree").value
         props.game.nombreJoueur = document.getElementById("nombreJoueur").value
-        props.game.ageMinimum = document.getElementById("age").value*/
+        props.game.ageMinimum = document.getElementById("age").value
 
-        console.log(editedGame)
+
         Axios.put('/api/games/'+props.game.idJeu, {game},{ headers: { Authorization: token.getToken() } })
             .then(res => {
                 props.setModalState(!props.modalState)
@@ -96,14 +80,14 @@ function ModalGame(props){
                     <CardBody  className="px-lg-5 py-lg-5">
                         {props.game != null && <Form role="form">
                             <FormGroup className="mb-3">
-                                <Label for="libelle">Libelle du jeu</Label>
+                                <Label for="libelleChamp">Libelle du jeu</Label>
                                 <InputGroup className="input-group-alternative">
                                     <InputGroupAddon addonType="prepend">
                                         <InputGroupText>
                                             <i className="ni ni-app" />
                                         </InputGroupText>
                                     </InputGroupAddon>
-                                    <Input id="libelle" defaultValue={props.game.libelleJeu} placeholder="libelle du Jeu" type="text" />
+                                    <Input id="libelleChamp" defaultValue={props.game.libelleJeu} placeholder="libelle du Jeu" type="text" />
                                 </InputGroup>
                             </FormGroup>
                             <FormGroup className="mb-3">
