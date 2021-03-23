@@ -49,7 +49,7 @@ module.exports = {
         }
     },
 
-    //Get all zones form a festival
+    //Get all zones from a festival
     getAFestivalZones: async (FK_idFestival, client) => {
         const clientUsed = await DB.getPoolClient(client)
         const queryText = 'SELECT * FROM "Zone" WHERE "FK_idFestival" = $1 ORDER BY "dateCreationZone" DESC, "idZone";'
