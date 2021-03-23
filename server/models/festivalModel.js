@@ -2,6 +2,8 @@ const DB = require('../config/config')
 
 const Zone = require('./zoneModel')
 const Emplacement = require('./emplacementModel')
+const Person = require('./personModel')
+const Reservation = require("./reservationModel");
 
 // Update the festival that is the current one, and pass it at false
 changeCurrentStateFestival = async (client) => {
@@ -41,6 +43,13 @@ module.exports = {
                 newFestival.emplacements[i] = (await Emplacement.createEmplacement(emp.libelleEmplacement, parseFloat(emp.coutTable),
                     parseFloat(emp.coutMetreCarre), parseInt(emp.nombreTablesPrevues), newFestival.idFestival, client)).rows[0]
             }
+            //Get all active exposants
+            const persons= await Person.getExposants(client)
+            //Create a default reservation for each of them
+            for (const p of persons) {
+                await Reservation.createPersonReservation(newFestival.idFestival,p.idPersonne,client)
+            }
+            //All went fine
             await client.query('COMMIT')
             return newFestival
         } catch (err) {

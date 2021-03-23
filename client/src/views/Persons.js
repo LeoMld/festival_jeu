@@ -29,7 +29,7 @@ function Persons(props){
     }
     return(
         <div className={"container justify-content-center"}>
-            {<Row className="mb-5 mt-5">
+            <Row className="mb-5 mt-5">
             <Col>
                 <h1 className="font-weight-900">Liste des {props.type===1?"Editeurs":"Exposants"}</h1>
             </Col>
@@ -43,7 +43,7 @@ function Persons(props){
                 </Button>
             </Col>
             <CreatePerson modalState = {modalState} setModalState = {setModalState} type={props.type} addPerson={addPerson}/>
-        </Row>}
+        </Row>
 
             <Table className="align-items-center table-bordered" responsive>
                 <thead className="thead-light">
