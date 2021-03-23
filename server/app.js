@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const path = require("path");
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
@@ -11,7 +12,8 @@ if (process.env.NODE_ENV !== 'production') {
     // We use our local variable environments
     require('dotenv').config();
 } else {
-    // TODO We are in production
+    // We are in production
+    app.use(express.static(path.join(__dirname, 'client/build')))
 }
 
 app.use(expressSanitizer());
