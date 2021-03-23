@@ -5,7 +5,6 @@ const Reservation = require("../models/reservationModel")
 module.exports={
     getReservations: async (req,res)=>{
         const idFestival = await utils.getFestivalToDisplay(req)
-        console.log(idFestival)
         await Reservation.getFestivalReservations(idFestival)
             .then((result)=>{
                 res.status(200).json(result)
@@ -14,6 +13,18 @@ module.exports={
                 res.status(503).json(e)
             })
     },
+    getAReservation : async (req,res)=>{
+        let id=req.params.id
+        await Reservation.getAReservations(id)
+            .then((result)=>{
+                console.log(result)
+                res.status(200).json(result)
+            })
+            .catch((e)=>{
+                res.status(503).json(e)
+            })
+    },
+
     updateReservation : async (req,res)=>{
         body=req.body
         if(body.remiseReservation){

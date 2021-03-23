@@ -10,6 +10,7 @@ const reservationController = require("../controllers/reservationController")
 const token = require('../utils/token')
 
 router.get("/reservations",reservationController.getReservations)
+router.get("/reservations/:id",reservationController.getAReservation)
 router.put("/reservations/:id",reservationController.updateReservation)
 
 

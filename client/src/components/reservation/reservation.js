@@ -3,6 +3,7 @@ import WorkFlowSelector from "../utils/WorkFlowSelector";
 import React, {useState} from "react";
 import token from "../../utils/token";
 import axios from "axios";
+import {Link} from "react-router-dom";
 
 function Reservation(props){
     let [r,setR] = useState(props.r)
@@ -37,7 +38,15 @@ function Reservation(props){
     }
     return(
         <tr key={props.index}>
-            <td>{r.nomPersonne}</td>
+            <td>
+                <Row className="justify-content-center">
+                    {r.nomPersonne}
+                </Row>
+                <Row className="justify-content-center mt-5">
+                    <Link to={"/Reservations/"+r.idReservation} className="btn btn-default">Voir</Link>
+
+                </Row>
+            </td>
             <td>
 
                 <Row>
