@@ -1,0 +1,21 @@
+{
+  "name": "festival_jeu_web",
+  "version": "1.0.0",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server/bin/www",
+    "server": "nodemon server/bin/www",
+    "client": "npm start --prefix client",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client"  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LeoMld/festival_jeu.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/LeoMld/festival_jeu/issues"
+  },
+  "homepage": "https://github.com/LeoMld/festival_jeu#readme"
+}
