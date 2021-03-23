@@ -35,4 +35,8 @@ app.use('/api/gestion/', gestionRoutes);
 app.use('/api/games/', gameRoutes);
 app.use('/api/user/', userRoutes)
 
+app.get('/*', (request, response) => {
+    response.sendFile(path.join(__dirname, 'client/build', 'index.html'));
+});
+
 module.exports = app;
