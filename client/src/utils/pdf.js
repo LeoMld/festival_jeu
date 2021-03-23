@@ -22,8 +22,17 @@ const pdf = {
         console.log(r)
 
         let result=[]
+        let data = {
+            idEspace: r.idEspace.toString(),
+            idEmplacement: r.idEmplacement.toString(),
+            nb_Tables: r.nombreTables.toString(),
+            metre_Carres: r.metreCarres.toString(),
+            PrixU_Table: r.coutTable.toString(),
+            PrixU_M2: r.coutMetreCarre.toString(),
+            Prix_Total_HT: r.prixReservation.toString(),
 
-        r.map(res =>{
+        };
+        /*r.map(res =>{
             let data = {
                 idEspace: res.idEspace.toString(),
                 idEmplacement: res.idEmplacement.toString(),
@@ -35,8 +44,9 @@ const pdf = {
 
             };
             result.push(Object.assign({}, data))
-        })
-
+        })*/
+        result.push(Object.assign({}, data))
+        console.log(result)
         let headers = createHeaders([
             "idEspace",
             "idEmplacement",
