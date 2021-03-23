@@ -3,11 +3,11 @@
   "version": "1.0.0",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server/bin/www",
-    "server": "nodemon server/bin/www",
+    "start": "cd server && npm install && npm start",
     "client": "npm start --prefix client",
-    "dev": "concurrently \"npm run server\" \"npm run client\"",
-    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client"  },
+    "dev": "concurrently \"npm run server --prefix server\" \"npm run client\"",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/LeoMld/festival_jeu.git"
