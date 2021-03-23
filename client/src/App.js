@@ -19,6 +19,7 @@ import Login from "./views/Login";
 import Persons from "./views/Persons";
 import PersonDetails from "./views/PersonDetails";
 import Zones from "./views/Zones"
+import Reservations from "./views/Reservations"
 
 function App() {
 
@@ -49,7 +50,11 @@ function App() {
 
                 <Route path="/ListeJeux" exact component={AllGames}/>
 
-
+                {token.getType() !== 2 ?
+                    <Route path="/Reservations" exact component={Reservations}/>
+                    :
+                    <Route path="/Reservations" exact><Redirect to="/Connexion"/></Route>
+                }
 
                 {token.getType() !== 2 ?
                     <Route path="/Editeurs" exact component={(props) =>
@@ -73,6 +78,7 @@ function App() {
                     :
                     <Route path="/Exposants" exact><Redirect to="/Connexion"/></Route>
                 }
+
 
                 {token.getType() !== 2 ?
                     <Route path="/Editeurs/:idPerson" exact component={(props)=> <PersonDetails {...props} type={1}/>}/>

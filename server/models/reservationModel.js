@@ -3,7 +3,7 @@ const DB = require('../config/config')
 /**
  * Description of the workflow. Each integer will describe a state :
  * 0 : Pas Contacté
- * 1 : Contacter (datePremierContact not null)
+ * 1 : Contacté (datePremierContact not null)
  * 2 : 2e Contact (dateSecondContact not null)
  * 3 : Pas de Réponse
  * 4 : 1. En discussion
@@ -25,9 +25,10 @@ module.exports = {
     //Get a festival reservations
     getFestivalReservations : async (idFestival,client)=>{
         const clientUsed = await DB.getPoolClient(client)
-        const text = 'SELECT "Reservation".*,"Personne"."nomPersonne" FROM "Reservation" JOIN "Personne" ON "Reservation"."FK_idPersonne"="Personne"."idPersonne" WHERE "FK_idFestival"=$1;'
+        const text = 'SELECT * FROM "Reservation" JOIN "Personne" ON "Reservation"."FK_idPersonne"="Personne"."idPersonne" LEFT JOIN "Note" ON "Reservation"."idReservation"="Note"."FK_idReservation" JOIN "EspaceReserve" ON "EspaceReserve"."FK_idReservation"="Reservation"."idReservation" WHERE "FK_idFestival"=$1;'
         const values = [idFestival]
         return (await clientUsed.query(text,values)).rows
+
     },
 
 
@@ -49,5 +50,12 @@ module.exports = {
         const clientUsed = await DB.getPoolClient(client)
         const queryText =`SELECT * FROM "Reservation" WHERE "FK_idPersonne"=${idPerson};`
         return (await clientUsed.query(queryText, [])).rows
-    }
+    },
+
+    //==========================UPDATE=============================
+    updateSingleCol : async (idReservation,colName,colValue,client) =>{
+        const clientUsed = await DB.getPoolClient(client)
+        const queryText = `UPDATE "Reservation" SET "${colName}" = '${colValue}' WHERE "idReservation" = '${idReservation}';`
+        return await clientUsed.query(queryText, [])
+    },
 }

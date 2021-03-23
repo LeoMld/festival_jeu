@@ -6,10 +6,11 @@ const festivalController = require('../controllers/festivalController');
 const contactController = require("../controllers/contactController");
 const zoneController = require("../controllers/zoneController");
 const personController = require("../controllers/personController");
-
+const reservationController = require("../controllers/reservationController")
 const token = require('../utils/token')
 
-router.get('/editeurs/:id', personController.getPersonPage)
+router.get("/reservations",reservationController.getReservations)
+router.put("/reservations/:id",reservationController.updateReservation)
 
 
 router.use(token.privateRoute);
@@ -21,6 +22,7 @@ router.put('/festival/:id', festivalController.changeCurrentFestival)
 
 router.get('/editeurs/', personController.getAllEditors)
 router.post('/editeurs/', personController.createPerson)
+router.get('/editeurs/:id', personController.getPersonPage)
 router.put('/editeurs/:id', personController.updatePerson)
 
 router.get('/exposants/', personController.getAllExposants)
@@ -39,5 +41,6 @@ router.get('/zone', zoneController.getAllZonesFestival)
 router.post('/zone/', zoneController.createNewZone)
 router.put('/zone/:id', zoneController.updateZone)
 router.delete('/zone/:id', zoneController.deleteZone)
+
 
 module.exports = router;

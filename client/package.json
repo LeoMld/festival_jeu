@@ -17,6 +17,7 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "^4.0.3",
     "reactstrap": "^8.9.0",
+    "reactstrap-date-picker": "^0.0.11",
     "web-vitals": "^1.1.0"
   },
   "scripts": {
@@ -43,6 +44,5 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "http://localhost:8080",
-  "devDependencies": {}
+  "proxy": "http://localhost:8080"
 }
