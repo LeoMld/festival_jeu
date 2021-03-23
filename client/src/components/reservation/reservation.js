@@ -1,4 +1,4 @@
-import {Col, Input, Label, Row} from "reactstrap";
+import {Col, Input, Label, Row, Button} from "reactstrap";
 import WorkFlowSelector from "../utils/WorkFlowSelector";
 import React, {useState} from "react";
 import token from "../../utils/token";
@@ -118,7 +118,20 @@ function Reservation(props){
                     </Col>
                 </Row>
             </td>
-            <td>{r.prixReservation}</td>
+            <td><Col >
+                <Row className="justify-content-center">
+                    {r.prixReservation}
+
+                </Row>
+                <Row className="justify-content-center mt-md">
+                    <Button className="btn-icon btn-3" color="danger"  type="button">
+                              <span className="btn-inner--icon">
+                                <i className="ni ni-paper-diploma" />
+                              </span>
+                        <span className="btn-inner--text">Facture</span>
+                    </Button>
+                </Row>
+            </Col></td>
             <td>
                 <Input type="textarea">{r.textNote}</Input>
             </td>
