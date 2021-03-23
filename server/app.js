@@ -13,7 +13,7 @@ if (process.env.NODE_ENV !== 'production') {
     require('dotenv').config();
 } else {
     // We are in production
-    app.use(express.static(path.join(__dirname, 'client/build')))
+    app.use(express.static(path.join(__dirname, '../client/build')))
 }
 
 app.use(expressSanitizer());
@@ -36,7 +36,7 @@ app.use('/api/games/', gameRoutes);
 app.use('/api/user/', userRoutes)
 
 app.get('/*', (request, response) => {
-    response.sendFile(path.join(__dirname, 'client/build', 'index.html'));
+    response.sendFile(path.join(__dirname, '../client/build', 'index.html'));
 });
 
 module.exports = app;
