@@ -1,4 +1,3 @@
-
 const utils = require("../utils/utils");
 const Reservation = require("../models/reservationModel")
 
@@ -17,7 +16,6 @@ module.exports={
         let id=req.params.id
         await Reservation.getAReservations(id)
             .then((result)=>{
-                console.log(result)
                 res.status(200).json(result)
             })
             .catch((e)=>{

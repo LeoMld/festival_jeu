@@ -18,26 +18,6 @@ function Zones() {
     const {data: zones, setData: setZones, isPending, error} = useAxios('/api/gestion/zone')
     const [modalState, setModalState] = useState(false)
 
-    // We put 2 zones per row
-    const displayZones = () => {
-        const items = []
-        for (let i = 1; i <= zones.length; i += 2) {
-            items.push(<Row className="mb-3 mt-3 mr-1 ml-1" key={i}>
-                <Col>
-                    <Zone zone={zones[i - 1]} updateZone={updateZone} deleteZone={deleteZone}/>
-                </Col>
-                <Col>
-                    {i < zones.length && <Zone zone={zones[i]} updateZone={updateZone} deleteZone={deleteZone}/>}
-                </Col>
-            </Row>)
-        }
-        return (
-            <>
-                {items}
-            </>
-        )
-    }
-
     // We add the zone created in the view
     const addNewZone = (newZone) => {
         const newZones = [...zones]
@@ -58,7 +38,25 @@ function Zones() {
 
     // We remove the zone from the view that has been deleted
     const deleteZone = (idZone) => {
+        //TODO
+        /*
+        // We retrieve the games in the deleted zone
+        const games = (zones.filter(item => item.idZone === idZone)).games
+        // We remove the zone
         const newZones = zones.filter(item => item.idZone !== idZone)
+        // We add the games
+        newZones[0].games = [...newZones[0].games, games]
+        setZones(newZones)
+         */
+    }
+
+    // Change the prototype on the view
+    const updateGameZone = (idZone, idJeu, colName, val) => {
+        let newZones = [...zones]
+        let changedGame = zones.filter(z => z.idZone === idZone)[0]
+        let indexOfZone = zones.indexOf(changedGame)
+        let indexOfGame = changedGame.games.indexOf(changedGame.games.filter(g => g.PK_idJeu === idJeu)[0])
+        newZones[indexOfZone].games[indexOfGame][colName] = val
         setZones(newZones)
     }
 
@@ -87,7 +85,17 @@ function Zones() {
                 <Alert color="danger">
                     {error}
                 </Alert> :
-                (!isPending ? (displayZones()) :
+                (!isPending ? (zones.map((zone, index) => {
+                        return (
+                            <Row className="mb-3 mt-3" key={index}>
+                                <Col>
+                                    <Zone zones={zones} zone={zone} updateZone={updateZone} deleteZone={deleteZone}
+                                          updateGameZone={updateGameZone}/>
+                                </Col>
+                            </Row>
+                        )
+
+                    })) :
                     <Waiting name="zones"/>)
             }
         </div>
