@@ -1,5 +1,6 @@
 const utils = require("../utils/utils");
 const Reservation = require("../models/reservationModel")
+const Emplacement = require("../models/emplacementModel")
 
 
 module.exports={
@@ -16,7 +17,9 @@ module.exports={
     getAReservation : async (req,res)=>{
         let id=req.params.id
         await Reservation.getAReservation(id)
-            .then((result)=>{
+            .then(async (result)=>{
+                // We retrieve the emplacements of a festival
+                result.emplacements = await Emplacement.retrieveEmplacements(result.FK_idFestival)
                 res.status(200).json(result)
             })
             .catch((e)=>{
@@ -39,7 +42,11 @@ module.exports={
                 .catch((e)=>{
                     res.status(503).json(e)
                 })
-
         }
+    },
+
+    saveNewEmplacements : async (req,res)=>{
+        // TODO créer les espaces réservés
+        // TODO update la remise et le prix
     }
 }

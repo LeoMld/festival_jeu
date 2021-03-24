@@ -51,9 +51,7 @@ module.exports = {
         const values = [idReservation]
         let info = (await clientUsed.query(text,values)).rows[0]
         info["espace"]= await EspaceReserve.getReservationsSpaces(idReservation,clientUsed)
-        console.log(info)
         info["jeuPresents"]= await jeuPresent.getReservationGames(idReservation,clientUsed)
-        console.log(info)
         return info
 
 
