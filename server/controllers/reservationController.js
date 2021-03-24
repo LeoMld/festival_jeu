@@ -2,6 +2,7 @@
 const utils = require("../utils/utils");
 const Reservation = require("../models/reservationModel")
 
+
 module.exports={
     getReservations: async (req,res)=>{
         const idFestival = await utils.getFestivalToDisplay(req)

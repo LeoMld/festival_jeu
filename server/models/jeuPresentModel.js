@@ -11,7 +11,8 @@ module.exports = {
     },
     getReservationGames : async (idReservation,client) =>{
         const clientUsed = DB.getPoolClient(client)
-        const queryText= 'SELECT * FROM "JeuPresent" JOIN "JEU" ON "JEU"."idJeu"="JeuPresent"."PK_idJeu" JOIN "TypeJeu" ON "TypeJeu"."idTypeJeu"="Jeu"."FK_idTypeJeu" WHERE "JeuPresent"."PK_idReservation"=$1'
+        const queryText= 'SELECT * FROM "JeuPresent" JOIN "Jeu" ON "Jeu"."idJeu"="JeuPresent"."PK_idJeu" JOIN "TypeJeu" ON "TypeJeu"."idTypeJeu"="Jeu"."FK_idTypeJeu" WHERE "JeuPresent"."PK_idReservation"=$1;'
+        console.log(queryText)
         const queryValues = [idReservation]
         return (await clientUsed.query(queryText, queryValues)).rows
     },
@@ -21,8 +22,6 @@ module.exports = {
         const queryText= 'SELECT SUM("prixRenvoi") as prixRenvoiTotal FROM "JeuPresent" WHERE "PK_idReservation"=$1'
         const queryValues = [idReservation]
         return (await clientUsed.query(queryText, queryValues)).rows[0]
-
-
     }
 
 }

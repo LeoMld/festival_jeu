@@ -1,6 +1,6 @@
 import {Col, Input, Label, Row, Button} from "reactstrap";
 import WorkFlowSelector from "../utils/WorkFlowSelector";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import token from "../../utils/token";
 import axios from "axios";
 import pdf from "../../utils/pdf"
@@ -8,6 +8,22 @@ import {Link} from "react-router-dom";
 
 function Reservation(props){
     let [r,setR] = useState(props.r)
+    let [color,setColor] = useState(r.workflowReservation)
+    const colorStateReservation = () =>{
+        switch(color) {
+            case 3:
+                return "bg-translucent-warning"
+            case 5:
+            case 6:
+            case 7:
+                return "bg-translucent-success"
+            case 8:
+            case 9 :
+                return "bg-red"
+            default:
+                return ""
+        }
+    }
     const handleChanges = async (event)=>{
         let info={}
         let value= event.target.value
@@ -16,6 +32,9 @@ function Reservation(props){
         axios.put("/api/gestion/reservations/"+r.idReservation,info,{ headers: { Authorization: token.getToken() } })
             .then((res)=>{
                 setR({...r,[event.target.name]:value})
+                if(event.target.id==="workflowReservation"){
+                    setColor(parseInt(value))
+                }
             })
             .catch(()=>{
                 setR(props.r)
@@ -35,6 +54,7 @@ function Reservation(props){
                 setR(props.r)
             })
     }
+
     return(
         <tr key={props.index}>
             <td>
@@ -52,6 +72,9 @@ function Reservation(props){
                     <Col md={6}>
                         <p className="mb--1">Etat de la Réservation</p>
                         <WorkFlowSelector selected={r.workflowReservation} id="workflowReservation" handleChanges={handleChanges}/>
+                    </Col>
+                    <Col md={6}>
+                        <div className={colorStateReservation()+ " mt-4"} style={{minHeight:"15px"}}> </div>
                     </Col>
                 </Row>
                 <Row className="mt-1">
