@@ -1,13 +1,8 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState} from 'react'
 
-import {
-    Container, Modal, Button, Alert, Col, Row, UncontrolledCollapse, Card, CardBody
-} from 'reactstrap';
+import {Alert, Button, Card, CardBody, Col, Container, Row, UncontrolledCollapse} from 'reactstrap';
 import useAxios from "../../utils/useAxios";
 import Waiting from '../utils/Waiting'
-import ModalGame from '../game/ModalGame'
-import ModalDelete from '../game/ModalDelete'
-import Selector from "../utils/Selector";
 import token from "../../utils/token";
 import ModalNewGame from "./ModalNewGame";
 import ModalType from "./ModalType";

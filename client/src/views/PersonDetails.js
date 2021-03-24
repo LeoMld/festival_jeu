@@ -1,14 +1,14 @@
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import axios from "axios";
 import useAxios from "../utils/useAxios";
-import {Button, Card, CardBody, CardHeader, Col, Collapse, Container, Input, Label, Row, Table} from "reactstrap";
+import {Button, Card, CardBody, Col, Collapse, Input, Label, Row, Table} from "reactstrap";
 import Waiting from "../components/utils/Waiting";
 import token from "../utils/token";
 import Contact from "../components/contact/contact";
 import ContactModal from "../components/contact/contactModal";
 import Game from "../components/game/Game";
 import ModalNewGame from "../components/game/ModalNewGame";
-import ModalDelete from "../components/game/ModalDelete";
+
 //TODO FIX PROTOTYPE JEUX
 
 function PersonDetails(props) {

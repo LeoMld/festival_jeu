@@ -1,25 +1,10 @@
-import {
-    Button,
-    Modal,
-    CardBody,
-    Form,
-    FormGroup,
-    InputGroup,
-    Card,
-    CardHeader,
-    InputGroupAddon,
-    Input,
-    InputGroupText,
-    Label,
-    Alert
-} from "reactstrap";
-import React,{useEffect, useState} from "react";
+import {Alert, Button, Modal} from "reactstrap";
+import React, {useState} from "react";
 import Axios from "axios";
 import Waiting from "../utils/Waiting";
 import token from "../../utils/token";
 
 import among_sage from "../../assets/images/amongus/among-sage.png"
-import among_green from "../../assets/images/amongus/among-green.png";
 
 function ModalDelete(props){
 

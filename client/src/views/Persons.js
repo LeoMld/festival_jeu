@@ -1,17 +1,11 @@
-import axios from "axios";
-import Home from "./Home";
-import React, {useState, useEffect} from 'react'
+import React, {useState} from 'react'
 import Person from "../components/person/person"
 import CreatePerson from "../components/person/createPerson"
 
-import {
-    Button,
-    Col, Row,
-    Table,Form
-} from "reactstrap"
+import {Button, Col, Row, Table} from "reactstrap"
 import useAxios from "../utils/useAxios";
-import CreateUpdateFestival from "../components/festival/createUpdateFestival";
 import Waiting from "../components/utils/Waiting";
+
 function Persons(props){
     let url;
     let [modalState,setModalState] = useState(false)

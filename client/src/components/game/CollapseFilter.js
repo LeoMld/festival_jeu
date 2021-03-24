@@ -1,29 +1,11 @@
-import {
-    Button,
-    Modal,
-    CardBody,
-    Row,
-    Col,
-    Form,
-    FormGroup,
-    InputGroup,
-    Card,
-    CardHeader,
-    InputGroupAddon,
-    Input,
-    InputGroupText,
-    Label,
-    Alert
-} from "reactstrap";
+import {Button, Col, Form, FormGroup, Input, Label, Row} from "reactstrap";
 
-import React,{useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import InputRange from 'react-input-range';
 import "react-input-range/lib/css/index.css";
 import Waiting from "../utils/Waiting";
-import useAxios from "../../utils/useAxios";
 import axios from "axios";
 import token from "../../utils/token";
-
 
 
 function CollapseFilter(props){

@@ -1,24 +1,4 @@
-import {
-    Button,
-    Modal,
-    CardBody,
-    Row,
-    Col,
-    Form,
-    FormGroup,
-    InputGroup,
-    Card,
-    CardHeader,
-    InputGroupAddon,
-    Input,
-    InputGroupText,
-    Label,
-    Alert, Container
-} from "reactstrap";
-
-import React,{ useEffect,useState} from "react";
-import Axios from "axios";
-import Waiting from "../utils/Waiting";
+import React, {useState} from "react";
 import token from "../../utils/token";
 import Selector from "../utils/Selector";
 import ModalGame from "./ModalGame";

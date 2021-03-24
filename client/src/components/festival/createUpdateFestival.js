@@ -1,18 +1,19 @@
-import React, {useState, useEffect} from 'react'
+import React, {useEffect, useState} from 'react'
 import Axios from 'axios'
 
 import {
+    Alert,
     Button,
-    Modal,
     Card,
+    CardBody,
     CardHeader,
+    Col,
     Form,
     FormGroup,
-    InputGroup,
     Input,
-    CardBody,
-    Col,
-    Row, Alert
+    InputGroup,
+    Modal,
+    Row
 } from 'reactstrap';
 import Waiting from "../utils/Waiting";
 import token from "../../utils/token";
