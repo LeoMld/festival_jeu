@@ -1,12 +1,7 @@
 import React, {useState} from 'react'
 
 import Festival from "../components/festival/festival";
-import {
-    Button,
-    Col,
-    Row,
-    Alert
-} from "reactstrap";
+import {Alert, Button, Col, Row} from "reactstrap";
 
 import useAxios from "../utils/useAxios";
 import Waiting from "../components/utils/Waiting";

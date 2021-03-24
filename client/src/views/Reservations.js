@@ -1,20 +1,15 @@
 import useAxios from "../utils/useAxios";
-import {Button, Card, CardBody, Col, Badge, Label, Row, Table, UncontrolledCollapse} from "reactstrap";
-import CreatePerson from "../components/person/createPerson";
+import {Badge, Button, Card, CardBody, Col, Row, Table, UncontrolledCollapse} from "reactstrap";
 import React, {useEffect} from "react";
-import Selector from "../components/utils/Selector";
-import WorkFlowSelector from "../components/utils/WorkFlowSelector";
 import Waiting from "../components/utils/Waiting";
 import Reservation from "../components/reservation/reservation";
 import CollapseFilterResa from "../components/reservation/CollapseFilterResa";
-import CollapseFilter from "../components/game/CollapseFilter";
 
 
 function Reservations() {
     const {data: reservations, setData: setReservations, isPending, error} = useAxios("/api/gestion/reservations")
 
     useEffect(()=>{
-        console.log("cran au dessus"+reservations)
     },[reservations])
 
     return (

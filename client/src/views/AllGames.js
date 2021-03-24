@@ -1,9 +1,6 @@
-import React, {useState} from 'react'
-import {Container,Button} from "reactstrap";
+import React from 'react'
+import {Container} from "reactstrap";
 import GameList from "../components/game/GameList";
-import ModalGame from "../components/game/ModalGame";
-import ModalNewGame from "../components/game/ModalNewGame";
-import token from "../utils/token";
 
 
 function AllGames(){

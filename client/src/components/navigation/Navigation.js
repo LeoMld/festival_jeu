@@ -5,18 +5,18 @@ import Headroom from "headroom.js";
 import token from "../../utils/token"
 
 import {
-    UncontrolledCollapse,
-    DropdownMenu,
-    DropdownItem,
-    DropdownToggle,
-    UncontrolledDropdown,
-    NavbarBrand,
-    Navbar,
-    NavItem,
-    Nav,
-    Container,
-    Row,
     Col,
+    Container,
+    DropdownItem,
+    DropdownMenu,
+    DropdownToggle,
+    Nav,
+    Navbar,
+    NavbarBrand,
+    NavItem,
+    Row,
+    UncontrolledCollapse,
+    UncontrolledDropdown,
 } from "reactstrap";
 import logo from "../../assets/images/LogoFJM-couleur-seul.png";
 

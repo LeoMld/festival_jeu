@@ -1,23 +1,6 @@
-import {
-    Button,
-    Modal,
-    CardBody,
-    Row,
-    Col,
-    Form,
-    FormGroup,
-    InputGroup,
-    Card,
-    CardHeader,
-    InputGroupAddon,
-    Input,
-    InputGroupText,
-    Label,
-    Alert
-} from "reactstrap";
+import {Button, Col, Form, FormGroup, Input, Label, Row} from "reactstrap";
 
-import React,{useEffect, useState} from "react";
-import InputRange from 'react-input-range';
+import React, {useState} from "react";
 import "react-input-range/lib/css/index.css";
 import axios from "axios";
 import token from "../../utils/token";
@@ -25,11 +8,12 @@ import WorkFlowSelector from "../utils/WorkFlowSelector";
 import Waiting from "../utils/Waiting";
 
 
-
 function CollapseFilter(props){
 
     const [Etat,setEtat] = useState(10)
     const [nom,setNom] = useState("")
+    const [prixMin,setPrixMin] = useState()
+    const [prixMax,setPrixMax] = useState()
 
 
     const [isPending,setIsPending] = useState(false)
@@ -41,10 +25,18 @@ function CollapseFilter(props){
             .then(({data}) => {
                 let filter
                 if(parseInt(Etat) !== 10){
+
                     filter = data.filter(resa => resa.nomPersonne.includes(nom)
-                        && (parseInt(resa.workflowReservation) === parseInt(Etat)))
+                        && (parseInt(resa.workflowReservation) === parseInt(Etat))
+                        && (resa.prixReservation >= (isNaN(parseInt(prixMin))? 0: parseInt(prixMin) ))
+                        && (resa.prixReservation <= (isNaN(parseInt(prixMax))? Infinity: parseInt(prixMax) )))
+
                 }else{
-                    filter = data.filter(resa => resa.nomPersonne.includes(nom))
+                    filter = data.filter(resa => resa.nomPersonne.includes(nom)
+                        && (resa.prixReservation >= (isNaN(parseInt(prixMin))? 0: parseInt(prixMin) ))
+                        && (resa.prixReservation <= (isNaN(parseInt(prixMax))? Infinity: parseInt(prixMax) )))
+
+
                 }
                 props.setResa([])
                 setTimeout(function(){ props.setResa(filter) }, 1)
@@ -79,9 +71,27 @@ function CollapseFilter(props){
                             />
                         </FormGroup>
                     </Col>
-                    <Col md="2d">
+                    <Col  md="2">
                         <Label for="libelleFilter"> <strong>Etat de la réservation</strong> </Label>
                         <WorkFlowSelector onChange={(event)=>{setEtat(event.target.value)}} id="libelleFilter" type={"Tous"} handleChanges={(event)=>{setEtat(event.target.value)}}/>
+                    </Col>
+                    <Col className="ml-md" md="5">
+                        <Label for="tranchePrix"> <strong>Tranche de prix</strong> </Label>
+                        <Row  id="tranchePrix">
+                            <Col md="1.5">
+                                <Label for="prixMin">Min :</Label>
+                            </Col>
+                            <Col md="4" className="">
+                                <Input id="prixMin" type="number" placeholder="Prix min" value={prixMin} onChange={(e)=>{setPrixMin(e.target.value)}}/>
+                            </Col>
+                            <Col md="1.5">
+                                <Label for="prixMin">Max :</Label>
+                            </Col>
+                            <Col md="5" className="">
+                                <Input id="prixMin" type="number" placeholder="Prix max" value={prixMax} onChange={(e)=>{setPrixMax(e.target.value)}}/>
+                            </Col>
+                        </Row>
+
                     </Col>
 
                 </Row>

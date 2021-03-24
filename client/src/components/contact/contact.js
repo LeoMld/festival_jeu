@@ -1,6 +1,3 @@
-import {useState} from "react";
-import PersonDetails from "../../views/PersonDetails";
-
 function Contact(props){
 
     return(

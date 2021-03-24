@@ -1,25 +1,24 @@
 import {
+    Alert,
     Button,
-    Modal,
+    Card,
     CardBody,
+    CardHeader,
     Form,
     FormGroup,
-    InputGroup,
-    Card,
-    CardHeader,
-    InputGroupAddon,
     Input,
+    InputGroup,
+    InputGroupAddon,
     InputGroupText,
     Label,
-    Alert
+    Modal
 } from "reactstrap";
-import React,{useEffect, useState} from "react";
+import React, {useState} from "react";
 import Axios from "axios";
 import Waiting from "../utils/Waiting";
 import token from "../../utils/token";
 
 import among_modify from "../../assets/images/amongus/among_modify.png"
-import among_sage from "../../assets/images/amongus/among-sage.png";
 
 function ModalGame(props){
 

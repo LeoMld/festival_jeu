@@ -1,21 +1,21 @@
 import {
+    Alert,
     Button,
-    Modal,
+    Card,
     CardBody,
+    CardHeader,
+    Col,
     Form,
     FormGroup,
-    InputGroup,
-    Card,
-    Col,
-    Row,
-    CardHeader,
-    InputGroupAddon,
     Input,
+    InputGroup,
+    InputGroupAddon,
     InputGroupText,
     Label,
-    Alert
+    Modal,
+    Row
 } from "reactstrap";
-import React,{useEffect, useState} from "react";
+import React, {useState} from "react";
 import Axios from "axios";
 import Waiting from "../utils/Waiting";
 import token from "../../utils/token";

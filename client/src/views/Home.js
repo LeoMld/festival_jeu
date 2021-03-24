@@ -1,5 +1,5 @@
 import React from 'react'
-import {Col,Container,Row,Button} from 'reactstrap'
+import {Col, Container, Row} from 'reactstrap'
 import home from "../assets/images/accueil/home.png"
 
 function Home(){

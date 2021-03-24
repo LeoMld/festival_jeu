@@ -2,13 +2,7 @@ import React, {useState} from 'react'
 import useAxios from "../utils/useAxios";
 import token from "../utils/token";
 
-import {
-    Alert,
-    UncontrolledAlert,
-    Row,
-    Button,
-    Col
-} from "reactstrap";
+import {Alert, Button, Col, Row, UncontrolledAlert} from "reactstrap";
 
 import Waiting from "../components/utils/Waiting";
 import Zone from "../components/zone/zone";
