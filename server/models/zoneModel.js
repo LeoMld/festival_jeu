@@ -33,11 +33,16 @@ module.exports = {
             await client.query('BEGIN')
             // Before deleting, we need to pass all the games to the default zone
             const defaultZone = await getFestivalDefaultZone(FK_idFestival, client)
+            if (defaultZone.idZone === idZone) {
+                // We can't delete the default zone
+                throw new Error("Vous ne pouvez pas supprimer la zone par défaut d'un festival ...")
+            }
             await JeuPresent.setZoneToDefault(defaultZone.idZone, idZone, client)
             // Now, we delete
             const queryText = `DELETE FROM "Zone" WHERE "idZone"=${idZone};`
             client.query(queryText, [])
             await client.query('COMMIT')
+
         } catch (err) {
             // Something wrong happened, we rollback
             await client.query('ROLLBACK')
@@ -52,8 +57,41 @@ module.exports = {
     //Get all zones from a festival
     getAFestivalZones: async (FK_idFestival, client) => {
         const clientUsed = await DB.getPoolClient(client)
-        const queryText = 'SELECT * FROM "Zone" WHERE "FK_idFestival" = $1 ORDER BY "dateCreationZone" DESC, "idZone";'
+        const queryText = 'SELECT * FROM "Zone" WHERE "FK_idFestival" = $1 ORDER BY "dateCreationZone", "idZone";'
         const queryValues = [FK_idFestival]
         return (await clientUsed.query(queryText, queryValues)).rows;
+    },
+
+    // Retrieve the default zone of a festival
+    getFestivalDefaultZone: async (FK_idFestival, client) => {
+        const clientUsed = await DB.getPoolClient(client)
+        const queryText = 'SELECT * FROM "Zone" WHERE "FK_idFestival" = $1 AND "libelleZone" = $2 ;'
+        const queryValues = [FK_idFestival, "Indéfinie"]
+        return (await clientUsed.query(queryText, queryValues)).rows[0];
+    },
+
+    changeZoneJeuPresent: async (idZone, idJeu, idReservation, idNewZone, idFestival) => {
+        const client = await DB.pool.connect()
+        try {
+            await client.query('BEGIN')
+            // We change the game of zone
+            const queryText = 'UPDATE "JeuPresent" SET "PK_idZone" = $1 WHERE "PK_idZone" = $2 ' +
+                'AND "PK_idJeu" = $3 AND "PK_idReservation" = $4;'
+            const queryValues = [idNewZone, idZone, idJeu, idReservation]
+            await client.query(queryText, queryValues)
+            // We retrieve the default zone
+            const defaultZone = await getFestivalDefaultZone(idFestival, client)
+            const estPlace = (defaultZone.idZone !== parseInt(idNewZone))
+            await JeuPresent.updateEstPlace(idJeu, idNewZone, idReservation, estPlace, client)
+            await client.query('COMMIT')
+        } catch (err) {
+            // Something wrong happened, we rollback
+            await client.query('ROLLBACK')
+            // The controller will handle this
+            throw err
+        } finally {
+            // We release the client in the pool
+            client.release()
+        }
     }
 }

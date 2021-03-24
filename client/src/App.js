@@ -44,13 +44,8 @@ function App() {
                         :
                         <Route path="/ChoixFestival" exact><Redirect to="/Connexion"/></Route>
                     }
-                    {token.getType() !== 2 ?
-                        <Route path="/Zones" exact component={Zones}/>
-                        :
-                        <Route path="/Zones" exact><Redirect to="/Connexion"/></Route>
-                    }
 
-
+                    <Route path="/Zones" exact component={Zones}/>
                     <Route path="/ListeJeux" exact component={AllGames}/>
 
                     {token.getType() !== 2 ?
@@ -80,7 +75,7 @@ function App() {
                     }
 
                     {token.getType() !== 2 ?
-                        <Route path="/Exposants" exact component={ (props)=>
+                        <Route path="/Exposants" exact component={(props) =>
                             <Persons {...props} type={0}/>
                         }/>
                         :
@@ -88,14 +83,16 @@ function App() {
                     }
 
 
-                {token.getType() !== 2 ?
-                    <Route path="/Editeurs/:idPerson" exact component={(props)=> <PersonDetails {...props} type={1}/>}/>
+                    {token.getType() !== 2 ?
+                        <Route path="/Editeurs/:idPerson" exact
+                               component={(props) => <PersonDetails {...props} type={1}/>}/>
 
                         :
                         <Route path="/Editeurs/:idPerson" exact><Redirect to="/Connexion"/></Route>
                     }
                     {token.getType() !== 2 ?
-                        <Route path="/Exposants/:idPerson" exact component={(props)=> <PersonDetails {...props} type={0}/>}/>
+                        <Route path="/Exposants/:idPerson" exact
+                               component={(props) => <PersonDetails {...props} type={0}/>}/>
 
                         :
                         <Route path="/Exposants/:idPerson" exact><Redirect to="/Connexion"/></Route>
