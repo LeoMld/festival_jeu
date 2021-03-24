@@ -46,6 +46,15 @@ function ReservationDetail(props) {
             })
     }
 
+    // We update the data on the view
+    const updateData = (data, remiseReservation, prixReservation) => {
+        const newInfo = {...info}
+        newInfo.remiseReservation = remiseReservation
+        newInfo.prixReservation = prixReservation
+        newInfo.espace = data
+        setInfo(newInfo)
+    }
+
     return (
         <div className="container justify-content-center">
             {error && <Alert color="danger">
@@ -170,7 +179,9 @@ function ReservationDetail(props) {
                 {!isPending ?
                     <ReservationEmplacements espaces={info.espace} emplacements={info.emplacements}
                                              prixReservation={info.prixReservation}
-                                             remiseReservation={info.remiseReservation}/> : <Waiting/>}
+                                             remiseReservation={info.remiseReservation}
+                                             idReservation={info.idReservation}
+                                             updateData={updateData}/> : <Waiting/>}
             </div>
             }
         </div>

@@ -1,7 +1,9 @@
 import React, {useState} from "react";
 
-import {Button, Input, Row, Table} from "reactstrap";
+import {Alert, Button, Input, Row, Table} from "reactstrap";
 import Axios from "axios";
+import token from "../../utils/token";
+import Waiting from "../utils/Waiting";
 
 function ReservationEmplacements(props) {
 
@@ -23,6 +25,8 @@ function ReservationEmplacements(props) {
     const [remiseReservation, setRemiseReservation] = useState(props.remiseReservation)
     const [inputsEspaces, setInputsEspaces] = useState(props.espaces.length === 0 ? initEspaces() : props.espaces)
 
+    const [isPending, setIsPending] = useState(false)
+    const [error, setError] = useState(null)
 
     // Display the total of each col
     const displayTotal = (colName) => {
@@ -35,7 +39,16 @@ function ReservationEmplacements(props) {
             }
             return tot.toFixed(2)
         } catch (err) {
-            return 0
+            if (props.espaces.length === 0) {
+                return (0).toFixed(2)
+            } else {
+                tot = 0
+                for (let i = 0; i < nbEmplacements; i++) {
+                    const float = parseFloat(props.espaces[i][colName])
+                    tot += float
+                }
+                return tot.toFixed(2)
+            }
         }
     }
 
@@ -48,14 +61,20 @@ function ReservationEmplacements(props) {
 
     // Display the price of a row
     const displayPrice = (index) => {
+        const prixTable = props.emplacements[index].coutTable
+        const prixMetreCarres = props.emplacements[index].coutMetreCarre
         try {
             const nbTables = parseFloat(document.getElementById("nombreTables" + index).value)
             const nbMetreCarres = parseFloat(document.getElementById("metreCarres" + index).value)
-            const prixTable = props.emplacements[index].coutTable
-            const prixMetreCarres = props.emplacements[index].coutMetreCarre
             return (nbTables * prixTable + nbMetreCarres * prixMetreCarres).toFixed(2)
         } catch (err) {
-            return 0
+            if (props.espaces.length === 0) {
+                return (0).toFixed(2)
+            } else {
+                const nbTables = parseFloat(props.espaces[index].nombreTables)
+                const nbMetreCarres = parseFloat(props.espaces[index].metreCarres)
+                return (nbTables * prixTable + nbMetreCarres * prixMetreCarres).toFixed(2)
+            }
         }
     }
 
@@ -77,19 +96,31 @@ function ReservationEmplacements(props) {
 
     // Save the new reserved spaces in the database
     const saveNewEmplacements = () => {
-        console.log(inputsEspaces)
+        setIsPending(true)
+        const prixReservation = (allPrice() - remiseReservation).toFixed(2)
         // The data we need to send
         const data = {
+            idReservation: props.idReservation,
             inputsEspaces,
             remiseReservation,
-            prixReservation: ((allPrice() - remiseReservation).toFixed(2))
+            prixReservation
         }
-        /*Axios.put('')
-            .then()*/
+        Axios.post('/api/gestion/reservation', data, {headers: {Authorization: token.getToken()}})
+            .then(({data}) => {
+                // We need to update the parent component
+                props.updateData(data, remiseReservation, prixReservation)
+                setIsPending(false)
+            })
+            .catch((err) => {
+                setError(err.message)
+                setIsPending(false)
+            })
     }
 
+    // We change the information of the reserved spaces of the reservation
     const saveChanges = () => {
-        console.log("OLD")
+        console.log(inputsEspaces[0].nombreTables)
+        console.log(inputsEspaces)
     }
 
     return (
@@ -119,7 +150,11 @@ function ReservationEmplacements(props) {
                                     type="text"
                                     id={'nombreTables' + index}
                                     value={props.espaces.length === 0 ? inputsEspaces[index]["nombreTables" + index] : inputsEspaces[index].nombreTables}
-                                    onChange={(event) => handleChangeEmp(event, 'nombreTables' + index, index)}
+                                    onChange={(event) => {
+                                        props.espaces.length === 0 ?
+                                            handleChangeEmp(event, 'nombreTables' + index, index) :
+                                            handleChangeEmp(event, 'nombreTables', index)
+                                    }}
                                 />
                             </td>
                             <td className="align-middle">
@@ -127,7 +162,11 @@ function ReservationEmplacements(props) {
                                     type="text"
                                     id={'metreCarres' + index}
                                     value={props.espaces.length === 0 ? inputsEspaces[index]["metreCarres" + index] : inputsEspaces[index].metreCarres}
-                                    onChange={(event) => handleChangeEmp(event, 'metreCarres' + index, index)}
+                                    onChange={(event) => {
+                                        props.espaces.length === 0 ?
+                                            handleChangeEmp(event, 'metreCarres' + index, index) :
+                                            handleChangeEmp(event, 'metreCarres', index)
+                                    }}
                                 />
                             </td>
                             <td className="align-middle">
@@ -164,18 +203,24 @@ function ReservationEmplacements(props) {
                 <tfoot>
                 <tr>
                     <td className="mt-3 align-middle" colSpan={4}>
-                        <Button size="sm"
-                                outline
-                                color="default"
-                                disabled={ready()}
-                                block
-                                onClick={props.espaces.length === 0 ? () => {
-                                    saveNewEmplacements()
-                                } : () => {
-                                    saveChanges()
-                                }}>
-                            Enregistrer
-                        </Button>
+                        {error ?
+                            <Alert color="danger">
+                                {error}
+                            </Alert> :
+                            (!isPending ?
+                                <Button size="sm"
+                                        outline
+                                        color="default"
+                                        disabled={ready()}
+                                        block
+                                        onClick={props.espaces.length === 0 ? () => {
+                                            saveNewEmplacements()
+                                        } : () => {
+                                            saveChanges()
+                                        }}>
+                                    Enregistrer
+                                </Button> :
+                                <Waiting/>)}
                     </td>
                 </tr>
                 </tfoot>
