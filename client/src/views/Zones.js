@@ -1,5 +1,7 @@
 import React, {useState} from 'react'
 import useAxios from "../utils/useAxios";
+import token from "../utils/token";
+
 import {
     Alert,
     UncontrolledAlert,
@@ -76,7 +78,8 @@ function Zones() {
 
     return (
         <div className="justify-content-center mr-7 ml-7">
-            <h1 className="font-weight-900 mt-5 mb-5">Liste des zones</h1>
+            <h1 className="font-weight-900 mt-5 mb-5">Liste des zones et de leurs jeux</h1>
+            {token.getType() !== 2 &&
             <div className="d-flex flex-row-reverse mb-sm-3">
                 <Button
                     color="success"
@@ -90,8 +93,9 @@ function Zones() {
                                   setModalState={setModalState}
                                   addNewZone={addNewZone}
                                   componentState={0}/>
-            </div>
-            {zones && zones.filter(zone => (zone.libelleZone === "Indéfinie") && (zone.games.length > 0)).length > 0 &&
+            </div>}
+            {token.getType() !== 2 &&
+            zones && zones.filter(zone => (zone.libelleZone === "Indéfinie") && (zone.games.length > 0)).length > 0 &&
             <UncontrolledAlert color="primary">
                 Il vous reste encore des jeux à placer !
             </UncontrolledAlert>}
@@ -100,15 +104,15 @@ function Zones() {
                     {error}
                 </Alert> :
                 (!isPending ? (zones.map((zone, index) => {
-                        return (
-                            <Row className="mb-3 mt-3" key={index}>
-                                <Col>
-                                    <Zone zones={zones} zone={zone} updateZone={updateZone} deleteZone={deleteZone}
-                                          updateGameZone={updateGameZone} changeZoneJeu={changeZoneJeu}/>
-                                </Col>
-                            </Row>
-                        )
-
+                        if (token.getType() !== 2 || (token.getType() === 2 && zone.libelleZone !== "Indéfinie"))
+                            return (
+                                <Row className="mb-3 mt-3" key={index}>
+                                    <Col>
+                                        <Zone zones={zones} zone={zone} updateZone={updateZone} deleteZone={deleteZone}
+                                              updateGameZone={updateGameZone} changeZoneJeu={changeZoneJeu}/>
+                                    </Col>
+                                </Row>
+                            )
                     })) :
                     <Waiting name="zones"/>)
             }

@@ -16,8 +16,8 @@ import {
 
 import token from "../../utils/token";
 import Axios from "axios";
-import Waiting from "../utils/Waiting";
 import CreateUpdateZone from "./createUpdateZone";
+import Waiting from "../utils/Waiting"
 import axios from "axios";
 import {Link} from "react-router-dom";
 
@@ -89,19 +89,20 @@ function Zone(props) {
         <div>
             <div className="btn-wrapper  my-4">
                 <Button block color="default" onClick={() => setCollapse(!collapse)}>Zone
-                    - {zone.libelleZone} : {zone.games.length} jeux
+                    - {zone.libelleZone} : {zone.games.length} {zone.games.length > 1 ? "jeux" : "jeu"}
                 </Button>
+                {token.getType() !== 2 &&
                 <CreateUpdateZone modalState={modalStateUpdate}
                                   setModalState={setModalStateUpdate}
                                   zone={zone}
                                   updateZone={props.updateZone}
-                                  componentState={1}/>
+                                  componentState={1}/>}
             </div>
             <Collapse
                 isOpen={collapse}
             >
                 <Card className="container-lg">
-                    {zone.libelleZone !== "Indéfinie" &&
+                    {zone.libelleZone !== "Indéfinie" && token.getType() !== 2 &&
                     <CardHeader>
                         <div className="btn-wrapper">
                             <Button
@@ -165,7 +166,7 @@ function Zone(props) {
                         </div>
                     </CardHeader>}
                     <CardBody>
-                        <h2 className="text-left font-weight-bold">Jeux réservés</h2>
+                        <h2 className="text-left font-weight-bold">Jeux {token.getType() !== 2 ? "réservés" : "exposés"}</h2>
                         <Table className="table-light table-striped table-bordered table-active">
                             <thead>
                             <tr>
@@ -176,14 +177,18 @@ function Zone(props) {
                                 <th>Durée</th>
                                 <th>Type</th>
                                 <th>Prototype</th>
-                                <th colSpan={2}>Détails</th>
-                                <th>Gestion</th>
-                                <th>Réservation</th>
+                                {token.getType() !== 2 &&
+                                <>
+                                    <th colSpan={2}>Détails</th>
+                                    <th>Gestion</th>
+                                    <th>Réservation</th>
+                                </>
+                                }
                             </tr>
                             </thead>
                             <tbody>
                             {zone.games.length === 0 &&
-                            <td colSpan={9}>
+                            <td colSpan={token.getType() !== 2 ? 11 : 8}>
                                 Cette zone ne comporte pas encore de jeu.
                             </td>
                             }
@@ -196,58 +201,64 @@ function Zone(props) {
                                         <td className="align-middle">{game.ageMinimum}</td>
                                         <td className="align-middle">{game.duree}</td>
                                         <td className="align-middle">{game.libelleTypeJeu}</td>
-                                        <td className="align-middle">
-                                            <Col>
-                                                <label className="custom-toggle">
-                                                    <input id="prototype"
-                                                           type="checkbox"
-                                                           checked={game.prototype}
-                                                           onChange={(event) => handlePrototypeChange(event, !game.prototype, game.PK_idJeu, game.PK_idReservation)}/>
-                                                    <span className="custom-toggle-slider rounded-circle"/>
-                                                </label>
-                                            </Col>
-                                        </td>
-                                        <td className="align-middle">
-                                            <p>Reçu</p>
-                                            <i style={{"font-size": "3rem"}}
-                                               className={game.estRecu ? "ni ni-check-bold text-green" : "ni ni-fat-remove text-red"}/>
-                                        </td>
-                                        <td>
-                                            <p>Bénévoles</p>
-                                            <i style={{"font-size": "2.5rem"}}
-                                               className={game.besoinAnimateurReservation ? "ni ni-check-bold text-green" : "ni ni-fat-remove text-red"}/>
-                                        </td>
-                                        <td className="align-middle">
-                                            <Row>
+                                        {token.getType() !== 2 ?
+                                            <td className="align-middle">
                                                 <Col>
-                                                    <p className="mb-1">Placer</p>
-                                                    <Input type="select"
-                                                           name="select"
-                                                           id={"zoneSelector" + game.PK_idJeu}
-                                                           size="sm"
-                                                           defaultValue={zone.libelleZone}>
-                                                        {props.zones.map((z, index) => {
-                                                                return (
-                                                                    <option value={z.idZone}
-                                                                            key={index}>{z.libelleZone}</option>
-                                                                )
-                                                            }
-                                                        )}
-                                                    </Input>
-                                                    <Button block
-                                                            size="sm mb-2"
-                                                            onClick={() => handleChangeZone(game.PK_idJeu, game.PK_idReservation)}>
-                                                        Valider
-                                                    </Button>
+                                                    <label className="custom-toggle">
+                                                        <input id="prototype"
+                                                               type="checkbox"
+                                                               checked={game.prototype}
+                                                               onChange={(event) => handlePrototypeChange(event, !game.prototype, game.PK_idJeu, game.PK_idReservation)}/>
+                                                        <span className="custom-toggle-slider rounded-circle"/>
+                                                    </label>
                                                 </Col>
-                                            </Row>
-                                        </td>
-                                        <td className="align-middle">
-                                            <Link style={{"font-size": "2.5rem"}}
-                                                  to={'/reservations/' + game.PK_idReservation}>
-                                                <i className="ni ni-book-bookmark"/>
-                                            </Link>
-                                        </td>
+                                            </td> :
+                                            <i style={{"font-size": "3rem"}}
+                                               className={game.prototype ? "ni ni-check-bold text-green" : "ni ni-fat-remove text-red"}/>}
+                                        {token.getType() !== 2 &&
+                                        <>
+                                            <td className="align-middle">
+                                                <p>Reçu</p>
+                                                <i style={{"font-size": "3rem"}}
+                                                   className={game.estRecu ? "ni ni-check-bold text-green" : "ni ni-fat-remove text-red"}/>
+                                            </td>
+                                            <td>
+                                                <p>Bénévoles</p>
+                                                <i style={{"font-size": "3rem"}}
+                                                   className={game.besoinAnimateurReservation ? "ni ni-check-bold text-green" : "ni ni-fat-remove text-red"}/>
+                                            </td>
+                                            <td className="align-middle">
+                                                <Row>
+                                                    <Col>
+                                                        <p className="mb-1">Placer</p>
+                                                        <Input type="select"
+                                                               name="select"
+                                                               id={"zoneSelector" + game.PK_idJeu}
+                                                               size="sm"
+                                                               defaultValue={zone.libelleZone}>
+                                                            {props.zones.map((z, index) => {
+                                                                    return (
+                                                                        <option value={z.idZone}
+                                                                                key={index}>{z.libelleZone}</option>
+                                                                    )
+                                                                }
+                                                            )}
+                                                        </Input>
+                                                        <Button block
+                                                                size="sm mb-2"
+                                                                onClick={() => handleChangeZone(game.PK_idJeu, game.PK_idReservation)}>
+                                                            Valider
+                                                        </Button>
+                                                    </Col>
+                                                </Row>
+                                            </td>
+                                            <td className="align-middle">
+                                                <Link style={{"font-size": "2.5rem"}}
+                                                      to={'/reservations/' + game.PK_idReservation}>
+                                                    <i className="ni ni-book-bookmark"/>
+                                                </Link>
+                                            </td>
+                                        </>}
                                     </tr>)
                             })}
                             </tbody>

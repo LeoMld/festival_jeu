@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import {Container, Button, Alert} from "reactstrap";
+import {Container, Alert, Button} from "reactstrap";
 import logo from "../assets/images/logo_FDJ_FINAL_800.png"
 import axios from "axios";
 import token from "../utils/token"
@@ -55,11 +55,14 @@ function Login() {
 
     }
 
+    const handleEnter = (event) => {
+        (event.keyCode === 13) && document.getElementById('login').click()
+    }
 
     return (
         <Container className="mt-md">
             <div className="justify-content-center mb-lg">
-                <h1> Connexion</h1>
+                <h1 className="font-weight-900"> Connexion</h1>
                 <div className="mt-md">
                     {erreurConnexion && <Alert color="danger">
                         Erreur, mauvaise combinaison login/mot de passe
@@ -78,13 +81,14 @@ function Login() {
                             <div className="form-group ">
                                 <input onChange={handleChange(setPassword)} value={password} type="password"
                                        className="form-control " id="exampleFormControlInput1"
-                                       placeholder="Mot de passe"/>
+                                       placeholder="Mot de passe"
+                                       onKeyDown={handleEnter}/>
                             </div>
-                            <button onClick={() => {
+                            <Button onClick={() => {
                                 onSubmit()
-                            }} type="button" className="btn btn-success mt-sm-4"
+                            }} type="button" className="btn btn-success mt-sm-4" id="login"
                                     disabled={stateEmail === "" || stateEmail === "is-invalid"}>Se connecter
-                            </button>
+                            </Button>
                         </form>
 
                     </div>

@@ -11,11 +11,12 @@ const noteController = require("../controllers/noteController")
 const jeuPresentController = require("../controllers/jeuPresentController")
 const token = require('../utils/token')
 
-router.get("/reservations",reservationController.getReservations)
-router.get("/reservations/:id",reservationController.getAReservation)
-router.put("/reservations/:id",reservationController.updateReservation)
-router.post("/notes",noteController.createNote)
-router.put("/notes/:id",noteController.updateNote)
+router.get('/zone', zoneController.getAllZonesFestival)
+router.get("/reservations", reservationController.getReservations)
+router.get("/reservations/:id", reservationController.getAReservation)
+router.put("/reservations/:id", reservationController.updateReservation)
+router.post("/notes", noteController.createNote)
+router.put("/notes/:id", noteController.updateNote)
 
 router.use(token.privateRoute);
 
@@ -41,7 +42,6 @@ router.post('/contact', contactController.createContact)
 router.put('/contact/:id', contactController.updateContact)
 router.delete('/contact/:id', contactController.deleteContact)
 
-router.get('/zone', zoneController.getAllZonesFestival)
 router.post('/zone/', zoneController.createNewZone)
 router.put('/zone/:id', zoneController.updateZone)
 router.delete('/zone/:id', zoneController.deleteZone)
