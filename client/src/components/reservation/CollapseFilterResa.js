@@ -28,18 +28,26 @@ import Waiting from "../utils/Waiting";
 
 function CollapseFilter(props){
 
-    const [Etat,setEtat] = useState()
+    const [Etat,setEtat] = useState(10)
     const [nom,setNom] = useState("")
 
-    const [resaFilter,setResaFilter] = useState()
+
     const [isPending,setIsPending] = useState(false)
 
-    const [allReservations,setAllReservations] =useState(props.r)
+
     const handleChange = ()=>{
         setIsPending(true)
         axios.get("/api/gestion/reservations",{ headers: { Authorization: token.getToken() } })
             .then(({data}) => {
-                setResaFilter(data);
+                let filter
+                if(parseInt(Etat) !== 10){
+                    filter = data.filter(resa => resa.nomPersonne.includes(nom)
+                        && (parseInt(resa.workflowReservation) === parseInt(Etat)))
+                }else{
+                    filter = data.filter(resa => resa.nomPersonne.includes(nom))
+                }
+                props.setResa([])
+                setTimeout(function(){ props.setResa(filter) }, 1)
                 setIsPending(false)
             })
             .catch(err => {
@@ -52,15 +60,7 @@ function CollapseFilter(props){
     }
 
 
-    useEffect(()=>{
-        if(resaFilter){
-            let filter
-            filter = resaFilter.filter(resa => resa.nomPersonne.includes(nom))
 
-            props.setR(filter)
-        }
-
-    },[resaFilter])
 
 
     return(
@@ -81,7 +81,7 @@ function CollapseFilter(props){
                     </Col>
                     <Col md="2d">
                         <Label for="libelleFilter"> <strong>Etat de la réservation</strong> </Label>
-                        <WorkFlowSelector id="libelleFilter" type={"Tous"} handleChanges={(event)=>{setEtat(event.target.value)}}/>
+                        <WorkFlowSelector onChange={(event)=>{setEtat(event.target.value)}} id="libelleFilter" type={"Tous"} handleChanges={(event)=>{setEtat(event.target.value)}}/>
                     </Col>
 
                 </Row>

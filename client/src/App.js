@@ -36,7 +36,7 @@ function App() {
             </header>
 
             <Navigation history={history}/>
-            <div className="minHeight">
+            <div id="firstDiv" className="minHeight">
                 <Switch>
                     <Route path="/Accueil" exact component={Home}/>
                     {token.getType() !== 2 ?

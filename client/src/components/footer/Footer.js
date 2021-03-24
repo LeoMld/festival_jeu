@@ -103,14 +103,18 @@ class Footer extends React.Component {
                 <Col md="6">
                   <Nav className=" nav-footer justify-content-end">
                     <NavItem>
+                      <Button className="mr-md" size="sm" style={{opacity:"0"}} onClick={()=>{document.getElementById("firstDiv").classList.add("fa-spin")
+                        setTimeout(function (){document.getElementById("firstDiv").classList.remove("fa-spin")},2000)}}/>
 
                     </NavItem>
                     <NavItem>
+
                       <NavLink
                           href=""
                           target="_blank"
                       >
                         About Us
+
                       </NavLink>
                     </NavItem>
 
