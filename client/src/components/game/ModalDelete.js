@@ -110,7 +110,7 @@ function ModalDelete(props){
                         className="img-fluid floating"
                         src={among_sage}
                     />
-                    <h4 className="heading mt-4">Veuillez confirmer la deletion</h4>
+                    <h4 className="heading mt-4">Veuillez confirmer la suppression</h4>
                     <p>
                         Vous allez supprimer le jeu "{props.game.libelleJeu}"
                     </p>

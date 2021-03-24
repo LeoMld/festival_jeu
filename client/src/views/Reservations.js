@@ -6,6 +6,7 @@ import Selector from "../components/utils/Selector";
 import WorkFlowSelector from "../components/utils/WorkFlowSelector";
 import Waiting from "../components/utils/Waiting";
 import Reservation from "../components/reservation/reservation";
+import CollapseFilterResa from "../components/reservation/CollapseFilterResa";
 
 
 function Reservations() {
@@ -22,6 +23,7 @@ function Reservations() {
                         <h1 className="font-weight-900">Liste des Réservations</h1>
                     </Col>
                 </Row>
+                <CollapseFilterResa r={reservations} setR={setReservations}/>
                 <div>
                     <Table className="table-striped table-bordered table-responsive-sm">
                         <thead>

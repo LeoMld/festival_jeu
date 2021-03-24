@@ -19,20 +19,11 @@ function createHeaders(keys) {
 
 const pdf = {
     createPDF : (r) =>{
-        console.log(r)
+
 
         let result=[]
-        /*let data = {
-            idEspace: r.FK_idEspace.toString(),
-            idEmplacement: r.idEmplacement.toString(),
-            nb_Tables: r.nombreTables.toString(),
-            metre_Carres: r.metreCarres.toString(),
-            PrixU_Table: r.coutTable.toString(),
-            PrixU_M2: r.coutMetreCarre.toString(),
-            Prix_Total_HT: r.prixReservation.toString(),
 
-        };*/
-        console.log(r)
+
         r.espace.map(res =>{
             console.log(res)
             let data = {
