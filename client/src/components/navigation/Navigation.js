@@ -115,9 +115,6 @@ class Navigation extends Component {
                                             <DropdownItem to="/Exposants" tag={Link}>
                                                 Exposants
                                             </DropdownItem>
-                                            <DropdownItem to="/login-page" tag={Link}>
-                                                gestion des jeux
-                                            </DropdownItem>
                                         </DropdownMenu>
                                     </UncontrolledDropdown>
 
