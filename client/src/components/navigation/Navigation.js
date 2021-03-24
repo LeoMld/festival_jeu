@@ -126,9 +126,9 @@ class Navigation extends Component {
                                     </NavItem>
 
                                     <NavItem>
-                                        <Link className="nav-link" to="/">Exposants</Link>
+                                        <Link className="nav-link" to="/Reservations">Réservations</Link>
                                     </NavItem><NavItem>
-                                    <Link className="nav-link" to="/">Facturation</Link>
+                                    <Link className="nav-link" to="/Facturation">Facturation</Link>
                                 </NavItem><NavItem>
                                     <Link className="nav-link" to="/Zones">Zones</Link>
                                 </NavItem>
@@ -193,7 +193,7 @@ class Navigation extends Component {
                                 </div>
                                 <Nav className="navbar-nav-hover align-items-lg-center" navbar>
                                     <NavItem>
-                                        <Link className="nav-link" to="/">Liste des jeux</Link>
+                                        <Link className="nav-link" to="/ListeJeux">Liste des jeux</Link>
                                     </NavItem>
 
                                     <NavItem>

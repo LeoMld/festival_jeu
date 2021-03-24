@@ -15,6 +15,8 @@ module.exports = {
         let text = 'SELECT * FROM  "EspaceReserve" JOIN "Emplacement" E on E."idEmplacement" = "EspaceReserve"."FK_idEmplacement" WHERE "EspaceReserve"."FK_idReservation"=$1;'
         let values = [idReservation]
         return (await clientUsed.query(text,values)).rows
-
+    },
+    createEspaceReserve : async (idEmplacement, idReservation) => {
+        //TODO
     }
 }
