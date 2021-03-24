@@ -300,6 +300,7 @@ function PersonDetails(props) {
                                                             <th className="d-none d-lg-table-cell">Nombre de joueurs</th>
                                                             <th className="d-none d-lg-table-cell">Âge minimum</th>
                                                             <th className="d-none d-lg-table-cell">Durée</th>
+                                                            <th className="d-none d-lg-table-cell">Type</th>
                                                             {token.getType() === 1 && <th >Prototype</th>}
                                                             {token.getType() === 1 && <th >Action</th>}
 
