@@ -45,7 +45,7 @@ module.exports = {
         return info
 
     },
-    getAReservations : async (idReservation,client)=>{
+    getAReservation : async (idReservation,client)=>{
         const clientUsed = await DB.getPoolClient(client)
         const text = 'SELECT * FROM "Reservation" JOIN "Personne" ON "Reservation"."FK_idPersonne"="Personne"."idPersonne" LEFT JOIN "Note" ON "Reservation"."idReservation"="Note"."FK_idReservation" WHERE "idReservation"=$1;'
         const values = [idReservation]
@@ -56,6 +56,13 @@ module.exports = {
         console.log(info)
         return info
 
+
+    },
+    getReservation : async (idReservation,client)=>{
+        const clientUsed = await DB.getPoolClient(client)
+        const text = 'SELECT * FROM "Reservation" JOIN "Personne" ON "Reservation"."FK_idPersonne"="Personne"."idPersonne" LEFT JOIN "Note" ON "Reservation"."idReservation"="Note"."FK_idReservation" JOIN "EspaceReserve" ON "EspaceReserve"."FK_idReservation"="Reservation"."idReservation" WHERE "idReservation"=$1;'
+        const values = [idReservation]
+        return (await clientUsed.query(text,values)).rows[0]
 
     },
 
