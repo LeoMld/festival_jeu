@@ -31,7 +31,7 @@ function CollapseFilter(props){
     const [Etat,setEtat] = useState(10)
     const [nom,setNom] = useState("")
 
-    const [resaFilter,setResaFilter] = useState(props.resa)
+
     const [isPending,setIsPending] = useState(false)
 
 
@@ -60,23 +60,7 @@ function CollapseFilter(props){
     }
 
 
-    useEffect(()=>{
-        if(resaFilter){
-            /*console.log(Etat)
-            let filter
-            if(parseInt(Etat) !== 10){
-                filter = resaFilter.filter(resa => resa.nomPersonne.includes(nom)
-                    && (parseInt(resa.workflowReservation) === parseInt(Etat)))
-            }else{
-                filter = resaFilter.filter(resa => resa.nomPersonne.includes(nom))
-            }
 
-
-            setResaFilter(filter)
-            console.log(props.resa)*/
-        }
-
-    },[props.resa])
 
 
     return(
