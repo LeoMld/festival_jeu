@@ -9,5 +9,12 @@ module.exports = {
         const queryText = 'SELECT * FROM "EspaceReserve" WHERE "FK_idEmplacement" = $1;'
         const queryValues = [idEmplacement]
         return (await clientUsed.query(queryText, queryValues)).rows
+    },
+    getReservationsSpaces : async (idReservation,client)=>{
+        const clientUsed = await DB.getPoolClient(client)
+        let text = 'SELECT * FROM  "EspaceReserve" JOIN "Emplacement" E on E."idEmplacement" = "EspaceReserve"."FK_idEmplacement" WHERE "EspaceReserve"."FK_idReservation"=$1;'
+        let values = [idReservation]
+        return (await clientUsed.query(text,values)).rows
+
     }
 }

@@ -1,4 +1,6 @@
 const DB = require('../config/config')
+const EspaceReserve=require("./espaceReserveModel")
+const jeuPresent = require("../models/jeuPresentModel")
 
 /**
  * Description of the workflow. Each integer will describe a state :
@@ -30,10 +32,14 @@ module.exports = {
         let info=(await clientUsed.query(text,values)).rows
         let data=[]
         for(let i =0;i<info.length;i++){
-            text = 'SELECT * FROM  "EspaceReserve" JOIN "Emplacement" E on E."idEmplacement" = "EspaceReserve"."FK_idEmplacement" WHERE "EspaceReserve"."FK_idReservation"=$1;'
-            let values = [info[i].idReservation]
-            let espace = (await clientUsed.query(text,values)).rows
+            let espace = await EspaceReserve.getReservationsSpaces(info[i].idReservation,clientUsed)
             info[i]["espace"]=espace
+            let prixRenvoi = await jeuPresent.getFactureGames(info[i].idReservation,clientUsed)
+            if(prixRenvoi.prixrenvoitotal){
+                info[i]["prixRenvoiTotal"]=parseInt(prixRenvoi.prixrenvoitotal)
+            }else{
+                info[i]["prixRenvoiTotal"]=0
+            }
         }
         console.log(info)
         return info
@@ -41,9 +47,11 @@ module.exports = {
     },
     getAReservations : async (idReservation,client)=>{
         const clientUsed = await DB.getPoolClient(client)
-        const text = 'SELECT * FROM "Reservation" JOIN "Personne" ON "Reservation"."FK_idPersonne"="Personne"."idPersonne" LEFT JOIN "Note" ON "Reservation"."idReservation"="Note"."FK_idReservation" JOIN "EspaceReserve" ON "EspaceReserve"."FK_idReservation"="Reservation"."idReservation" WHERE "idReservation"=$1;'
+        const text = 'SELECT * FROM "Reservation" JOIN "Personne" ON "Reservation"."FK_idPersonne"="Personne"."idPersonne" LEFT JOIN "Note" ON "Reservation"."idReservation"="Note"."FK_idReservation" WHERE "idReservation"=$1;'
         const values = [idReservation]
-        return (await clientUsed.query(text,values)).rows[0]
+        let info = (await clientUsed.query(text,values)).rows[0]
+        info["espace"]= await EspaceReserve.getReservationsSpaces(idReservation,clientUsed)
+
 
     },
 
