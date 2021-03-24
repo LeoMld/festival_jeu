@@ -1,10 +1,11 @@
 import useAxios from "../utils/useAxios";
-import {Alert, Col, Input, Label, Row} from "reactstrap";
+import {Alert, Button, Col, Input, Label, Row, Table} from "reactstrap";
 import Waiting from "../components/utils/Waiting";
 import WorkFlowSelector from "../components/utils/WorkFlowSelector";
 import axios from "axios";
 import token from "../utils/token";
-import {useState} from "react";
+import React, {useState} from "react";
+import pdf from "../utils/pdf";
 
 function ReservationDetail(props){
     const {data:info,setData:setInfo,isPending,err}=useAxios("/api/gestion/reservations/"+props.match.params.id)
@@ -46,39 +47,149 @@ function ReservationDetail(props){
                     <h1 className="font-weight-900">Détail de la Réservation</h1>
                 </Col>
             </Row>
+
             {isPending && <Waiting/>}
             {info &&
                 <div>
-                    <Row className="justify-content-center">
-                        <Col md={6}>
-                            <p className="mb--1">Etat de la Réservation</p>
-                            <WorkFlowSelector selected={info.workflowReservation} id="workflowReservation" handleChanges={handleChanges}/>
+                    <div className="d-flex justify-content-between">
+                        <h2 className="font-weight-600">Au nom de : {info.nomPersonne} </h2>
+                        <div>
+
+                        </div>
+                        <div>
+                            <Button onClick={()=>{pdf.createPDF(info)}}  className="btn-icon btn-3" color="danger"  type="button">
+                              <span className="btn-inner--icon">
+                                <i className="ni ni-paper-diploma" />
+                              </span>
+                                <span className="btn-inner--text">Facture</span>
+                            </Button>
+                        </div>
+                    </div>
+                    <hr/>
+                    <Row>
+
+                        <Col md={4}>
+                            <Row className="justify-content-center ">
+                                    <p className="mb--1">Etat de la Réservation</p>
+                                    <WorkFlowSelector selected={info.workflowReservation} id="workflowReservation" handleChanges={handleChanges}/>
+                            </Row>
+                            <div className="justify-content-center mt-2 " >
+                                <p className="mb--1">Placé:</p>
+                                <label className="custom-toggle">
+                                    <input id="estPlaceReservation"
+                                           type="checkbox"
+                                           checked={info.estPlaceReservation}
+                                           onChange={(event)=>handleSelector(event,!(info.estPlaceReservation))}/>
+                                    <span className="custom-toggle-slider rounded-circle"/>
+                                </label>
+                            </div>
+                            <div>
+                                <p className="mb--1">Déplace:</p>
+                                <label className="custom-toggle">
+                                    <input id="seDeplaceReservation"
+                                           type="checkbox"
+                                           checked={info.seDeplaceReservation}
+                                           onChange={(event)=>handleSelector(event,!info.seDeplaceReservation)}/>
+                                    <span className="custom-toggle-slider rounded-circle"/>
+                                </label>
+                            </div>
+                            <div>
+                                <p className="mb--1">Bénévoles:</p>
+                                <label className="custom-toggle">
+                                    <input id="besoinAnimateurReservation"
+                                           type="checkbox"
+                                           checked={info.besoinAnimateurReservation}
+                                           onChange={(event)=>handleSelector(event,!(info.besoinAnimateurReservation))}/>
+                                    <span className="custom-toggle-slider rounded-circle"/>
+                                </label>
+                            </div>
+                        </Col>
+                        <Col md={3}>
+
+                        </Col>
+                        <Col md={5}>
+                            <Row className="mt-1">
+                                    <Label for="datePremierContactReservation">
+                                        Date 1er Contact
+                                    </Label>
+                                    <Input type="date"
+                                           name="datePremierContactReservation"
+                                           id="datePremierContactReservation"
+                                           value={info.datePremierContactReservation?new Date(info.datePremierContactReservation).toISOString().slice(0, 10):""}
+
+                                           onChange={(event)=>handleChanges(event)}/>
+                            </Row>
+
+                            <Row className="mt-2">
+                                <Label for="dateSecondContactReservation">
+                                    Date 2nd Contact
+                                </Label>
+                                <Input type="date"
+                                       name="dateSecondContactReservation"
+                                       id="dateSecondContactReservation"
+                                       value={info.dateSecondContactReservation?new Date(info.dateSecondContactReservation).toISOString().slice(0, 10):""}
+
+                                       onChange={(event)=>handleChanges(event)}/>
+                            </Row>
+                            <Row className="mt-2">
+                                <Label for="dateEnvoiFactureReservation">
+                                    Envoi Facture
+                                </Label>
+                                <Input type="date"
+                                       name="dateEnvoiFactureReservation"
+                                       id="dateEnvoiFactureReservation"
+                                       value={info.dateEnvoiFactureReservation?new Date(info.dateEnvoiFactureReservation).toISOString().slice(0, 10):""}
+                                       onChange={(event)=>handleChanges(event)}/>
+                            </Row>
+                            <Row className="mt-2">
+                                <Label for="datePaiementFactureReservation">
+                                    Paiement Facture
+                                </Label>
+                                <Input type="date"
+                                       name="datePaiementFactureReservation"
+                                       id="datePaiementFactureReservation"
+                                       value={info.datePaiementFactureReservation?new Date(info.datePaiementFactureReservation).toISOString().slice(0, 10):""}
+                                       onChange={(event)=>handleChanges(event)}/>
+                            </Row>
+
                         </Col>
                     </Row>
-                    <Row className="mt-1">
-                        <Col>
-                            <Label for="datePremierContactReservation" className="mb--2">
-                                Date 1er Contact
-                            </Label>
-                            <Input type="date"
-                                   name="datePremierContactReservation"
-                                   id="datePremierContactReservation"
-                                   value={info.datePremierContactReservation?new Date(info.datePremierContactReservation).toISOString().slice(0, 10):""}
-
-                                   onChange={(event)=>handleChanges(event)}/>
-                        </Col>
-                        <Col>
-                            <Label for="dateSecondContactReservation" className="mb--2">
-                                Date 2nd Contact
-                            </Label>
-                            <Input type="date"
-                                   name="dateSecondContactReservation"
-                                   id="dateSecondContactReservation"
-                                   value={info.dateSecondContactReservation?new Date(info.dateSecondContactReservation).toISOString().slice(0, 10):""}
-
-                                   onChange={(event)=>handleChanges(event)}/>
-                        </Col>
+                    <hr/>
+                    <Row className="mt-2">
+                        <div>
+                            <h3 className="font-weight-500">Emplacements Reservés</h3>
+                        </div>
+                        <Table className="table  table-bordered">
+                            <thead className="table-light">
+                                <tr>
+                                    <th scope="col" rowSpan={2}>Emplacement</th>
+                                    <th colSpan={2}>Réservation</th>
+                                </tr>
+                                <tr>
+                                    <th>Tables </th>
+                                    <th>M² </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {info.espace.map((e)=>{
+                               return( <tr>
+                                    <td>
+                                        <p>{e.libelleEmplacement}</p>
+                                    </td>
+                                   <td>
+                                       <p>{e.nombreTables}</p>
+                                   </td>
+                                   <td>
+                                       <p>{e.metreCarres}</p>
+                                   </td>
+                                </tr>)
+                            })}
+                            </tbody>
+                        </Table>
                     </Row>
+
+
+
                 </div>
 
 
