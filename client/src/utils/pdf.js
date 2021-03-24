@@ -69,17 +69,18 @@ const pdf = {
         doc.text("Festival du jeu", 50, 80);
         doc.text("Polytech Montpellier", 50, 100);
         doc.setFont("Helvetica","bold");
-        doc.text("Référence id :"+r.idReservation.toString(), 50, 150);
+        doc.text("Référence id: "+r.idReservation.toString(), 50, 150);
         doc.setFont("Helvetica","normal");
         doc.text(r.nomPersonne.toString(), 400, 180);
         doc.text(r.adressePersonne.toString(), 400, 200);
         doc.table(40, 300, result, headers, { autoSize: true });
-        doc.text("Prix renvoi jeux HT: "+(r.prixRenvoiTotal).toString()+" €", 400, 440);
-        doc.text("Prix total HT: "+(r.prixReservation+r.prixRenvoiTotal).toString()+" €", 400, 460);
+        doc.text("Prix renvoi jeux HT: "+(r.prixRenvoiTotal).toString()+" €", 400, 420);
+        doc.text("Remises: "+(r.remiseReservation).toString()+" €", 400, 440);
+        doc.text("Prix total HT: "+(r.prixReservation+r.prixRenvoiTotal-r.remiseReservation).toString()+" €", 400, 460);
         doc.text("TVA : 20%", 400, 480);
         doc.setFont("Helvetica","bold")
-        doc.text("Prix total TTC: "+(r.prixReservation*1.2).toString()+" €", 400, 500);
-        doc.setFont("Helvetica")
+        doc.text("Prix total TTC: "+((r.prixReservation+r.prixRenvoiTotal+r.remiseReservation)*1.2).toString()+" €", 400, 500);
+        doc.setFont("Helvetica","normal")
         doc.text("En votre aimable règlement,", 50, 600);
         doc.text("Cordialement,", 50, 620);
         doc.setFontSize(8)
