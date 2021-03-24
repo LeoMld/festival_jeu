@@ -31,7 +31,7 @@ module.exports = {
                     const editor = await Person.getPerson(game[0].FK_idPersonne)
                     zones[i].games[j].nomPersonne = editor.nomPersonne
                     // We retrieve the reservation
-                    const reservation = await Reservation.getAReservations(zones[i].games[j].PK_idReservation)
+                    const reservation = await Reservation.getAReservation(zones[i].games[j].PK_idReservation)
                     zones[i].games[j].besoinAnimateurReservation = reservation.besoinAnimateurReservation
                     zones[i].games[j].jeuxRecuReservation = reservation.jeuxRecuReservation
                 }

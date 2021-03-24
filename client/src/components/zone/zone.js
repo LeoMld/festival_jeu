@@ -19,6 +19,7 @@ import Axios from "axios";
 import Waiting from "../utils/Waiting";
 import CreateUpdateZone from "./createUpdateZone";
 import axios from "axios";
+import {Link} from "react-router-dom";
 
 function Zone(props) {
 
@@ -59,11 +60,11 @@ function Zone(props) {
     }
 
     // We update the prototype
-    const handlePrototypeChange = async (event, val, idJeu) => {
+    const handlePrototypeChange = async (event, val, idJeu, idReservation) => {
         axios.put('/api/games/' + idJeu, {bool: val}, {headers: {Authorization: token.getToken()}})
             .then(() => {
                 // We update the parent view
-                props.updateGameZone(zone.idZone, idJeu, event.target.id, val)
+                props.updateGameZone(zone.idZone, idJeu, event.target.id, val, idReservation)
             })
     }
 
@@ -79,7 +80,8 @@ function Zone(props) {
         }
         Axios.put('/api/gestion/jeuPresent/', data, {headers: {Authorization: token.getToken()}})
             .then(() => {
-                //TODO view update
+                // It's fine, we update the view
+                props.changeZoneJeu(idJeu, zone.idZone, idReservation, idNewZone)
             })
     }
 
@@ -98,7 +100,7 @@ function Zone(props) {
             <Collapse
                 isOpen={collapse}
             >
-                <Card>
+                <Card className="container-lg">
                     {zone.libelleZone !== "Indéfinie" &&
                     <CardHeader>
                         <div className="btn-wrapper">
@@ -174,13 +176,15 @@ function Zone(props) {
                                 <th>Durée</th>
                                 <th>Type</th>
                                 <th>Prototype</th>
-                                <th colSpan={2}>Gestion</th>
+                                <th colSpan={2}>Détails</th>
+                                <th>Gestion</th>
+                                <th>Réservation</th>
                             </tr>
                             </thead>
                             <tbody>
                             {zone.games.length === 0 &&
                             <td colSpan={9}>
-                                Cette zone ne comporte pas encore de jeux.
+                                Cette zone ne comporte pas encore de jeu.
                             </td>
                             }
                             {zone.games.map((game, index) => {
@@ -198,10 +202,20 @@ function Zone(props) {
                                                     <input id="prototype"
                                                            type="checkbox"
                                                            checked={game.prototype}
-                                                           onChange={(event) => handlePrototypeChange(event, !game.prototype, game.PK_idJeu)}/>
+                                                           onChange={(event) => handlePrototypeChange(event, !game.prototype, game.PK_idJeu, game.PK_idReservation)}/>
                                                     <span className="custom-toggle-slider rounded-circle"/>
                                                 </label>
                                             </Col>
+                                        </td>
+                                        <td className="align-middle">
+                                            <p>Reçu</p>
+                                            <i style={{"font-size": "3rem"}}
+                                               className={game.estRecu ? "ni ni-check-bold text-green" : "ni ni-fat-remove text-red"}/>
+                                        </td>
+                                        <td>
+                                            <p>Bénévoles</p>
+                                            <i style={{"font-size": "2.5rem"}}
+                                               className={game.besoinAnimateurReservation ? "ni ni-check-bold text-green" : "ni ni-fat-remove text-red"}/>
                                         </td>
                                         <td className="align-middle">
                                             <Row>
@@ -227,22 +241,12 @@ function Zone(props) {
                                                     </Button>
                                                 </Col>
                                             </Row>
-                                            <Row className="justify-content-center">
-                                                <Row>
-                                                    <Col className="mr-3">
-                                                        <p>Reçu</p>
-                                                        <i style={{"font-size": "3rem"}}
-                                                           className={game.estRecu ? "ni ni-check-bold text-green" : "ni ni-fat-remove text-red"}/>
-                                                    </Col>
-                                                </Row>
-                                                <Row>
-                                                    <Col>
-                                                        <p>Bénévoles</p>
-                                                        <i style={{"font-size": "3rem"}}
-                                                           className={game.besoinAnimateurReservation ? "ni ni-check-bold text-green" : "ni ni-fat-remove text-red"}/>
-                                                    </Col>
-                                                </Row>
-                                            </Row>
+                                        </td>
+                                        <td className="align-middle">
+                                            <Link style={{"font-size": "2.5rem"}}
+                                                  to={'/reservations/' + game.PK_idReservation}>
+                                                <i className="ni ni-book-bookmark"/>
+                                            </Link>
                                         </td>
                                     </tr>)
                             })}

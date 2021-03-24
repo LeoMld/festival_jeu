@@ -38,30 +38,44 @@ function Zones() {
 
     // We remove the zone from the view that has been deleted
     const deleteZone = (idZone) => {
-        //TODO
-        /*
         // We retrieve the games in the deleted zone
-        const games = (zones.filter(item => item.idZone === idZone)).games
+        const games = (zones.filter(z => z.idZone === parseInt(idZone)))[0].games
         // We remove the zone
-        const newZones = zones.filter(item => item.idZone !== idZone)
+        const newZones = zones.filter(item => item.idZone !== parseInt(idZone))
         // We add the games
-        newZones[0].games = [...newZones[0].games, games]
+        newZones[0].games = [...newZones[0].games, ...games]
         setZones(newZones)
-         */
+    }
+
+    const changeZoneJeu = (idJeu, idZone, idReservation, idNewZone) => {
+        let newZones = [...zones]
+        // We retrieve the changed zone
+        const changedZone = zones.filter(z => z.idZone === parseInt(idZone))[0]
+        const indexOfZone = zones.indexOf(changedZone)
+        // We retrieve the game
+        const changedGame = changedZone.games.filter(g => g.PK_idJeu === idJeu && g.PK_idReservation === idReservation)[0]
+        const indexOfGame = changedZone.games.indexOf(changedGame)
+        // We remove the game from the zone
+        newZones[indexOfZone].games.splice(indexOfGame, 1)
+        // Now we need to add it into the new zone
+        const newZone = zones.filter(z => z.idZone === parseInt(idNewZone))[0]
+        let indexOfNewZone = zones.indexOf(newZone)
+        newZones[indexOfNewZone].games.push(changedGame)
+        setZones(newZones)
     }
 
     // Change the prototype on the view
-    const updateGameZone = (idZone, idJeu, colName, val) => {
+    const updateGameZone = (idZone, idJeu, colName, val, idReservation) => {
         let newZones = [...zones]
         let changedGame = zones.filter(z => z.idZone === idZone)[0]
         let indexOfZone = zones.indexOf(changedGame)
-        let indexOfGame = changedGame.games.indexOf(changedGame.games.filter(g => g.PK_idJeu === idJeu)[0])
+        let indexOfGame = changedGame.games.indexOf(changedGame.games.filter(g => g.PK_idJeu === idJeu && g.PK_idReservation === idReservation)[0])
         newZones[indexOfZone].games[indexOfGame][colName] = val
         setZones(newZones)
     }
 
     return (
-        <div className="container justify-content-center">
+        <div className="justify-content-center mr-7 ml-7">
             <h1 className="font-weight-900 mt-5 mb-5">Liste des zones</h1>
             <div className="d-flex flex-row-reverse mb-sm-3">
                 <Button
@@ -90,7 +104,7 @@ function Zones() {
                             <Row className="mb-3 mt-3" key={index}>
                                 <Col>
                                     <Zone zones={zones} zone={zone} updateZone={updateZone} deleteZone={deleteZone}
-                                          updateGameZone={updateGameZone}/>
+                                          updateGameZone={updateGameZone} changeZoneJeu={changeZoneJeu}/>
                                 </Col>
                             </Row>
                         )

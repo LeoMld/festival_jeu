@@ -33,11 +33,16 @@ module.exports = {
             await client.query('BEGIN')
             // Before deleting, we need to pass all the games to the default zone
             const defaultZone = await getFestivalDefaultZone(FK_idFestival, client)
+            if (defaultZone.idZone === idZone) {
+                // We can't delete the default zone
+                throw new Error("Vous ne pouvez pas supprimer la zone par défaut d'un festival ...")
+            }
             await JeuPresent.setZoneToDefault(defaultZone.idZone, idZone, client)
             // Now, we delete
             const queryText = `DELETE FROM "Zone" WHERE "idZone"=${idZone};`
             client.query(queryText, [])
             await client.query('COMMIT')
+
         } catch (err) {
             // Something wrong happened, we rollback
             await client.query('ROLLBACK')
@@ -76,7 +81,7 @@ module.exports = {
             await client.query(queryText, queryValues)
             // We retrieve the default zone
             const defaultZone = await getFestivalDefaultZone(idFestival, client)
-            const estPlace = (defaultZone.idZone != idNewZone)
+            const estPlace = (defaultZone.idZone !== parseInt(idNewZone))
             await JeuPresent.updateEstPlace(idJeu, idNewZone, idReservation, estPlace, client)
             await client.query('COMMIT')
         } catch (err) {
