@@ -1,33 +1,33 @@
 const DB = require('../config/config')
-module.exports={
+module.exports = {
 
     // We create a new game
-    createJeu : async (libellejeu,nombreJoueur,ageMinimum, duree,prototype, FK_idTypeJeu, FK_idPersonne, client) => {
+    createJeu: async (libellejeu, nombreJoueur, ageMinimum, duree, prototype, FK_idTypeJeu, FK_idPersonne, client) => {
         const clientUsed = await DB.getPoolClient(client)
         const text = 'INSERT INTO "Jeu" ("libelleJeu","nombreJoueur","ageMinimum","duree","prototype", "FK_idTypeJeu", "FK_idPersonne") VALUES ($1,$2,$3,$4,$5,$6,$7) RETURNING "idJeu";'
-        const queryValues = [ libellejeu,nombreJoueur,ageMinimum, duree,prototype, FK_idTypeJeu, FK_idPersonne]
+        const queryValues = [libellejeu, nombreJoueur, ageMinimum, duree, prototype, FK_idTypeJeu, FK_idPersonne]
 
-        return (await clientUsed.query(text,queryValues)).rows[0].idJeu
+        return (await clientUsed.query(text, queryValues)).rows[0].idJeu
     },
 
     //delete a game
-    deleteJeu : async (idJeu, client) =>{
+    deleteJeu: async (idJeu, client) => {
         const clientUsed = await DB.getPoolClient(client)
         const text = 'DELETE FROM "Jeu" WHERE "idJeu" = $1'
         const queryValues = [idJeu]
-        clientUsed.query(text,queryValues)
+        clientUsed.query(text, queryValues)
     },
 
     //delete a type
-    deleteType : async (idJeu, client) =>{
+    deleteType: async (idJeu, client) => {
         const clientUsed = await DB.getPoolClient(client)
         const text = 'DELETE FROM "TypeJeu" WHERE "idTypeJeu" = $1'
         const queryValues = [idJeu]
-        clientUsed.query(text,queryValues)
+        clientUsed.query(text, queryValues)
     },
 
     //modify the prototype value of a game (boolean)
-    modifyPrototypeJeu : async (idJeu, isPrototype, client) =>{
+    modifyPrototypeJeu: async (idJeu, isPrototype, client) => {
 
         const clientUsed = await DB.getPoolClient(client)
         const queryText = 'UPDATE "Jeu" SET "prototype" = $1 WHERE "idJeu" = $2;'
@@ -36,15 +36,15 @@ module.exports={
     },
 
     //modify a game
-    modifyJeu : async (libellejeu,nombreJoueur,ageMinimum, duree,prototype, FK_idTypeJeu, FK_idPersonne, idJeu, client) =>{
+    modifyJeu: async (libellejeu, nombreJoueur, ageMinimum, duree, prototype, FK_idTypeJeu, FK_idPersonne, idJeu, client) => {
         const clientUsed = await DB.getPoolClient(client)
         const queryText = 'UPDATE "Jeu" SET "libelleJeu" = $1, "nombreJoueur" = $2, "ageMinimum" = $3, "duree" = $4, "prototype" = $5, "FK_idPersonne"=$6, "FK_idTypeJeu"=$7 WHERE "idJeu" = $8;'
-        const queryValues = [libellejeu,nombreJoueur,ageMinimum, duree,prototype, FK_idTypeJeu, FK_idPersonne, idJeu]
+        const queryValues = [libellejeu, nombreJoueur, ageMinimum, duree, prototype, FK_idTypeJeu, FK_idPersonne, idJeu]
         clientUsed.query(queryText, queryValues)
     },
 
     //create a type of game
-    createTypeGame : async (libelleTypeJeu,client) =>{
+    createTypeGame: async (libelleTypeJeu, client) => {
         const clientUsed = await DB.getPoolClient(client)
         const text = 'INSERT INTO "TypeJeu" ("libelleTypeJeu") VALUES ($1);'
         const queryValues = [libelleTypeJeu]
@@ -52,7 +52,7 @@ module.exports={
     },
 
     //modify a type of game
-    modifyTypeJeu : async (idTypeJeu, libelleTypeJeu, client) =>{
+    modifyTypeJeu: async (idTypeJeu, libelleTypeJeu, client) => {
         const clientUsed = await DB.getPoolClient(client)
         const queryText = 'UPDATE "TypeJeu" SET "libelleTypeJeu" = $2 WHERE "idTypeJeu" = $1;'
         const queryValues = [idTypeJeu, libelleTypeJeu]
@@ -66,7 +66,7 @@ module.exports={
         return (await clientUsed.query(queryText)).rows
     },
     //retrieve all games from an editor
-    getEditorGames: async (idEditor,client) => {
+    getEditorGames: async (idEditor, client) => {
         const clientUsed = await DB.getPoolClient(client)
         const queryText = `SELECT * FROM "Jeu" j JOIN "TypeJeu" t ON t."idTypeJeu" = j."FK_idTypeJeu" 
         WHERE j."FK_idPersonne"=${idEditor} ;`
@@ -74,20 +74,25 @@ module.exports={
     },
 
     // Retrieve a game
-    getGame: async (idJeu,client) => {
+    getGame: async (idJeu, client) => {
         const clientUsed = await DB.getPoolClient(client)
         const queryText = 'SELECT * FROM "Jeu" WHERE "idJeu"=$1;'
         const queryValues = [idJeu]
-        return (await clientUsed.query(queryText,queryValues)).rows
+        return (await clientUsed.query(queryText, queryValues)).rows
     },
 
     // Retrieve all types
-    getTypesJeux: async (idJeu,client) => {
+    getTypesJeux: async (client) => {
         const clientUsed = await DB.getPoolClient(client)
         const queryText = 'SELECT * FROM "TypeJeu";'
         return (await clientUsed.query(queryText)).rows
     },
 
-
-
+    // Retrieve the type of a game
+    getTypeJeu: async (idTypeJeu, client) => {
+        const clientUsed = await DB.getPoolClient(client)
+        const queryText = 'SELECT * FROM "TypeJeu" WHERE "idTypeJeu" = $1;'
+        const queryValues = [idTypeJeu]
+        return (await clientUsed.query(queryText, queryValues)).rows[0]
+    }
 }

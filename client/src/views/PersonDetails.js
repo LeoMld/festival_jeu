@@ -9,7 +9,7 @@ import ContactModal from "../components/contact/contactModal";
 import Game from "../components/game/Game";
 import ModalNewGame from "../components/game/ModalNewGame";
 import ModalDelete from "../components/game/ModalDelete";
-
+//TODO FIX PROTOTYPE JEUX
 
 function PersonDetails(props) {
     const getPerson = ()=>{
