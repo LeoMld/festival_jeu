@@ -9,12 +9,12 @@ const jeuPresent = require("../models/jeuPresentModel")
  * 2 : 2e Contact (dateSecondContact not null)
  * 3 : Pas de Réponse
  * 4 : 1. En discussion
- * 5 : 2. Présence Confirmée
- * 6 : 3. Présent liste jeux demandée ( to put in JeuPresent )
- * 7 : 4. Présent : liste jeux reçue ( jeu in JeuPresent )
- * 8 : Absent
- * 9 : Considéré absent
-**/
+ * 5 : 2. Présence Confirmée => Couleur Verte
+ * 6 : 3. Présent liste jeux demandée ( to put in JeuPresent ) => Couleur Verte
+ * 7 : 4. Présent : liste jeux reçue ( jeu in JeuPresent ) => Couleur Verte
+ * 8 : Absent => Couleur Rouge
+ * 9 : Considéré absent => Couleur Rouge
+ **/
 // Contains all the queries to the database concerning a reservation
 module.exports = {
     createPersonReservation : async (idFestival,idPerson,client) =>{
@@ -45,13 +45,24 @@ module.exports = {
         return info
 
     },
-    getAReservations : async (idReservation,client)=>{
+    getAReservation : async (idReservation,client)=>{
         const clientUsed = await DB.getPoolClient(client)
         const text = 'SELECT * FROM "Reservation" JOIN "Personne" ON "Reservation"."FK_idPersonne"="Personne"."idPersonne" LEFT JOIN "Note" ON "Reservation"."idReservation"="Note"."FK_idReservation" WHERE "idReservation"=$1;'
         const values = [idReservation]
         let info = (await clientUsed.query(text,values)).rows[0]
         info["espace"]= await EspaceReserve.getReservationsSpaces(idReservation,clientUsed)
+        console.log(info)
+        info["jeuPresents"]= await jeuPresent.getReservationGames(idReservation,clientUsed)
+        console.log(info)
+        return info
 
+
+    },
+    getReservation : async (idReservation,client)=>{
+        const clientUsed = await DB.getPoolClient(client)
+        const text = 'SELECT * FROM "Reservation" JOIN "Personne" ON "Reservation"."FK_idPersonne"="Personne"."idPersonne" LEFT JOIN "Note" ON "Reservation"."idReservation"="Note"."FK_idReservation" JOIN "EspaceReserve" ON "EspaceReserve"."FK_idReservation"="Reservation"."idReservation" WHERE "idReservation"=$1;'
+        const values = [idReservation]
+        return (await clientUsed.query(text,values)).rows[0]
 
     },
 

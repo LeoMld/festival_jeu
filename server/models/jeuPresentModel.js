@@ -27,15 +27,18 @@ module.exports = {
     },
     getReservationGames: async (idReservation, client) => {
         const clientUsed = DB.getPoolClient(client)
-        const queryText = 'SELECT * FROM "JeuPresent" JOIN "JEU" ON "JEU"."idJeu"="JeuPresent"."PK_idJeu" JOIN "TypeJeu" ON "TypeJeu"."idTypeJeu"="Jeu"."FK_idTypeJeu" WHERE "JeuPresent"."PK_idReservation"=$1'
+        const queryText= 'SELECT * FROM "JeuPresent" JOIN "Jeu" ON "Jeu"."idJeu"="JeuPresent"."PK_idJeu" JOIN "TypeJeu" ON "TypeJeu"."idTypeJeu"="Jeu"."FK_idTypeJeu" WHERE "JeuPresent"."PK_idReservation"=$1;'
         const queryValues = [idReservation]
         return (await clientUsed.query(queryText, queryValues)).rows
     },
     //retrieve games with prixRenvoi != 0 for a reservation
-    getFactureGames: async (idReservation, client) => {
+    getFactureGames : async (idReservation,client)=>{
         const clientUsed = DB.getPoolClient(client)
-        const queryText = 'SELECT SUM("prixRenvoi") as prixRenvoiTotal FROM "JeuPresent" WHERE "PK_idReservation"=$1'
+        const queryText= 'SELECT SUM("prixRenvoi") as prixRenvoiTotal FROM "JeuPresent" WHERE "PK_idReservation"=$1'
         const queryValues = [idReservation]
         return (await clientUsed.query(queryText, queryValues)).rows[0]
+
+
     }
+
 }

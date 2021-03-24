@@ -9,7 +9,7 @@ function WorkFlowSelector(props){
             { state.map((i,index)=>{
 
 
-                    return( <option value={i} key={index}>{workflow(i)}</option>)
+                    return( <option value={i} key={index} >{workflow(i)}</option>)
 
             }
             )}
