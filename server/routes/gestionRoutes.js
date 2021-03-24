@@ -7,12 +7,14 @@ const contactController = require("../controllers/contactController");
 const zoneController = require("../controllers/zoneController");
 const personController = require("../controllers/personController");
 const reservationController = require("../controllers/reservationController")
+const noteController = require("../controllers/noteController")
 const token = require('../utils/token')
 
 router.get("/reservations",reservationController.getReservations)
 router.get("/reservations/:id",reservationController.getAReservation)
 router.put("/reservations/:id",reservationController.updateReservation)
-
+router.post("/notes",noteController.createNote)
+router.put("/notes/:id",noteController.updateNote)
 
 router.use(token.privateRoute);
 

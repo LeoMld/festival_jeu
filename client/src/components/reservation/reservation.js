@@ -54,7 +54,31 @@ function Reservation(props){
                 setR(props.r)
             })
     }
-
+    const handleEditNote = async (event)=>{
+        let value = document.getElementById("textNote").value
+        let info = {textNote : value}
+        if(r.idNote!==null){
+            info["idNote"]=r.idNote
+            axios.put("/api/gestion/notes/"+r.idNote,info,{ headers: { Authorization: token.getToken() }})
+                .then((res)=>{
+                    setR({...r,textNote:value})
+                })
+                .catch(()=>{
+                    setR(props.r)
+                })
+        }else{
+            info["idReservation"]=r.idReservation
+            console.log(info)
+            axios.post("/api/gestion/notes",info,{ headers: { Authorization: token.getToken() }})
+            .then((res)=>{
+                setR({...r,textNote:value})
+                setR({...r,idNote:res.data.idNote})
+            })
+            .catch(()=>{
+                setR(props.r)
+            })
+        }
+    }
     return(
         <tr key={props.index}>
             <td>
@@ -174,7 +198,8 @@ function Reservation(props){
                 </Row>
             </Col></td>
             <td>
-                <Input type="textarea">{r.textNote}</Input>
+                <Input type="textarea" id="textNote" defaultValue={r.textNote}/>
+                <Button className=" mt-2" color="secondary" size="sm" onClick={(event)=>handleEditNote(event)}>Valider Commentaire</Button>
             </td>
         </tr>
     )
