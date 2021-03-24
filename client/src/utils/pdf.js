@@ -22,8 +22,8 @@ const pdf = {
         console.log(r)
 
         let result=[]
-        let data = {
-            idEspace: r.idEspace.toString(),
+        /*let data = {
+            idEspace: r.FK_idEspace.toString(),
             idEmplacement: r.idEmplacement.toString(),
             nb_Tables: r.nombreTables.toString(),
             metre_Carres: r.metreCarres.toString(),
@@ -31,21 +31,25 @@ const pdf = {
             PrixU_M2: r.coutMetreCarre.toString(),
             Prix_Total_HT: r.prixReservation.toString(),
 
-        };
-        /*r.map(res =>{
+        };*/
+        console.log(r)
+        r.espace.map(res =>{
+            console.log(res)
             let data = {
                 idEspace: res.idEspace.toString(),
-                idEmplacement: res.idEmplacement.toString(),
+                idEmplacement: res.FK_idEmplacement.toString(),
                 nb_Tables: res.nombreTables.toString(),
                 metre_Carres: res.metreCarres.toString(),
                 PrixU_Table: res.coutTable.toString(),
                 PrixU_M2: res.coutMetreCarre.toString(),
-                Prix_Total_HT: res.prixReservation.toString(),
+                Prix_Total_HT: (res.coutTable*res.nombreTables+res.metreCarres*res.coutMetreCarre).toString()
 
             };
             result.push(Object.assign({}, data))
-        })*/
-        result.push(Object.assign({}, data))
+        })
+
+
+        /*result.push(Object.assign({}, data))*/
         console.log(result)
         let headers = createHeaders([
             "idEspace",
@@ -70,16 +74,18 @@ const pdf = {
         doc.text(r.nomPersonne.toString(), 400, 180);
         doc.text(r.adressePersonne.toString(), 400, 200);
         doc.table(40, 300, result, headers, { autoSize: true });
-        doc.text("TVA : 20%", 400, 400);
+        doc.text("Prix renvoi jeux HT: "+(r.prixRenvoiTotal).toString()+" €", 400, 440);
+        doc.text("Prix total HT: "+(r.prixReservation+r.prixRenvoiTotal).toString()+" €", 400, 460);
+        doc.text("TVA : 20%", 400, 480);
         doc.setFont("Helvetica","bold")
-        doc.text("Prix total TTC: "+(r.prixReservation*1.2).toString(), 400, 420);
+        doc.text("Prix total TTC: "+(r.prixReservation*1.2).toString()+" €", 400, 500);
         doc.setFont("Helvetica")
         doc.text("En votre aimable règlement,", 50, 600);
         doc.text("Cordialement,", 50, 620);
         doc.setFontSize(8)
         doc.setFont("Helvetica","italic")
-        doc.text("Polytech Montpellier", 230, 800);
-        doc.text("Mollard Léo, Raymond Luc, Barbou Bryan", 190, 820);
+        doc.text("Polytech Montpellier", 260, 800);
+        doc.text("Mollard Léo, Raymond Luc, Barbou Bryan", 220, 820);
 
         doc.save("test.pdf")
     }
