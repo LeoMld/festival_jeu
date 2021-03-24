@@ -33,6 +33,8 @@ function CollapseFilter(props){
     const [prototype, setPrototype] = useState(2);
     const [libelle, setLibelle] = useState("");
     const [type, setType] = useState("");
+    const [isPending,setIsPending] = useState(false)
+
 
     const [gamesFilter,setGamesFilter] = useState()
 
@@ -40,7 +42,7 @@ function CollapseFilter(props){
     useEffect(()=>{
         if(gamesFilter){
             let filter
-            console.log(gamesFilter[0].libelleTypeJeu === "aventure")
+
             if(parseInt(prototype) === 2){
                 filter = gamesFilter.filter(game => game.libelleJeu.includes(libelle)
                     && (game.nombreJoueur>=nbJoueurState.min && game.nombreJoueur<=nbJoueurState.max)
@@ -60,9 +62,11 @@ function CollapseFilter(props){
     },[gamesFilter])
 
     const handleChange = ()=>{
+        setIsPending(true)
         axios.get("/api/games",{ headers: { Authorization: token.getToken() } })
             .then(({data}) => {
                 setGamesFilter(data);
+                setIsPending(false)
             })
             .catch(err => {
                 //if the token is not the good one
@@ -169,9 +173,10 @@ function CollapseFilter(props){
                     </Col>
                 </Row>
                 <Row className="d-flex flex-row-reverse mr-md">
-                    <Button onClick={handleChange} color="secondary" type="button">
+                    {!isPending && <Button onClick={handleChange} color="secondary" type="button">
                         Filtrer
-                    </Button>
+                    </Button>}
+                    {isPending && <Waiting/>}
                 </Row>
             </Form>
         </div>
