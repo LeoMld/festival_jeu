@@ -56,7 +56,7 @@ module.exports = {
 
     privateRoute: async (req, res, next) => {
         try {
-            if (await getStatus(req.headers.authorization) !== (1 || 0)) {
+            if (await getStatus(req.headers.authorization) !== (0 || 1)) {
                 res.status(401).json({code: 0})
             } else {
                 next();
