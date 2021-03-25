@@ -18,15 +18,18 @@ module.exports = {
         const email = req.sanitize(req.body.email);
         const password = req.sanitize(req.body.password);
 
+
         //search if the user exist
         try {
             const user = await usersModel.searchUser(email)
             let jwtToken = null
 
+
             //if an user exist
             if (user[0]) {
                 data.exist = true
                 const match = await bcrypt.compare(password, user[0].mdpUtilisateur);
+
                 if (match) {
                     data.match = true
                     console.log(user)
