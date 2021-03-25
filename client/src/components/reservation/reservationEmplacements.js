@@ -142,7 +142,7 @@ function ReservationEmplacements(props) {
     return (
         <Row className="mt-2">
             <div>
-                <h3 className="font-weight-500">Réserver des emplacements</h3>
+                <h3 className="font-weight-600">Réserver des emplacements</h3>
             </div>
             <Table className="table  table-bordered">
                 <thead className="table-light">
@@ -166,7 +166,7 @@ function ReservationEmplacements(props) {
                                     type="text"
                                     id={'nombreTables' + index}
                                     value={props.info.espace.length === 0 ? inputsEspaces[index]["nombreTables" + index] : inputsEspaces[index].nombreTables}
-                                    disabled={props.info.payeReservation}
+                                    disabled={props.info.payeReservation || token.getType() !== 1}
                                     onChange={(event) => {
                                         props.info.espace.length === 0 ?
                                             handleChangeEmp(event, 'nombreTables' + index, index) :
@@ -179,7 +179,7 @@ function ReservationEmplacements(props) {
                                     type="text"
                                     id={'metreCarres' + index}
                                     value={props.info.espace.length === 0 ? inputsEspaces[index]["metreCarres" + index] : inputsEspaces[index].metreCarres}
-                                    disabled={props.info.payeReservation}
+                                    disabled={props.info.payeReservation || token.getType() !== 1}
                                     onChange={(event) => {
                                         props.info.espace.length === 0 ?
                                             handleChangeEmp(event, 'metreCarres' + index, index) :
@@ -206,7 +206,7 @@ function ReservationEmplacements(props) {
                             type="text"
                             id="remiseReservation"
                             value={remiseReservation}
-                            disabled={props.info.payeReservation}
+                            disabled={props.info.payeReservation || token.getType() !== 1}
                             onChange={(event) => setRemiseReservation(event.target.value)}
                         />
                     </td>
@@ -219,7 +219,7 @@ function ReservationEmplacements(props) {
                     <th className="align-middle">{isNaN(allPrice() - remiseReservation) ? (0).toFixed(2) : (allPrice() - remiseReservation).toFixed(2)}€</th>
                 </tr>
                 </tbody>
-                {!props.info.payeReservation &&
+                {(!props.info.payeReservation && token.getType() === 1) &&
                 <tfoot>
                 <tr>
                     <td className="mt-3 align-middle" colSpan={4}>
@@ -241,6 +241,14 @@ function ReservationEmplacements(props) {
                                     Enregistrer
                                 </Button> :
                                 <Waiting/>)}
+                    </td>
+                </tr>
+                </tfoot>}
+                {props.info.payeReservation &&
+                <tfoot>
+                <tr  className="table-success">
+                    <td colSpan={5} className="font-weight-800">
+                        Cette réservation a déjà été payée
                     </td>
                 </tr>
                 </tfoot>}
