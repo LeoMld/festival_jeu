@@ -14,6 +14,7 @@ module.exports = {
     updateNote : async(req,res)=>{
         let idNote = req.params.id
         let body = req.body
+        console.log(idNote + " " +body.textNote)
         await Note.updateNote(idNote,body.textNote)
             .then((result)=>{
                 res.status(201).json(result)
