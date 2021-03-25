@@ -57,8 +57,8 @@ function Persons(props){
                     <th>Exposant Inactif </th>
                 </tr>
                 </thead>
-                <tbody>
                 {isPending && <Waiting></Waiting>}
+                <tbody>
                 {persons!==null && persons.map((p,index)=>{
                     return(<Person person={p} type={props.type} index={index}/>)
                 })}

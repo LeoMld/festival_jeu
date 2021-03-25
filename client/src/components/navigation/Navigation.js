@@ -135,7 +135,7 @@ class Navigation extends Component {
                                 <Nav className="align-items-lg-center ml-lg-auto" navbar>
 
                                     <NavItem>
-                                        <Link className="nav-link" to="/"> <i className="ni ni-circle-08"/>
+                                        <Link className="nav-link" to="/compte"> <i className="ni ni-circle-08"/>
                                             Mon compte</Link>
                                     </NavItem>
                                     <NavItem>

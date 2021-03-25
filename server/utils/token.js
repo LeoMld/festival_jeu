@@ -16,16 +16,23 @@ getStatus = async (token) => {
 }
 
 module.exports = {
+    //CAN REFRESH TOKEN WITH A SET TIMEOUT OF EXP - 10S when you get the jwtTOken
 
     //generate a token, put him in localStorage
-    connect: async (req, res, id, type) => {
+    connect: async (id, type) => {
         return await jwt.sign({
             userId: id,
             type: type
         }, process.env.JWT_SIGN, {
-            expiresIn: '1h'
+            expiresIn: '15m'
         })
 
+    },
+    createRefreshToken : async (id,type)=>{
+       return await jwt.sign({
+            userId: id,
+            type: type
+        }, process.env.refresh_token)
     },
 
     // Retrieve the status of the user connected, if there is any
@@ -57,5 +64,7 @@ module.exports = {
         } catch (e) {
             console.log(e)
         }
-    }
+    },
+
+
 }

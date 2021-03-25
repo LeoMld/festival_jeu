@@ -21,11 +21,42 @@ import PersonDetails from "./views/PersonDetails";
 import Zones from "./views/Zones"
 import Reservations from "./views/Reservations"
 import ReservationDetail from "./views/ReservationDetail"
+import Account from "./views/Account";
 
+import axios from "axios";
 
 function App() {
 
     const history = useHistory()
+    axios.interceptors.request.use(async (config)=>{
+        console.log(config)
+        console.log(config.method)
+        const accessToken = config.headers.Authorization
+        let exp;
+        try{
+            exp = token.getTokenExp(accessToken)
+        }
+        catch (e){
+            exp = 0
+        }
+        let now=new Date().getTime()/1000
+        if(exp< (now + 5)){
+            console.log("Gonna Exp")
+            const refreshToken  = token.getRefreshToken()
+            await axios.post("/api/token",{token:refreshToken})
+                .then(async (res)=>{
+                    await token.setToken(res.data.accessToken)
+                    await token.setRefreshToken(res.data.refreshToken)
+                    config.headers.Authorization = res.data.accessToken
+                    console.log(token.getToken())
+                })
+
+        }
+        return config
+    },(err)=>{
+        return Promise.reject(err)
+    })
+
 
 
     return (
@@ -96,6 +127,12 @@ function App() {
 
                         :
                         <Route path="/Exposants/:idPerson" exact><Redirect to="/Connexion"/></Route>
+                    }
+                    {token.getType() !== 2 ?
+                        <Route path="/compte" exact component={Account}/>
+
+                        :
+                        <Route path="/compte" exact><Redirect to="/Connexion"/></Route>
                     }
                     <Route path="/login" exact component={Login}/>
 

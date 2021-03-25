@@ -107,12 +107,11 @@ function PersonDetails(props) {
         setContact(contact)
         setModalState(true)
     }
-    if (isPending) {
-        return (<Waiting/>)
-    } else if (info !== null) {
-        return (
+    return (
 
             <div>
+                {isPending && <div className="justify-content-center mt-9"><Waiting/></div>}
+                {info &&
                 <div className=" justify-content-center">
                     <div>
                         <Row className="mb-5 mt-5">
@@ -279,60 +278,64 @@ function PersonDetails(props) {
                                 </Collapse>
                             </Col>
                         </Row>
-                        {(info.games || info.reservations.length !== 0 ) &&
-                            <Row className="m-2 inline-flex">
-                                {info.games.length!==0 &&
-                                <Col className="w-50 p-2">
-                                    <Button color="link" onClick={() => setOpenJeux(!openJeux)}
-                                            className=" w-100 text-primary text-center border">Jeux</Button>
-                                    <Collapse isOpen={openJeux}>
-                                        <Card>
-                                            <CardBody>
-                                                {token.getType() === 1 && <Button onClick={() => setModalStateAddGame(!modalStateAddGame)
-                                                } color="success" outline type="button">
-                                                    Ajouter un jeu
-                                                </Button>}
-                                                <table className="table table-striped">
-                                                    <thead>
-                                                        <tr>
-                                                            <th className="text-center">#</th>
-                                                            <th>Titre</th>
-                                                            <th className="d-none d-lg-table-cell">Nombre de joueurs</th>
-                                                            <th className="d-none d-lg-table-cell">Âge minimum</th>
-                                                            <th className="d-none d-lg-table-cell">Durée</th>
-                                                            <th className="d-none d-lg-table-cell">Type</th>
-                                                            {token.getType() === 1 && <th >Prototype</th>}
-                                                            {token.getType() === 1 && <th >Action</th>}
+                        {(info.games || info.reservations.length !== 0) &&
+                        <Row className="m-2 inline-flex">
+                            {info.games.length !== 0 &&
+                            <Col className="w-50 p-2">
+                                <Button color="link" onClick={() => setOpenJeux(!openJeux)}
+                                        className=" w-100 text-primary text-center border">Jeux</Button>
+                                <Collapse isOpen={openJeux}>
+                                    <Card>
+                                        <CardBody>
+                                            {token.getType() === 1 &&
+                                            <Button onClick={() => setModalStateAddGame(!modalStateAddGame)
+                                            } color="success" outline type="button">
+                                                Ajouter un jeu
+                                            </Button>}
+                                            <table className="table table-striped">
+                                                <thead>
+                                                <tr>
+                                                    <th className="text-center">#</th>
+                                                    <th>Titre</th>
+                                                    <th className="d-none d-lg-table-cell">Nombre de joueurs</th>
+                                                    <th className="d-none d-lg-table-cell">Âge minimum</th>
+                                                    <th className="d-none d-lg-table-cell">Durée</th>
+                                                    <th className="d-none d-lg-table-cell">Type</th>
+                                                    {token.getType() === 1 && <th>Prototype</th>}
+                                                    {token.getType() === 1 && <th>Action</th>}
 
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                    {info.games.map((g,index)=>{
-                                                        return(
-                                                            <Game games={info} setGames={setInfo} index={index} game={g} type={1}/>
-                                                        )
-                                                    })
-                                                    }
-                                                    </tbody>
-                                                </table>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                {info.games.map((g, index) => {
+                                                    return (
+                                                        <Game games={info} setGames={setInfo} index={index} game={g}
+                                                              type={1}/>
+                                                    )
+                                                })
+                                                }
+                                                </tbody>
+                                            </table>
 
 
-                                            </CardBody>
-                                        </Card>
-                                    </Collapse>
-                                    {info.games && modalStateAddGame && token.getType() === 1 && <ModalNewGame setGames={setInfo} games={info} modalState={modalStateAddGame} setModalState={setModalStateAddGame} type={1} />}
-                                </Col>}
+                                        </CardBody>
+                                    </Card>
+                                </Collapse>
+                                {info.games && modalStateAddGame && token.getType() === 1 &&
+                                <ModalNewGame setGames={setInfo} games={info} modalState={modalStateAddGame}
+                                              setModalState={setModalStateAddGame} type={1}/>}
+                            </Col>}
 
-                            </Row>
+                        </Row>
                         }
-
 
 
                     </div>
                 </div>
+                }
+
             </div>
         )
-    }
 }
 
 
