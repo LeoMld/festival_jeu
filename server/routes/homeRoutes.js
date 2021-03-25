@@ -5,8 +5,10 @@ const router = express.Router();
 const homeController = require('../controllers/homeController');
 
 
-
+router.delete('')
 router.get('/token', homeController.getStatus)
+router.post('/token', homeController.refreshToken)
+
 
 router.post('/login', homeController.login)
 

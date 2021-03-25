@@ -42,6 +42,7 @@ function Login() {
             console.log(res.data)
             if (res.data.data.exist && res.data.data.match) {
                 token.setToken(res.data.token)
+                token.setRefreshToken(res.data.refreshToken)
                 let path = `/Accueil`;
                 history.push(path);
                 window.location.reload(false);

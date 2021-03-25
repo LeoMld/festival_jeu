@@ -1,12 +1,12 @@
 const usersModel = require("../models/utilisateurModel")
 const bcrypt = require('bcrypt');
-const jwt = require('../utils/token')
-
+const token = require('../utils/token')
+const jwt = require('jsonwebtoken');
 module.exports = {
 
     //get the state of an user an send it to the client
     getStatus: async (req, res) => {
-        const status = await jwt.getStatus(req.headers.authorization)
+        const status = await token.getStatus(req.headers.authorization)
         res.status(200).json(status)
     },
 
@@ -21,7 +21,7 @@ module.exports = {
         //search if the user exist
         try {
             const user = await usersModel.searchUser(email)
-            let token = null
+            let jwtToken = null
 
             //if an user exist
             if (user[0]) {
@@ -29,21 +29,37 @@ module.exports = {
                 const match = await bcrypt.compare(password, user[0].mdpUtilisateur);
                 if (match) {
                     data.match = true
-
-                    token = await jwt.connect(req, res, user[0].idUtilisateur, user[0].typeUtilisateur)
+                    console.log(user)
+                    jwtToken = await token.connect(user[0].idUtilisateur, user[0].typeUtilisateur)
                     //if it's the good password
-                    console.log("token : "+token)
+                    console.log("token : "+jwtToken)
+                    const refreshToken = await token.createRefreshToken(user[0].idUtilisateur, user[0].typeUtilisateur)
+                    //put exp time afer tested
                     data.type = user[0].typeUtilisateur
-                    res.status(200).json({token: token, data: data})
+                    res.status(200).json({token: jwtToken, refreshToken : refreshToken,data: data})
                 } else {
-                    res.status(401).json({token: token, data: data})
+                    res.status(401).json({token: jwtToken, data: data})
                 }
             } else {
-                res.status(401).json({token: token, data: data})
+                res.status(401).json({token: jwtToken, data: data})
             }
         } catch (err) {
             res.status(503).json({error: err})
         }
 
+    },
+    refreshToken : async (req,res) =>{
+        const refreshToken = req.body.token
+        console.log(req.body)
+        if (refreshToken == null) return res.status(401).json({logged:false})
+        //verif if token is already used
+        //if (!refreshTokens.includes(refreshToken)) return res.sendStatus(403)
+        jwt.verify(refreshToken, process.env.REFRESH_TOKEN, async (err, user) => {
+            if (err) return res.status(403).json({logged:false})
+            const accessToken = await token.connect(user.userId, user.type)
+            const refreshToken = await token.createRefreshToken(user.userId, user.type)
+
+            res.status(201).json({ accessToken: accessToken,refreshToken : refreshToken })
+        })
     }
 }
