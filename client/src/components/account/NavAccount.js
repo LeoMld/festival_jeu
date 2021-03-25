@@ -2,6 +2,7 @@ import React, {useState} from "react";
 import classnames from "classnames";
 import ProfilePane from "./ProfilePane";
 import ParamPane from "./ParamPane";
+import OrganisateursPane from "./OrganisateursPane";
 
 // reactstrap components
 import {Card, CardBody, Nav, NavItem, NavLink, TabContent, TabPane} from "reactstrap";
@@ -79,13 +80,7 @@ function NavAccount(){
 
                         </TabPane>
                         {token.getType() !==0 && <TabPane tabId="tabs3">
-                            <p className="description">
-                                Raw denim you probably haven't heard of them jean shorts
-                                Austin. Nesciunt tofu stumptown aliqua, retro synth master
-                                cleanse. Mustache cliche tempor, williamsburg carles vegan
-                                helvetica. Reprehenderit butcher retro keffiyeh dreamcatcher
-                                synth.
-                            </p>
+                            <OrganisateursPane/>
                         </TabPane>}
                     </TabContent>
                 </CardBody>

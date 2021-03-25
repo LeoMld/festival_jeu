@@ -16,6 +16,54 @@ module.exports = {
             })
     },
 
+    // Retrieve all the organisateurs
+    getOrganisateurs: async (req, res) => {
+        usersModel.getAllOrganisateurs()
+            .then((result) => {
+                res.status(200).json(result)
+            })
+            .catch((e) => {
+                console.log(e)
+                res.status(503).json()
+            })
+    },
+
+    // add an new organisateur
+    addOrganisateur: async (req, res) => {
+        let pwd = req.body.mdpUtilisateur
+        const nom = req.body.nomUtilisateur
+        const prenom = req.body.prenomUtilisateur
+        const mail = req.body.mailUtilisateur
+        const type = 0
+
+        if(!pwd){
+            pwd = " "
+        }
+        bcrypt.hash(pwd, 10, function(err, hash) {
+            usersModel.addUser(nom,prenom,mail,hash,type)
+                .then((id) => {
+                    res.status(200).json(id)
+                })
+                .catch((e) => {
+                    console.log(e)
+                    res.status(503).json()
+                })
+        })
+
+    },
+    // Delete an organisateur
+    deleteOrganisateur: async (req, res) => {
+        const id = req.params.id
+        usersModel.deleteOrganisateur(id)
+            .then(() => {
+                res.status(200).json({deleted:true})
+            })
+            .catch((e) => {
+                console.log(e)
+                res.status(503).json()
+            })
+    },
+
     // We update the festival to see of the user asking
     changeFestivalUser: async (req, res) => {
         const idUtilisateur = await jwt.getId(req.headers.authorization)

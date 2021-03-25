@@ -58,12 +58,14 @@ class Navigation extends Component {
         window.location.reload(false);
     };
 
+
+
     render() {
 
+        console.log(token.getType())
 
-        switch (token.getType()) {
             //return the navbar for an administrator
-            case 1 || 0:
+            if(token.getType() === 1 || token.getType() === 0){
                 return (
                     <Navbar
                         className="navbar-main navbar-transparent navbar-light headroom"
@@ -152,8 +154,9 @@ class Navigation extends Component {
 
 
                 );
-            //return the navbar for a visitor
-            default:
+            }else{
+                //return the navbar for a visitor
+
                 return (
                     <Navbar
 
@@ -218,8 +221,11 @@ class Navigation extends Component {
                     </Navbar>
 
                 );
+            }
 
-        }
+
+
+
 
 
     }
