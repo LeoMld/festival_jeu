@@ -6,6 +6,7 @@ import {Alert, Button, Col, Row} from "reactstrap";
 import useAxios from "../utils/useAxios";
 import Waiting from "../components/utils/Waiting";
 import CreateUpdateFestival from "../components/festival/createUpdateFestival";
+import token from "../utils/token";
 
 function FestivalChoice() {
 
@@ -51,21 +52,24 @@ function FestivalChoice() {
     return (
         <div className="container justify-content-center">
             <h1 className="font-weight-900 mt-5 mb-5">Liste des festivals</h1>
-            <div className="d-flex flex-row-reverse mb-sm-3">
-                <Button
-                    color="success"
-                    outline
-                    type="button"
-                    onClick={() => setModalState(!modalState)}
-                >
-                    Nouveau Festival
-                </Button>
-            </div>
+            {token.getType() === 1 &&
+            <>
+                <div className="d-flex flex-row-reverse mb-sm-3">
+                    <Button
+                        color="success"
+                        outline
+                        type="button"
+                        onClick={() => setModalState(!modalState)}
+                    >
+                        Nouveau Festival
+                    </Button>
+                </div>
 
-            <CreateUpdateFestival modalState={modalState}
-                                  setModalState={setModalState}
-                                  componentState={0}
-                                  addNewFestival={addNewFestival}/>
+                <CreateUpdateFestival modalState={modalState}
+                                      setModalState={setModalState}
+                                      componentState={0}
+                                      addNewFestival={addNewFestival}/>
+            </>}
 
             {(error === null && errorFTS === null) ?
                 (!isPending ? festivals.map((festival, index) => {
