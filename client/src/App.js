@@ -21,6 +21,7 @@ import PersonDetails from "./views/PersonDetails";
 import Zones from "./views/Zones"
 import Reservations from "./views/Reservations"
 import ReservationDetail from "./views/ReservationDetail"
+import Account from "./views/Account";
 
 
 function App() {
@@ -96,6 +97,12 @@ function App() {
 
                         :
                         <Route path="/Exposants/:idPerson" exact><Redirect to="/Connexion"/></Route>
+                    }
+                    {token.getType() !== 2 ?
+                        <Route path="/compte" exact component={Account}/>
+
+                        :
+                        <Route path="/compte" exact><Redirect to="/Connexion"/></Route>
                     }
                     <Route path="/login" exact component={Login}/>
 

@@ -32,7 +32,6 @@ module.exports = {
 
                     token = await jwt.connect(req, res, user[0].idUtilisateur, user[0].typeUtilisateur)
                     //if it's the good password
-                    console.log("token : "+token)
                     data.type = user[0].typeUtilisateur
                     res.status(200).json({token: token, data: data})
                 } else {
