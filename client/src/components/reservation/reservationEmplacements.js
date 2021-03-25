@@ -141,9 +141,7 @@ function ReservationEmplacements(props) {
 
     return (
         <Row className="mt-2">
-            <div>
-                <h3 className="font-weight-600">Réserver des emplacements</h3>
-            </div>
+            <h3 className="font-weight-600 mb-3">Réserver des emplacements</h3>
             <Table className="table  table-bordered">
                 <thead className="table-light">
                 <tr>
@@ -246,7 +244,7 @@ function ReservationEmplacements(props) {
                 </tfoot>}
                 {props.info.payeReservation &&
                 <tfoot>
-                <tr  className="table-success">
+                <tr className="table-success">
                     <td colSpan={5} className="font-weight-800">
                         Cette réservation a déjà été payée
                     </td>

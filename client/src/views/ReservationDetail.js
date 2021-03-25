@@ -7,6 +7,7 @@ import token from "../utils/token";
 import React, {useState} from "react";
 import pdf from "../utils/pdf";
 import ReservationEmplacements from "../components/reservation/reservationEmplacements";
+import ReservationJeuxReserves from "../components/reservation/reservationJeuxReserves";
 
 function ReservationDetail(props) {
     const {
@@ -55,6 +56,24 @@ function ReservationDetail(props) {
         setInfo(newInfo)
     }
 
+    // Udate the view when we change the prototype of a game
+    const updateGameReservation = (val, idJeu) => {
+        const newInfo = {...info}
+        let changedGame = info.jeuPresents.filter(g => g.PK_idJeu === idJeu)[0]
+        let indexOfGame = info.jeuPresents.indexOf(changedGame)
+        newInfo.jeuPresents[indexOfGame].prototype = val
+        setInfo(newInfo)
+    }
+
+    // Change the zone of a game
+    const changeZoneJeu = (idJeu, idZone) => {
+        const newInfo = {...info}
+        let changedGame = info.jeuPresents.filter(g => g.PK_idJeu === idJeu)[0]
+        let indexOfGame = info.jeuPresents.indexOf(changedGame)
+        newInfo.jeuPresents[indexOfGame].PK_idZone = idZone
+        setInfo(newInfo)
+    }
+
     return (
         <div className="container justify-content-center">
             {error && <Alert color="danger">
@@ -66,120 +85,123 @@ function ReservationDetail(props) {
                 </Col>
             </Row>
 
-            {isPending && <Waiting/>}
-            {info &&
-            <div>
-                <div className="d-flex justify-content-between">
-                    <h2 className="font-weight-600">Au nom de : {info.nomPersonne} </h2>
-                    <div>
+            {isPending ? <Waiting/> :
+                <div>
+                    <div className="d-flex justify-content-between">
+                        <h2 className="font-weight-600">Au nom de : {info.nomPersonne} </h2>
+                        <div>
 
-                    </div>
-                    <div>
-                        <Button onClick={() => {
-                            pdf.createPDF(info)
-                        }} className="btn-icon btn-3" color="danger" type="button">
+                        </div>
+                        <div>
+                            <Button onClick={() => {
+                                pdf.createPDF(info)
+                            }} className="btn-icon btn-3" color="danger" type="button">
                               <span className="btn-inner--icon">
                                 <i className="ni ni-paper-diploma"/>
                               </span>
-                            <span className="btn-inner--text">Facture</span>
-                        </Button>
+                                <span className="btn-inner--text">Facture</span>
+                            </Button>
+                        </div>
                     </div>
+                    <hr/>
+                    <Row>
+
+                        <Col md={4}>
+                            <Row className="justify-content-center ">
+                                <p className="mb--1">Etat de la Réservation</p>
+                                <WorkFlowSelector selected={info.workflowReservation} id="workflowReservation"
+                                                  handleChanges={handleChanges}/>
+                            </Row>
+                            <div className="justify-content-center mt-2 ">
+                                <p className="mb--1">Placé:</p>
+                                <label className="custom-toggle">
+                                    <input id="estPlaceReservation"
+                                           type="checkbox"
+                                           checked={info.estPlaceReservation}
+                                           onChange={(event) => handleSelector(event, !(info.estPlaceReservation))}/>
+                                    <span className="custom-toggle-slider rounded-circle"/>
+                                </label>
+                            </div>
+                            <div>
+                                <p className="mb--1">Déplace:</p>
+                                <label className="custom-toggle">
+                                    <input id="seDeplaceReservation"
+                                           type="checkbox"
+                                           checked={info.seDeplaceReservation}
+                                           onChange={(event) => handleSelector(event, !info.seDeplaceReservation)}/>
+                                    <span className="custom-toggle-slider rounded-circle"/>
+                                </label>
+                            </div>
+                            <div>
+                                <p className="mb--1">Bénévoles:</p>
+                                <label className="custom-toggle">
+                                    <input id="besoinAnimateurReservation"
+                                           type="checkbox"
+                                           checked={info.besoinAnimateurReservation}
+                                           onChange={(event) => handleSelector(event, !(info.besoinAnimateurReservation))}/>
+                                    <span className="custom-toggle-slider rounded-circle"/>
+                                </label>
+                            </div>
+                        </Col>
+                        <Col md={3}>
+
+                        </Col>
+                        <Col md={5}>
+                            <Row className="mt-1">
+                                <Label for="datePremierContactReservation">
+                                    Date 1er Contact
+                                </Label>
+                                <Input type="date"
+                                       name="datePremierContactReservation"
+                                       id="datePremierContactReservation"
+                                       value={info.datePremierContactReservation ? new Date(info.datePremierContactReservation).toISOString().slice(0, 10) : ""}
+
+                                       onChange={(event) => handleChanges(event)}/>
+                            </Row>
+
+                            <Row className="mt-2">
+                                <Label for="dateSecondContactReservation">
+                                    Date 2nd Contact
+                                </Label>
+                                <Input type="date"
+                                       name="dateSecondContactReservation"
+                                       id="dateSecondContactReservation"
+                                       value={info.dateSecondContactReservation ? new Date(info.dateSecondContactReservation).toISOString().slice(0, 10) : ""}
+
+                                       onChange={(event) => handleChanges(event)}/>
+                            </Row>
+                            <Row className="mt-2">
+                                <Label for="dateEnvoiFactureReservation">
+                                    Envoi Facture
+                                </Label>
+                                <Input type="date"
+                                       name="dateEnvoiFactureReservation"
+                                       id="dateEnvoiFactureReservation"
+                                       value={info.dateEnvoiFactureReservation ? new Date(info.dateEnvoiFactureReservation).toISOString().slice(0, 10) : ""}
+                                       onChange={(event) => handleChanges(event)}/>
+                            </Row>
+                            <Row className="mt-2">
+                                <Label for="datePaiementFactureReservation">
+                                    Paiement Facture
+                                </Label>
+                                <Input type="date"
+                                       name="datePaiementFactureReservation"
+                                       id="datePaiementFactureReservation"
+                                       value={info.datePaiementFactureReservation ? new Date(info.datePaiementFactureReservation).toISOString().slice(0, 10) : ""}
+                                       onChange={(event) => handleChanges(event)}/>
+                            </Row>
+
+                        </Col>
+                    </Row>
+                    <hr/>
+                    {!isPending ?
+                        <ReservationEmplacements info={info}
+                                                 updateData={updateData}/> : <Waiting/>}
+                    <hr/>
+                    <ReservationJeuxReserves info={info}
+                                             updateGameReservation={updateGameReservation}
+                                             changeZoneJeu={changeZoneJeu}/>
                 </div>
-                <hr/>
-                <Row>
-
-                    <Col md={4}>
-                        <Row className="justify-content-center ">
-                            <p className="mb--1">Etat de la Réservation</p>
-                            <WorkFlowSelector selected={info.workflowReservation} id="workflowReservation"
-                                              handleChanges={handleChanges}/>
-                        </Row>
-                        <div className="justify-content-center mt-2 ">
-                            <p className="mb--1">Placé:</p>
-                            <label className="custom-toggle">
-                                <input id="estPlaceReservation"
-                                       type="checkbox"
-                                       checked={info.estPlaceReservation}
-                                       onChange={(event) => handleSelector(event, !(info.estPlaceReservation))}/>
-                                <span className="custom-toggle-slider rounded-circle"/>
-                            </label>
-                        </div>
-                        <div>
-                            <p className="mb--1">Déplace:</p>
-                            <label className="custom-toggle">
-                                <input id="seDeplaceReservation"
-                                       type="checkbox"
-                                       checked={info.seDeplaceReservation}
-                                       onChange={(event) => handleSelector(event, !info.seDeplaceReservation)}/>
-                                <span className="custom-toggle-slider rounded-circle"/>
-                            </label>
-                        </div>
-                        <div>
-                            <p className="mb--1">Bénévoles:</p>
-                            <label className="custom-toggle">
-                                <input id="besoinAnimateurReservation"
-                                       type="checkbox"
-                                       checked={info.besoinAnimateurReservation}
-                                       onChange={(event) => handleSelector(event, !(info.besoinAnimateurReservation))}/>
-                                <span className="custom-toggle-slider rounded-circle"/>
-                            </label>
-                        </div>
-                    </Col>
-                    <Col md={3}>
-
-                    </Col>
-                    <Col md={5}>
-                        <Row className="mt-1">
-                            <Label for="datePremierContactReservation">
-                                Date 1er Contact
-                            </Label>
-                            <Input type="date"
-                                   name="datePremierContactReservation"
-                                   id="datePremierContactReservation"
-                                   value={info.datePremierContactReservation ? new Date(info.datePremierContactReservation).toISOString().slice(0, 10) : ""}
-
-                                   onChange={(event) => handleChanges(event)}/>
-                        </Row>
-
-                        <Row className="mt-2">
-                            <Label for="dateSecondContactReservation">
-                                Date 2nd Contact
-                            </Label>
-                            <Input type="date"
-                                   name="dateSecondContactReservation"
-                                   id="dateSecondContactReservation"
-                                   value={info.dateSecondContactReservation ? new Date(info.dateSecondContactReservation).toISOString().slice(0, 10) : ""}
-
-                                   onChange={(event) => handleChanges(event)}/>
-                        </Row>
-                        <Row className="mt-2">
-                            <Label for="dateEnvoiFactureReservation">
-                                Envoi Facture
-                            </Label>
-                            <Input type="date"
-                                   name="dateEnvoiFactureReservation"
-                                   id="dateEnvoiFactureReservation"
-                                   value={info.dateEnvoiFactureReservation ? new Date(info.dateEnvoiFactureReservation).toISOString().slice(0, 10) : ""}
-                                   onChange={(event) => handleChanges(event)}/>
-                        </Row>
-                        <Row className="mt-2">
-                            <Label for="datePaiementFactureReservation">
-                                Paiement Facture
-                            </Label>
-                            <Input type="date"
-                                   name="datePaiementFactureReservation"
-                                   id="datePaiementFactureReservation"
-                                   value={info.datePaiementFactureReservation ? new Date(info.datePaiementFactureReservation).toISOString().slice(0, 10) : ""}
-                                   onChange={(event) => handleChanges(event)}/>
-                        </Row>
-
-                    </Col>
-                </Row>
-                <hr/>
-                {!isPending ?
-                    <ReservationEmplacements info={info}
-                                             updateData={updateData}/> : <Waiting/>}
-            </div>
             }
         </div>
     )

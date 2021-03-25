@@ -1,6 +1,8 @@
 const utils = require("../utils/utils");
 const Reservation = require("../models/reservationModel")
-
+const Emplacement = require("../models/emplacementModel")
+const EspaceReserve = require("../models/espaceReserveModel")
+const Zone = require("../models/zoneModel");
 
 module.exports = {
     getReservations: async (req, res) => {
@@ -19,6 +21,9 @@ module.exports = {
             .then(async (result) => {
                 // We retrieve the emplacements of a festival
                 result.emplacements = await Emplacement.retrieveEmplacements(result.FK_idFestival)
+                // We retrieve the zones of the festival
+                result.zones = await Zone.getAFestivalZones(result.FK_idFestival)
+                console.log(result)
                 res.status(200).json(result)
             })
             .catch((e) => {
@@ -26,9 +31,9 @@ module.exports = {
             })
     },
 
-    updateReservation : async (req,res)=>{
-        let body=req.body
-        if(body.remiseReservation){
+    updateReservation: async (req, res) => {
+        let body = req.body
+        if (body.remiseReservation) {
             //update the whole reservation
         } else {
             let colName = Object.keys(body)[0]
