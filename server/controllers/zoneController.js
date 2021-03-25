@@ -1,6 +1,6 @@
 const Zone = require("../models/zoneModel");
 const JeuPresent = require("../models/jeuPresentModel")
-const Jeu = require("../models/JeuxModel")
+const Jeu = require("../models/jeuxModel")
 const Person = require("../models/personModel")
 const Reservation = require("../models/reservationModel")
 const utils = require("../utils/utils");

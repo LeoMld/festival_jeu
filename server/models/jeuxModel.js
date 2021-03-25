@@ -1,4 +1,5 @@
 const DB = require('../config/config')
+
 module.exports = {
 
     // We create a new game
