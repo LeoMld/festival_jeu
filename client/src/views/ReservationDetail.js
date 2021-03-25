@@ -177,10 +177,7 @@ function ReservationDetail(props) {
                 </Row>
                 <hr/>
                 {!isPending ?
-                    <ReservationEmplacements espaces={info.espace} emplacements={info.emplacements}
-                                             prixReservation={info.prixReservation}
-                                             remiseReservation={info.remiseReservation}
-                                             idReservation={info.idReservation}
+                    <ReservationEmplacements info={info}
                                              updateData={updateData}/> : <Waiting/>}
             </div>
             }

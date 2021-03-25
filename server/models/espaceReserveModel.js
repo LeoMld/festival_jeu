@@ -9,6 +9,14 @@ createEspaceReserve = async (idEmplacement, idReservation, nombreTables, metresC
     return (await clientUsed.query(queryText, queryValues)).rows[0]
 }
 
+// Update a reserved space
+updateEspaceReserve = async (idEspace, nombreTables, metresCarres, client) => {
+    const clientUsed = await DB.getPoolClient(client)
+    const queryText = 'UPDATE "EspaceReserve" SET "nombreTables" = $1, "metreCarres" = $2 WHERE "idEspace" = $3;'
+    const queryValues = [nombreTables, metresCarres, idEspace]
+    await clientUsed.query(queryText, queryValues)
+}
+
 // Contains all the queries to the database concerning reserved spaces
 module.exports = {
 
@@ -40,6 +48,29 @@ module.exports = {
             }
             await client.query('COMMIT')
             return newEspacesReserves
+        } catch (err) {
+            // Something wrong happened, we rollback
+            await client.query('ROLLBACK')
+            // The controller will handle this
+            throw err
+        } finally {
+            // We release the client in the pool
+            client.release()
+        }
+    },
+
+    // We update all the reserved spaces given
+    updateSeveralReservedSpaces: async (espacesReserves) => {
+        const client = await DB.pool.connect()
+        try {
+            await client.query('BEGIN')
+            for (let i = 0; i < espacesReserves.length; i++) {
+                const idEspace = espacesReserves[i].idEspace
+                const nombreTables = parseFloat(espacesReserves[i].nombreTables)
+                const metreCarres = parseFloat(espacesReserves[i].metreCarres)
+                await updateEspaceReserve(idEspace, nombreTables, metreCarres, client)
+            }
+            await client.query('COMMIT')
         } catch (err) {
             // Something wrong happened, we rollback
             await client.query('ROLLBACK')

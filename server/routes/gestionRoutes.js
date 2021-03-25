@@ -47,6 +47,8 @@ router.put('/zone/:id', zoneController.updateZone)
 router.delete('/zone/:id', zoneController.deleteZone)
 
 router.put('/jeuPresent', jeuPresentController.changeZoneJeuPresent)
-router.post('/reservation', reservationController.saveNewEmplacements)
+
+router.put('/espacesReserves/:id', reservationController.updateEmplacementsReservation)
+router.post('/espacesReserves', reservationController.saveNewEmplacements)
 
 module.exports = router;
