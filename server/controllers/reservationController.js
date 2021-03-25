@@ -25,7 +25,7 @@ module.exports={
     },
 
     updateReservation : async (req,res)=>{
-        body=req.body
+        let body=req.body
         if(body.remiseReservation){
             //update the whole reservation
         }else{
