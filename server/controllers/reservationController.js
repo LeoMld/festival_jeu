@@ -1,7 +1,5 @@
 const utils = require("../utils/utils");
 const Reservation = require("../models/reservationModel")
-const Emplacement = require("../models/emplacementModel")
-const EspaceReserve = require("../models/espaceReserveModel")
 
 
 module.exports = {
@@ -28,9 +26,9 @@ module.exports = {
             })
     },
 
-    updateReservation: async (req, res) => {
-        body = req.body
-        if (body.remiseReservation) {
+    updateReservation : async (req,res)=>{
+        let body=req.body
+        if(body.remiseReservation){
             //update the whole reservation
         } else {
             let colName = Object.keys(body)[0]
