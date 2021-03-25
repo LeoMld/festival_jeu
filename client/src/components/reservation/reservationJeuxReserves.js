@@ -1,15 +1,18 @@
 import React, {useState} from "react";
-import {Button, Col, Input, Row, Table} from "reactstrap";
+import {Alert, Button, Col, Input, Modal, Row, Table} from "reactstrap";
 import token from "../../utils/token";
 import axios from "axios";
 import Axios from "axios";
+import Waiting from "../utils/Waiting";
+import CreateUpdateZone from "../zone/createUpdateZone";
+import CreateNewJeuPresent from "./createNewJeuPresent"
 
 function ReservationJeuxReserves(props) {
 
     // Init the state
     const initPrixRenvoi = () => {
         const nbJeux = props.info.jeuPresents.length
-        const init = [nbJeux]
+        const init = []
         for (let i = 0; i < nbJeux; i++) {
             init[i] = {
                 PK_idJeu: props.info.jeuPresents[i].PK_idJeu,
@@ -20,6 +23,16 @@ function ReservationJeuxReserves(props) {
     }
 
     const [prixRenvoi, setPrixRenvoi] = useState(initPrixRenvoi())
+    const [isPendingPR, setIsPendingPR] = useState(false)
+    const [errorPR, setErrorPR] = useState(null)
+
+    const [modalStateZone, setModalStateZone] = useState(false)
+    const [modalStateJeuPresent, setModalStateJeuPresent] = useState(false)
+    const [modalStateDelete, setModalStateDelete] = useState(false)
+
+    const [gameToDelete, setGameToDelete] = useState()
+    const [errorDelete, setErrorDelete] = useState(null)
+    const [isDeleting, setIsDeleting] = useState(false)
 
     // We update the prototype
     const handlePrototypeChange = async (val, idJeu) => {
@@ -27,6 +40,11 @@ function ReservationJeuxReserves(props) {
             .then(() => {
                 // We update the parent view
                 props.updateGameReservation(val, idJeu)
+            })
+            .catch((err) => {
+                if (err.response.data.code === 0) {
+                    token.destroyToken()
+                }
             })
     }
 
@@ -45,6 +63,11 @@ function ReservationJeuxReserves(props) {
                 // It's fine, we update the view
                 props.changeZoneJeu(idJeu, idNewZone)
             })
+            .catch((err) => {
+                if (err.response.data.code === 0) {
+                    token.destroyToken()
+                }
+            })
     }
 
     // Handle the changes on the inputs
@@ -55,27 +78,68 @@ function ReservationJeuxReserves(props) {
     }
 
     // We remove the reserve game
-    const deleteGameReserved = (idJeu) => {
-        //TODO
-        console.log("REMOVE")
-    }
-
-    // We add a new game to the reservation
-    const addReservedGame = () => {
-        //TODO
-        console.log("ADD")
+    const deleteGameReserved = () => {
+        setIsDeleting(true)
+        const data = {
+            idJeu: gameToDelete.PK_idJeu,
+            idZone: gameToDelete.PK_idZone,
+            idReservation: gameToDelete.PK_idReservation
+        }
+        Axios.delete('/api/gestion/jeuPresent', {
+            data,
+            headers: {Authorization: token.getToken()}
+        })
+            .then(() => {
+                setIsDeleting(false)
+                // We update the view by removing the game
+                props.deleteGameReservation(gameToDelete)
+                let newPrixRenvoi = [...prixRenvoi]
+                newPrixRenvoi = newPrixRenvoi.filter(pr => pr.PK_idJeu !== gameToDelete.PK_idJeu)
+                setPrixRenvoi(newPrixRenvoi)
+                setModalStateDelete(false)
+            })
+            .catch((err) => {
+                setIsDeleting(false)
+                setErrorDelete(err.message)
+            })
     }
 
     // We change the price of a game
-    const changePrixRenvoi = () => {
-        //TODO
-        console.log("UPDATE")
+    const changePrixRenvoi = (idJeu, idZone, index) => {
+        setIsPendingPR(index)
+        const data = {
+            idReservation: props.info.idReservation,
+            idZone: idZone,
+            prixRenvoi: prixRenvoi[index].prixRenvoi
+        }
+        Axios.put('/api/gestion/jeuPresent/' + idJeu, data, {headers: {Authorization: token.getToken()}})
+            .then(() => {
+                // It's done
+                setIsPendingPR(false)
+            })
+            .catch((err) => {
+                setIsPendingPR(false)
+                setErrorPR(err.message)
+                if (err.response.data.code === 0) {
+                    token.destroyToken()
+                }
+            })
     }
 
     // Add a new zone into the festival
-    const addNewZone = () => {
-        // TODO
-        console.log("ADD ZONE")
+    const addNewZone = (newZone) => {
+        props.addNewZoneGameReservation("zones", newZone)
+    }
+
+    // Add a new game in the reservation view
+    const addNewGameReservation = (newGameReserved) => {
+        const newPrixRenvoi = [...prixRenvoi]
+        newPrixRenvoi.push({
+            PK_idJeu: newGameReserved.PK_idJeu,
+            prixRenvoi: newGameReserved.prixRenvoi
+        })
+        setPrixRenvoi(newPrixRenvoi)
+        props.addNewZoneGameReservation("jeuPresents", newGameReserved)
     }
 
     // Return the libelle of the zone with the id
@@ -121,12 +185,14 @@ function ReservationJeuxReserves(props) {
                                     value={prixRenvoi[index].prixRenvoi}
                                     onChange={(event) => handleChangePrixRenvoi(event, index)}
                                 />
-                                <Button block
-                                        size="sm"
-                                        disabled={isNaN(prixRenvoi[index].prixRenvoi)}
-                                        onClick={() => changePrixRenvoi(index)}>
-                                    Valider
-                                </Button>
+                                {isPendingPR === index ? <Waiting/> :
+                                    errorPR ? <Alert color="danger">{errorPR}</Alert> :
+                                        <Button block
+                                                size="sm"
+                                                disabled={isNaN(prixRenvoi[index].prixRenvoi)}
+                                                onClick={() => changePrixRenvoi(game.PK_idJeu, game.PK_idZone, index)}>
+                                            Valider
+                                        </Button>}
                             </td>
                             <td className="align-middle">
                                 <Row>
@@ -169,7 +235,10 @@ function ReservationJeuxReserves(props) {
                             <td className="align-middle">
                                 <Button outline
                                         color="danger"
-                                        onClick={() => deleteGameReserved(game.PK_idJeu)}>
+                                        onClick={() => {
+                                            setGameToDelete(game)
+                                            setModalStateDelete(true)
+                                        }}>
                                     Supprimer
                                 </Button>
                             </td>
@@ -189,7 +258,7 @@ function ReservationJeuxReserves(props) {
                             color="success"
                             outline
                             type="button"
-                            onClick={() => addReservedGame()}
+                            onClick={() => setModalStateJeuPresent(true)}
                         >
                             Ajouter un jeu à la réservation
                         </Button>
@@ -197,14 +266,71 @@ function ReservationJeuxReserves(props) {
                             color="success"
                             outline
                             type="button"
-                            onClick={() => addNewZone()}
+                            onClick={() => setModalStateZone(true)}
                         >
                             Ajouter une zone au festival
                         </Button>
+
                     </td>
                 </tr>
                 </tfoot>
             </Table>
+            <CreateNewJeuPresent modalState={modalStateJeuPresent}
+                                 setModalState={setModalStateJeuPresent}
+                                 info={props.info}
+                                 addNewGameReservation={addNewGameReservation}/>
+            <CreateUpdateZone modalState={modalStateZone}
+                              setModalState={setModalStateZone}
+                              addNewZone={addNewZone}
+                              componentState={0}/>
+            {gameToDelete &&
+            <Modal
+                className="modal-dialog-centered modal-danger"
+                contentClassName="bg-gradient-danger"
+                isOpen={modalStateDelete}
+                toggle={() => setModalStateDelete(!modalStateDelete)}
+            >
+                <div className="modal-header">
+                    <h6 className="modal-title" id="modal-title-notification">
+                        Confirmation de suppression
+                    </h6>
+                    <button
+                        aria-label="Close"
+                        className="close"
+                        data-dismiss="modal"
+                        type="button"
+                        onClick={() => setModalStateDelete(!modalStateDelete)}
+                    >
+                        <span aria-hidden={true}>×</span>
+                    </button>
+                </div>
+                <div className="modal-body">
+                    <div className="py-3 text-center">
+                        <i className="ni ni-bell-55 ni-3x"/>
+                        <h4 className="heading mt-4">Suppression : {gameToDelete.libelleJeu}</h4>
+                        <p>
+                            Êtes-vous sûr de vouloir supprimer ce jeu de la réservation ?
+                        </p>
+                    </div>
+                </div>
+                <div className="modal-footer">
+                    {errorDelete ? <Alert color="danger">{errorDelete}</Alert> :
+                        isDeleting ? <Waiting name="suppression"/> :
+                            <Button className="btn-white" color="default" type="button"
+                                    onClick={() => deleteGameReserved()}>
+                                Confirmer
+                            </Button>}
+                    <Button
+                        className="text-white ml-auto"
+                        color="link"
+                        data-dismiss="modal"
+                        type="button"
+                        onClick={() => setModalStateDelete(!modalStateDelete)}
+                    >
+                        Annuler
+                    </Button>
+                </div>
+            </Modal>}
         </Row>
     )
 }

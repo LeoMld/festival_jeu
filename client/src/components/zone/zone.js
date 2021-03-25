@@ -128,7 +128,7 @@ function Zone(props) {
                                         <i className="ni ni-bell-55 ni-3x"/>
                                         <h4 className="heading mt-4">Suppression : Zone - {zone.libelleZone}</h4>
                                         <p>
-                                            Êtes-vous sûrs de vouloir supprimer cette zone ?
+                                            Êtes-vous sûr de vouloir supprimer cette zone ?
                                             Si elle contient des jeux, ces jeux retourneront dans la zone indéfinie.
                                         </p>
                                     </div>

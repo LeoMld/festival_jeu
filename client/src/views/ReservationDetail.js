@@ -29,6 +29,9 @@ function ReservationDetail(props) {
             })
             .catch(() => {
                 setError(true)
+                if (err.response.data.code === 0) {
+                    token.destroyToken()
+                }
             })
     }
 
@@ -44,6 +47,9 @@ function ReservationDetail(props) {
             })
             .catch(() => {
                 setError(true)
+                if (err.response.data.code === 0) {
+                    token.destroyToken()
+                }
             })
     }
 
@@ -71,6 +77,18 @@ function ReservationDetail(props) {
         let changedGame = info.jeuPresents.filter(g => g.PK_idJeu === idJeu)[0]
         let indexOfGame = info.jeuPresents.indexOf(changedGame)
         newInfo.jeuPresents[indexOfGame].PK_idZone = idZone
+        setInfo(newInfo)
+    }
+
+    const addNewZoneGameReservation = (colName, newGame) => {
+        const newInfo = {...info}
+        newInfo[colName].push(newGame)
+        setInfo(newInfo)
+    }
+
+    const deleteGameReservation = (gameToDelete) => {
+        const newInfo = {...info}
+        newInfo.jeuPresents = newInfo.jeuPresents.filter(g => gameToDelete.PK_idJeu !== g.PK_idJeu)
         setInfo(newInfo)
     }
 
@@ -199,6 +217,8 @@ function ReservationDetail(props) {
                                                  updateData={updateData}/> : <Waiting/>}
                     <hr/>
                     <ReservationJeuxReserves info={info}
+                                             deleteGameReservation={deleteGameReservation}
+                                             addNewZoneGameReservation={addNewZoneGameReservation}
                                              updateGameReservation={updateGameReservation}
                                              changeZoneJeu={changeZoneJeu}/>
                 </div>
