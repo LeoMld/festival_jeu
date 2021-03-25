@@ -73,7 +73,7 @@ function Zones() {
     return (
         <div className="justify-content-center mr-7 ml-7">
             <h1 className="font-weight-900 mt-5 mb-5">Liste des zones et de leurs jeux</h1>
-            {token.getType() !== 2 &&
+            {token.getType() === 1 &&
             <div className="d-flex flex-row-reverse mb-sm-3">
                 <Button
                     color="success"
@@ -88,7 +88,7 @@ function Zones() {
                                   addNewZone={addNewZone}
                                   componentState={0}/>
             </div>}
-            {token.getType() !== 2 &&
+            {token.getType() === 1 &&
             zones && zones.filter(zone => (zone.libelleZone === "Indéfinie") && (zone.games.length > 0)).length > 0 &&
             <UncontrolledAlert color="primary">
                 Il vous reste encore des jeux à placer !

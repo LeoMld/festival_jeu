@@ -159,8 +159,10 @@ function ReservationJeuxReserves(props) {
                     <th className="align-middle">Type</th>
                     <th className="align-middle">Prototype</th>
                     <th className="align-middle">Prix renvoi</th>
-                    <th colSpan={2} className="align-middle">Zone</th>
+                    <th colSpan={token.getType() === 1 ? 2 : 1} className="align-middle">Zone</th>
+                    {token.getType() === 1 &&
                     <th className="align-middle">Suppression</th>
+                    }
                 </tr>
                 </thead>
                 <tbody>
@@ -174,19 +176,22 @@ function ReservationJeuxReserves(props) {
                                 <label className="custom-toggle">
                                     <input id="prototype"
                                            type="checkbox"
+                                           disabled={token.getType() !== 1}
                                            checked={game.prototype}
-                                           onChange={(event) => handlePrototypeChange(!game.prototype, game.PK_idJeu)}/>
+                                           onChange={() => handlePrototypeChange(!game.prototype, game.PK_idJeu)}/>
                                     <span className="custom-toggle-slider rounded-circle"/>
                                 </label>
                             </td>
                             <td className="align-middle">
                                 <Input
                                     type="text"
+                                    disabled={token.getType() !== 1}
                                     value={prixRenvoi[index].prixRenvoi}
                                     onChange={(event) => handleChangePrixRenvoi(event, index)}
                                 />
                                 {isPendingPR === index ? <Waiting/> :
                                     errorPR ? <Alert color="danger">{errorPR}</Alert> :
+                                        token.getType() === 1 &&
                                         <Button block
                                                 size="sm"
                                                 disabled={isNaN(prixRenvoi[index].prixRenvoi)}
@@ -207,6 +212,7 @@ function ReservationJeuxReserves(props) {
                                     </Col>
                                 </Row>
                             </td>
+                            {token.getType() === 1 &&
                             <td className="align-middle">
                                 <Row>
                                     <Col>
@@ -231,7 +237,8 @@ function ReservationJeuxReserves(props) {
                                         </Button>
                                     </Col>
                                 </Row>
-                            </td>
+                            </td>}
+                            {token.getType() === 1 &&
                             <td className="align-middle">
                                 <Button outline
                                         color="danger"
@@ -241,7 +248,7 @@ function ReservationJeuxReserves(props) {
                                         }}>
                                     Supprimer
                                 </Button>
-                            </td>
+                            </td>}
                         </tr>
                     )
                 })}
@@ -251,6 +258,7 @@ function ReservationJeuxReserves(props) {
                 </tr>
                 }
                 </tbody>
+                {token.getType() === 1 &&
                 <tfoot>
                 <tr>
                     <td colSpan={8}>
@@ -270,10 +278,9 @@ function ReservationJeuxReserves(props) {
                         >
                             Ajouter une zone au festival
                         </Button>
-
                     </td>
                 </tr>
-                </tfoot>
+                </tfoot>}
             </Table>
             <CreateNewJeuPresent modalState={modalStateJeuPresent}
                                  setModalState={setModalStateJeuPresent}

@@ -89,8 +89,8 @@ function Zone(props) {
             <Collapse
                 isOpen={collapse}
             >
-                <Card className="container-lg">
-                    {zone.libelleZone !== "Indéfinie" && token.getType() !== 2 &&
+                <Card>
+                    {zone.libelleZone !== "Indéfinie" && token.getType() === 1 &&
                     <CardHeader>
                         <div className="btn-wrapper">
                             <Button
@@ -168,7 +168,8 @@ function Zone(props) {
                                 {token.getType() !== 2 &&
                                 <>
                                     <th colSpan={2}>Détails</th>
-                                    <th>Gestion</th>
+                                    {token.getType() === 1 &&
+                                    <th>Gestion</th>}
                                     <th>Réservation</th>
                                 </>
                                 }
@@ -195,6 +196,7 @@ function Zone(props) {
                                                     <label className="custom-toggle">
                                                         <input id="prototype"
                                                                type="checkbox"
+                                                               disabled={token.getType() !== 1}
                                                                checked={game.prototype}
                                                                onChange={(event) => handlePrototypeChange(event, !game.prototype, game.PK_idJeu, game.PK_idReservation)}/>
                                                         <span className="custom-toggle-slider rounded-circle"/>
@@ -215,6 +217,7 @@ function Zone(props) {
                                                 <i style={{"font-size": "3rem"}}
                                                    className={game.besoinAnimateurReservation ? "ni ni-check-bold text-green" : "ni ni-fat-remove text-red"}/>
                                             </td>
+                                            {token.getType() === 1 &&
                                             <td className="align-middle">
                                                 <Row>
                                                     <Col>
@@ -239,7 +242,7 @@ function Zone(props) {
                                                         </Button>
                                                     </Col>
                                                 </Row>
-                                            </td>
+                                            </td>}
                                             <td className="align-middle">
                                                 <Link style={{"font-size": "2.5rem"}}
                                                       to={'/reservations/' + game.PK_idReservation}>
