@@ -1,7 +1,5 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState} from 'react'
 import axios from 'axios';
-import Persons from "../../views/Persons";
-import Selector from "../utils/Selector";
 import {Link} from "react-router-dom";
 import token from "../../utils/token";
 

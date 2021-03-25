@@ -1,12 +1,6 @@
-import React, {useState, useEffect} from 'react'
+import React, {useEffect, useState} from 'react'
 
-import {
-    Table,
-    Button,
-    Col,
-    Row,
-    Alert
-} from 'reactstrap';
+import {Alert, Button, Col, Row, Table} from 'reactstrap';
 
 import CreateUpdateFestival from "./createUpdateFestival";
 import Waiting from "../utils/Waiting";

@@ -1,6 +1,5 @@
 import {Button, Col, Form, Input, Label, Modal, ModalBody, ModalFooter, Row} from "reactstrap";
 import {useEffect, useState} from "react";
-import PersonDetails from "../../views/PersonDetails";
 import axios from "axios";
 import token from "../../utils/token";
 

@@ -1,22 +1,21 @@
 import useAxios from "../utils/useAxios";
-import {Button, Card, CardBody, Col, Badge, Label, Row, Table, UncontrolledCollapse} from "reactstrap";
-import CreatePerson from "../components/person/createPerson";
-import React from "react";
-import Selector from "../components/utils/Selector";
-import WorkFlowSelector from "../components/utils/WorkFlowSelector";
+import {Badge, Button, Card, CardBody, Col, Row, Table, UncontrolledCollapse} from "reactstrap";
+import React, {useEffect} from "react";
 import Waiting from "../components/utils/Waiting";
 import Reservation from "../components/reservation/reservation";
 import CollapseFilterResa from "../components/reservation/CollapseFilterResa";
-import CollapseFilter from "../components/game/CollapseFilter";
 
 
 function Reservations() {
     const {data: reservations, setData: setReservations, isPending, error} = useAxios("/api/gestion/reservations")
 
+    useEffect(()=>{
+    },[reservations])
+
     return (
         <div>
-            {isPending && <Waiting/>}
-            {reservations &&
+
+
             <div>
 
                 <Row className="mb-5 mt-5">
@@ -25,7 +24,7 @@ function Reservations() {
                     </Col>
                 </Row>
 
-                <div className="mr-md ml-md">
+                { reservations && !isPending && <div className="mr-md ml-md">
                     <Col  className="d-flex flex-row mb-sm-3">
                         <Button id="toggler" color="info"  type="button">
                             Filtres
@@ -34,7 +33,7 @@ function Reservations() {
                     <UncontrolledCollapse toggler="#toggler">
                         <Card>
                             <CardBody>
-                                {reservations &&  <CollapseFilterResa r={reservations} setR={setReservations}/>}
+                                {reservations &&  <CollapseFilterResa resa={reservations} setResa={setReservations}/>}
                             </CardBody>
                         </Card>
                     </UncontrolledCollapse>
@@ -73,8 +72,10 @@ function Reservations() {
                         })}
                         </tbody>
                     </Table>
-                </div>
-            </div>}
+                </div>}
+                {isPending && <Waiting/>}
+            </div>
+
         </div>
     )
 }

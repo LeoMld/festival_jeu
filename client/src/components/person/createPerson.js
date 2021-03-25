@@ -1,10 +1,7 @@
-import {
-    Button, Col, Form, Input, Label,
-    Modal, ModalBody, ModalFooter, Row
-
-} from "reactstrap"
+import {Button, Col, Form, Input, Label, Modal, ModalBody, ModalFooter, Row} from "reactstrap"
 import {useState} from "react";
 import axios from "axios";
+
 function CreatePerson(props) {
     let person = props.type===1?"Editeur":"Exposant"
 

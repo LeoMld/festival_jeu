@@ -1,4 +1,4 @@
-import { jsPDF } from "jspdf";
+import {jsPDF} from "jspdf";
 
 function createHeaders(keys) {
     let result = [];

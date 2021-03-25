@@ -1,24 +1,12 @@
-import React, {useState, useEffect} from 'react'
+import React, {useEffect, useState} from 'react'
 
-import {
-    Button,
-    Collapse,
-    Card,
-    CardBody,
-    Table,
-    Modal,
-    CardHeader,
-    Alert,
-    Col,
-    Row,
-    Input
-} from 'reactstrap'
+import {Alert, Button, Card, CardBody, CardHeader, Col, Collapse, Input, Modal, Row, Table} from 'reactstrap'
 
 import token from "../../utils/token";
 import Axios from "axios";
+import axios from "axios";
 import CreateUpdateZone from "./createUpdateZone";
 import Waiting from "../utils/Waiting"
-import axios from "axios";
 import {Link} from "react-router-dom";
 
 function Zone(props) {
