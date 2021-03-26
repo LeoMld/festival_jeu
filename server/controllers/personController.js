@@ -261,22 +261,17 @@ module.exports = {
             res.status(503).json(err)
 
         }else if(body.nomPersonne!==undefined){
-            const reservations = Reservation.getPersonReservations(req.params.id)
-            console.log(reservations)
-            if(reservations.length>0){
                 await Person.updatePerson(req.params.id,body.nomPersonne, body.adressePersonne, body.statutEditeur, body.estEditeur, body.exposantInactif, body.estExposant)
                     .then(()=>{
                         res.status(200).json({updated: true})
                     }).catch((err)=>{
                         res.status(503).json({updated: false})
                     })
-            }else{
-                res.status(400).json({updated:false})
-            }
 
         }else if(body.estEditeur!==undefined){
             const games = await Games.getEditorGames(req.params.id)
-            if (games.length>0){
+            console.log()
+            if (games.length===0){
                 await updatePersonEditeur(req, res)
                     .catch((err)=>{
                         res.status(503).json({updated: false})
@@ -286,10 +281,16 @@ module.exports = {
                 res.status(400).json({updated:false})
             }
         }else if(body.estExposant!==undefined){
-          await updatePersonExposant(req, res).catch((err)=>{
-              res.status(503).json({updated: false})
+            const reservations = Reservation.getPersonReservations(req.params.id)
+            if(reservations.length===0) {
 
-          })
+                await updatePersonExposant(req, res).catch((err) => {
+                    res.status(503).json({updated: false})
+
+                })
+            }else{
+            res.status(400).json({updated:false})
+        }
         }else if(body.exposantInactif!==undefined){
             await updatePersonInactif(req, res).catch((err)=>{
               res.status(503).json({updated: false})

@@ -61,7 +61,7 @@ function Person(props){
                     <input onChange={()=> {handleChangeEditeur(!person.estEditeur)}} checked={person.estEditeur} type="checkbox" defaultChecked={person.estEditeur}/>
                     <span className="custom-toggle-slider rounded-circle"/>
                 </label>
-                {errorEditeur && <Alert color="danger"> L'Editeur possède encore des jeux</Alert>}
+                {errorEditeur && <Alert color="danger" toggle={()=>{setErrorEditeur(false)}}> L'Editeur possède encore des jeux</Alert>}
 
             </td>
             <td >
@@ -69,7 +69,7 @@ function Person(props){
                     <input onChange={()=> {handleChangeExposant(!person.estExposant)}} checked={person.estExposant} type="checkbox" defaultChecked={person.estExposant}/>
                     <span className="custom-toggle-slider rounded-circle"/>
                 </label>
-                {errorExposant && <Alert color="danger"> L'Exposant possède encore des reservations</Alert>}
+                {errorExposant && <Alert color="danger" toggle={()=>{setErrorExposant(false)}}> L'Exposant possède encore des reservations</Alert>}
             </td>
             <td >
                 <label className="custom-toggle">
