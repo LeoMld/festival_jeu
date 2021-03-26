@@ -210,7 +210,7 @@ function Zone(props) {
                                             <td className="align-middle">
                                                 <p>Reçu</p>
                                                 <i style={{"font-size": "3rem"}}
-                                                   className={game.estRecu ? "ni ni-check-bold text-green" : "ni ni-fat-remove text-red"}/>
+                                                   className={game.jeuxRecuReservation ? "ni ni-check-bold text-green" : "ni ni-fat-remove text-red"}/>
                                             </td>
                                             <td>
                                                 <p>Bénévoles</p>
