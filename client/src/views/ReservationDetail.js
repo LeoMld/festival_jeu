@@ -143,13 +143,14 @@ function ReservationDetail(props) {
                     <hr/>
                     <Row>
 
-                        <Col md={4}>
+                        <Col md={5}>
                             <Row className="mt-3 font-weight-400">
                                 <h3>Informations</h3>
                             </Row>
                             <Row className="justify-content-center">
                                 <p className="mb-1 mt-2">Etat de la Réservation</p>
-                                <WorkFlowSelector selected={info.workflowReservation} id="workflowReservation"
+                                <WorkFlowSelector disabled={token.getType() !== 1} selected={info.workflowReservation}
+                                                  id="workflowReservation"
                                                   handleChanges={handleChanges}/>
                             </Row>
                             <Row>
@@ -159,6 +160,7 @@ function ReservationDetail(props) {
                                         <label className="custom-toggle">
                                             <input id="estPlaceReservation"
                                                    type="checkbox"
+                                                   disabled={token.getType() !== 1}
                                                    checked={info.estPlaceReservation}
                                                    onChange={(event) => handleSelector(event, !(info.estPlaceReservation))}/>
                                             <span className="custom-toggle-slider rounded-circle"/>
@@ -172,6 +174,7 @@ function ReservationDetail(props) {
                                             <input id="seDeplaceReservation"
                                                    type="checkbox"
                                                    checked={info.seDeplaceReservation}
+                                                   disabled={token.getType() !== 1}
                                                    onChange={(event) => handleSelector(event, !info.seDeplaceReservation)}/>
                                             <span className="custom-toggle-slider rounded-circle"/>
                                         </label>
@@ -183,6 +186,7 @@ function ReservationDetail(props) {
                                         <label className="custom-toggle">
                                             <input id="besoinAnimateurReservation"
                                                    type="checkbox"
+                                                   disabled={token.getType() !== 1}
                                                    checked={info.besoinAnimateurReservation}
                                                    onChange={(event) => handleSelector(event, !(info.besoinAnimateurReservation))}/>
                                             <span className="custom-toggle-slider rounded-circle"/>
@@ -197,6 +201,7 @@ function ReservationDetail(props) {
                                         <label className="custom-toggle">
                                             <input id="jeuxRecuReservation"
                                                    type="checkbox"
+                                                   disabled={token.getType() !== 1}
                                                    checked={info.jeuxRecuReservation}
                                                    onChange={(event) => handleSelector(event, !(info.jeuxRecuReservation))}/>
                                             <span className="custom-toggle-slider rounded-circle"/>
@@ -209,6 +214,7 @@ function ReservationDetail(props) {
                                         <label className="custom-toggle">
                                             <input id="jeuxAmenesReservation"
                                                    type="checkbox"
+                                                   disabled={token.getType() !== 1}
                                                    checked={info.jeuxAmenesReservation}
                                                    onChange={(event) => handleSelector(event, !(info.jeuxAmenesReservation))}/>
                                             <span className="custom-toggle-slider rounded-circle"/>
@@ -216,9 +222,12 @@ function ReservationDetail(props) {
                                     </div>
                                 </Col>
                             </Row>
+                            {token.getType() === 1 &&
+                            <Row className="mt-3 font-weight-400">
+                                <h3>Commentaires</h3>
+                            </Row>}
                         </Col>
-                        <Col md={3}>
-
+                        <Col md={2}>
                         </Col>
                         <Col md={5}>
                             <Row className="mt-3 font-weight-400">
@@ -234,14 +243,16 @@ function ReservationDetail(props) {
                                     <Input type="date"
                                            name="datePremierContactReservation"
                                            id="datePremierContactReservation"
+                                           disabled={token.getType() !== 1}
                                            value={info.datePremierContactReservation ? new Date(info.datePremierContactReservation).toISOString().slice(0, 10) : ""}
                                            onChange={(event) => handleChanges(event)}/>
                                 </Col>
+                                {token.getType() === 1 &&
                                 <Col>
                                     <Button onClick={() => resetDate("datePremierContactReservation")}>
                                         Réinitialiser
                                     </Button>
-                                </Col>
+                                </Col>}
                             </Row>
                             <Row className="mt-2">
                                 <Label for="dateSecondContactReservation">
@@ -253,15 +264,16 @@ function ReservationDetail(props) {
                                     <Input type="date"
                                            name="dateSecondContactReservation"
                                            id="dateSecondContactReservation"
+                                           disabled={token.getType() !== 1}
                                            value={info.dateSecondContactReservation ? new Date(info.dateSecondContactReservation).toISOString().slice(0, 10) : ""}
-
                                            onChange={(event) => handleChanges(event)}/>
                                 </Col>
+                                {token.getType() === 1 &&
                                 <Col>
                                     <Button onClick={() => resetDate("dateSecondContactReservation")}>
                                         Réinitialiser
                                     </Button>
-                                </Col>
+                                </Col>}
                             </Row>
                             <Row className="mt-3 font-weight-400">
                                 <h3>Facturation</h3>
@@ -276,14 +288,16 @@ function ReservationDetail(props) {
                                     <Input type="date"
                                            name="dateEnvoiFactureReservation"
                                            id="dateEnvoiFactureReservation"
+                                           disabled={token.getType() !== 1}
                                            value={info.dateEnvoiFactureReservation ? new Date(info.dateEnvoiFactureReservation).toISOString().slice(0, 10) : ""}
                                            onChange={(event) => handleChanges(event)}/>
                                 </Col>
+                                {token.getType() === 1 &&
                                 <Col>
                                     <Button onClick={() => resetDate("dateEnvoiFactureReservation")}>
                                         Réinitialiser
                                     </Button>
-                                </Col>
+                                </Col>}
                             </Row>
                             <Row className="mt-2">
                                 <Label for="datePaiementFactureReservation">
@@ -295,16 +309,17 @@ function ReservationDetail(props) {
                                     <Input type="date"
                                            name="datePaiementFactureReservation"
                                            id="datePaiementFactureReservation"
+                                           disabled={token.getType() !== 1}
                                            value={info.datePaiementFactureReservation ? new Date(info.datePaiementFactureReservation).toISOString().slice(0, 10) : ""}
                                            onChange={(event) => handleChanges(event)}/>
                                 </Col>
+                                {token.getType() === 1 &&
                                 <Col>
                                     <Button onClick={() => resetDate("datePaiementFactureReservation")}>
                                         Réinitialiser
                                     </Button>
-                                </Col>
+                                </Col>}
                             </Row>
-
                         </Col>
                     </Row>
                     <hr/>
@@ -316,7 +331,8 @@ function ReservationDetail(props) {
                                              deleteGameReservation={deleteGameReservation}
                                              addNewZoneGameReservation={addNewZoneGameReservation}
                                              updateGameReservation={updateGameReservation}
-                                             changeZoneJeu={changeZoneJeu}/>
+                                             changeZoneJeu={changeZoneJeu}
+                                             updateReservation={updateReservation}/>
                 </div>
             }
         </div>
