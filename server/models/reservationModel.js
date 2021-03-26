@@ -1,5 +1,5 @@
 const DB = require('../config/config')
-const EspaceReserve=require("./espaceReserveModel")
+const EspaceReserve = require("./espaceReserveModel")
 const jeuPresent = require("../models/jeuPresentModel")
 
 /**
@@ -17,50 +17,48 @@ const jeuPresent = require("../models/jeuPresentModel")
  **/
 // Contains all the queries to the database concerning a reservation
 module.exports = {
-    createPersonReservation : async (idFestival,idPerson,client) =>{
+    createPersonReservation: async (idFestival, idPerson, client) => {
         const clientUsed = await DB.getPoolClient(client)
         const text = 'INSERT INTO "Reservation" ("FK_idPersonne","FK_idFestival") VALUES ($1,$2);'
-        const values = [idPerson,idFestival]
-        clientUsed.query(text,values)
+        const values = [idPerson, idFestival]
+        clientUsed.query(text, values)
     },
 
     //Get a festival reservations
-    getFestivalReservations : async (idFestival,client)=>{
+    getFestivalReservations: async (idFestival, client) => {
         const clientUsed = await DB.getPoolClient(client)
         let text = 'SELECT * FROM "Reservation" JOIN "Personne" ON "Reservation"."FK_idPersonne"="Personne"."idPersonne" LEFT JOIN "Note" ON "Reservation"."idReservation"="Note"."FK_idReservation"  WHERE "Reservation"."FK_idFestival"=$1;'
         let values = [idFestival]
-        let info=(await clientUsed.query(text,values)).rows
-        let data=[]
-        for(let i =0;i<info.length;i++){
-            let espace = await EspaceReserve.getReservationsSpaces(info[i].idReservation,clientUsed)
-            info[i]["espace"]=espace
-            let prixRenvoi = await jeuPresent.getFactureGames(info[i].idReservation,clientUsed)
-            if(prixRenvoi.prixrenvoitotal){
-                info[i]["prixRenvoiTotal"]=parseInt(prixRenvoi.prixrenvoitotal)
-            }else{
-                info[i]["prixRenvoiTotal"]=0
+        let info = (await clientUsed.query(text, values)).rows
+        for (let i = 0; i < info.length; i++) {
+            let espace = await EspaceReserve.getReservationsSpaces(info[i].idReservation, clientUsed)
+            info[i]["espace"] = espace
+            let prixRenvoi = await jeuPresent.getFactureGames(info[i].idReservation, clientUsed)
+            if (prixRenvoi.prixrenvoitotal) {
+                info[i]["prixRenvoiTotal"] = parseInt(prixRenvoi.prixrenvoitotal)
+            } else {
+                info[i]["prixRenvoiTotal"] = 0
             }
         }
-        console.log(info)
         return info
 
     },
-    getAReservation : async (idReservation,client)=>{
+    getAReservation: async (idReservation, client) => {
         const clientUsed = await DB.getPoolClient(client)
         const text = 'SELECT * FROM "Reservation" JOIN "Personne" ON "Reservation"."FK_idPersonne"="Personne"."idPersonne" LEFT JOIN "Note" ON "Reservation"."idReservation"="Note"."FK_idReservation" WHERE "idReservation"=$1;'
         const values = [idReservation]
-        let info = (await clientUsed.query(text,values)).rows[0]
-        info["espace"]= await EspaceReserve.getReservationsSpaces(idReservation,clientUsed)
-        info["jeuPresents"]= await jeuPresent.getReservationGames(idReservation,clientUsed)
+        let info = (await clientUsed.query(text, values)).rows[0]
+        info["espace"] = await EspaceReserve.getReservationsSpaces(idReservation, clientUsed)
+        info["jeuPresents"] = await jeuPresent.getReservationGames(idReservation, clientUsed)
         return info
 
 
     },
-    getReservation : async (idReservation,client)=>{
+    getReservation: async (idReservation, client) => {
         const clientUsed = await DB.getPoolClient(client)
         const text = 'SELECT * FROM "Reservation" JOIN "Personne" ON "Reservation"."FK_idPersonne"="Personne"."idPersonne" LEFT JOIN "Note" ON "Reservation"."idReservation"="Note"."FK_idReservation" JOIN "EspaceReserve" ON "EspaceReserve"."FK_idReservation"="Reservation"."idReservation" WHERE "idReservation"=$1;'
         const values = [idReservation]
-        return (await clientUsed.query(text,values)).rows[0]
+        return (await clientUsed.query(text, values)).rows[0]
 
     },
 
@@ -79,16 +77,58 @@ module.exports = {
         return totalAmount.toFixed(2);
     },
     //get Reservation from person
-    getPersonReservations : async (idPerson,client)=>{
+    getPersonReservations: async (idPerson, client) => {
         const clientUsed = await DB.getPoolClient(client)
-        const queryText =`SELECT * FROM "Reservation" WHERE "FK_idPersonne"=${idPerson};`
+        const queryText = `SELECT * FROM "Reservation" WHERE "FK_idPersonne"=${idPerson};`
         return (await clientUsed.query(queryText, [])).rows
     },
 
     //==========================UPDATE=============================
-    updateSingleCol : async (idReservation,colName,colValue,client) =>{
-        const clientUsed = await DB.getPoolClient(client)
-        const queryText = `UPDATE "Reservation" SET "${colName}" = '${colValue}' WHERE "idReservation" = '${idReservation}';`
-        return await clientUsed.query(queryText, [])
+    updateSingleCol: async (idReservation, colName, colValue) => {
+        const client = await DB.pool.connect()
+        try {
+            await client.query('BEGIN')
+            let queryText
+            if (colName.includes("date") && colValue === "") {
+                queryText = `UPDATE "Reservation" SET "${colName}" = NULL WHERE "idReservation" = '${idReservation}';`
+            } else {
+                queryText = `UPDATE "Reservation" SET "${colName}" = '${colValue}' WHERE "idReservation" = '${idReservation}';`
+            }
+            const rowCount = await client.query(queryText, [])
+            switch (colName) {
+                case "datePaiementFactureReservation":
+                    // The reservation is now paid
+                    queryText = `UPDATE "Reservation" SET "payeReservation" = '${colValue !== ""}' WHERE "idReservation" = $1;`
+                    await client.query(queryText, [idReservation])
+                    break;
+                case "datePremierContactReservation":
+                    if (colValue !== "") {
+                        queryText = `UPDATE "Reservation"
+                                     SET "workflowReservation" = 1
+                                     WHERE "idReservation" = $1;`
+                        await client.query(queryText, [idReservation])
+                    }
+                    break;
+                case "dateSecondContactReservation":
+                    if (colValue !== "") {
+                        queryText = `UPDATE "Reservation"
+                                     SET "workflowReservation" = 2
+                                     WHERE "idReservation" = $1;`
+                        await client.query(queryText, [idReservation])
+                    }
+                    break;
+            }
+            await client.query('COMMIT')
+            return rowCount
+        } catch (err) {
+            // Something wrong happened, we rollback
+            await client.query('ROLLBACK')
+            // The controller will handle this
+            throw err
+        } finally {
+            // We release the client in the pool
+            client.release()
+        }
+
     },
 }

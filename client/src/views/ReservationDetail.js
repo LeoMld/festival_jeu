@@ -1,5 +1,5 @@
 import useAxios from "../utils/useAxios";
-import {Alert, Button, Col, Input, Label, Row, Table} from "reactstrap";
+import {Alert, Button, Col, Input, Label, Row} from "reactstrap";
 import Waiting from "../components/utils/Waiting";
 import WorkFlowSelector from "../components/utils/WorkFlowSelector";
 import axios from "axios";
@@ -7,6 +7,7 @@ import token from "../utils/token";
 import React, {useState} from "react";
 import pdf from "../utils/pdf";
 import ReservationEmplacements from "../components/reservation/reservationEmplacements";
+import ReservationJeuxReserves from "../components/reservation/reservationJeuxReserves";
 
 function ReservationDetail(props) {
     const {
@@ -17,33 +18,58 @@ function ReservationDetail(props) {
     } = useAxios("/api/gestion/reservations/" + props.match.params.id)
     const [error, setError] = useState(false)
 
+    const updateReservation = (id, data, value) => {
+        axios.put("/api/gestion/reservations/" + info.idReservation, data, {headers: {Authorization: token.getToken()}})
+            .then(() => {
+                setError(false)
+                switch (id) {
+                    case "datePaiementFactureReservation":
+                        setInfo({...info, payeReservation: value !== "", [id]: value})
+                        break;
+                    case "datePremierContactReservation":
+                        if (value !== "") {
+                            setInfo({...info, workflowReservation: '1', [id]: value})
+                        } else {
+                            setInfo({...info, [id]: value})
+                        }
+                        break;
+                    case "dateSecondContactReservation":
+                        if (value !== "") {
+                            setInfo({...info, workflowReservation: '2', [id]: value})
+                        } else {
+                            setInfo({...info, [id]: value})
+                        }
+                        break;
+                    default:
+                        setInfo({...info, [id]: value})
+                }
+            })
+            .catch(() => {
+                setError(true)
+                if (err.response.data.code === 0) {
+                    token.destroyToken()
+                }
+            })
+    }
+
     const handleChanges = async (event) => {
         let data = {}
         let value = event.target.value
         data[event.target.id] = value
-        axios.put("/api/gestion/reservations/" + info.idReservation, data, {headers: {Authorization: token.getToken()}})
-            .then((res) => {
-                setInfo({...info, [event.target.id]: value})
-                setError(false)
-            })
-            .catch(() => {
-                setError(true)
-            })
+        updateReservation(event.target.id, data, value)
     }
 
-    const handleSelector = async (event, val) => {
+    const handleSelector = async (event, value) => {
         let data = {}
-        data[event.target.id] = val
-        setInfo({...info, [event.target.id]: val})
+        data[event.target.id] = value
+        updateReservation(event.target.id, data, value)
+    }
 
-        axios.put("/api/gestion/reservations/" + info.idReservation, data, {headers: {Authorization: token.getToken()}})
-            .then((res) => {
-                setInfo({...info, [event.target.id]: val})
-                setError(false)
-            })
-            .catch(() => {
-                setError(true)
-            })
+    // Used to reset the date
+    const resetDate = (id) => {
+        let data = {}
+        data[id] = ""
+        updateReservation(id, data, "")
     }
 
     // We update the data on the view
@@ -52,6 +78,36 @@ function ReservationDetail(props) {
         newInfo.remiseReservation = remiseReservation
         newInfo.prixReservation = prixReservation
         newInfo.espace = data
+        setInfo(newInfo)
+    }
+
+    // Udate the view when we change the prototype of a game
+    const updateGameReservation = (val, idJeu) => {
+        const newInfo = {...info}
+        let changedGame = info.jeuPresents.filter(g => g.PK_idJeu === idJeu)[0]
+        let indexOfGame = info.jeuPresents.indexOf(changedGame)
+        newInfo.jeuPresents[indexOfGame].prototype = val
+        setInfo(newInfo)
+    }
+
+    // Change the zone of a game
+    const changeZoneJeu = (idJeu, idZone) => {
+        const newInfo = {...info}
+        let changedGame = info.jeuPresents.filter(g => g.PK_idJeu === idJeu)[0]
+        let indexOfGame = info.jeuPresents.indexOf(changedGame)
+        newInfo.jeuPresents[indexOfGame].PK_idZone = idZone
+        setInfo(newInfo)
+    }
+
+    const addNewZoneGameReservation = (colName, newGame) => {
+        const newInfo = {...info}
+        newInfo[colName].push(newGame)
+        setInfo(newInfo)
+    }
+
+    const deleteGameReservation = (gameToDelete) => {
+        const newInfo = {...info}
+        newInfo.jeuPresents = newInfo.jeuPresents.filter(g => gameToDelete.PK_idJeu !== g.PK_idJeu)
         setInfo(newInfo)
     }
 
@@ -66,120 +122,202 @@ function ReservationDetail(props) {
                 </Col>
             </Row>
 
-            {isPending && <Waiting/>}
-            {info &&
-            <div>
-                <div className="d-flex justify-content-between">
-                    <h2 className="font-weight-600">Au nom de : {info.nomPersonne} </h2>
-                    <div>
+            {isPending ? <Waiting/> :
+                <div>
+                    <div className="d-flex justify-content-between">
+                        <h2 className="font-weight-600">Au nom de : {info.nomPersonne} </h2>
+                        <div>
 
-                    </div>
-                    <div>
-                        <Button onClick={() => {
-                            pdf.createPDF(info)
-                        }} className="btn-icon btn-3" color="danger" type="button">
+                        </div>
+                        <div>
+                            <Button onClick={() => {
+                                pdf.createPDF(info)
+                            }} className="btn-icon btn-3" color="danger" type="button">
                               <span className="btn-inner--icon">
                                 <i className="ni ni-paper-diploma"/>
                               </span>
-                            <span className="btn-inner--text">Facture</span>
-                        </Button>
+                                <span className="btn-inner--text">Facture</span>
+                            </Button>
+                        </div>
                     </div>
+                    <hr/>
+                    <Row>
+
+                        <Col md={4}>
+                            <Row className="mt-3 font-weight-400">
+                                <h3>Informations</h3>
+                            </Row>
+                            <Row className="justify-content-center">
+                                <p className="mb-1 mt-2">Etat de la Réservation</p>
+                                <WorkFlowSelector selected={info.workflowReservation} id="workflowReservation"
+                                                  handleChanges={handleChanges}/>
+                            </Row>
+                            <Row>
+                                <Col>
+                                    <div className="mt-2">
+                                        <p className="mb--1">Placé</p>
+                                        <label className="custom-toggle">
+                                            <input id="estPlaceReservation"
+                                                   type="checkbox"
+                                                   checked={info.estPlaceReservation}
+                                                   onChange={(event) => handleSelector(event, !(info.estPlaceReservation))}/>
+                                            <span className="custom-toggle-slider rounded-circle"/>
+                                        </label>
+                                    </div>
+                                </Col>
+                                <Col>
+                                    <div className="mt-2">
+                                        <p className="mb--1">Déplace</p>
+                                        <label className="custom-toggle">
+                                            <input id="seDeplaceReservation"
+                                                   type="checkbox"
+                                                   checked={info.seDeplaceReservation}
+                                                   onChange={(event) => handleSelector(event, !info.seDeplaceReservation)}/>
+                                            <span className="custom-toggle-slider rounded-circle"/>
+                                        </label>
+                                    </div>
+                                </Col>
+                                <Col>
+                                    <div className="mt-2">
+                                        <p className="mb--1">Bénévoles</p>
+                                        <label className="custom-toggle">
+                                            <input id="besoinAnimateurReservation"
+                                                   type="checkbox"
+                                                   checked={info.besoinAnimateurReservation}
+                                                   onChange={(event) => handleSelector(event, !(info.besoinAnimateurReservation))}/>
+                                            <span className="custom-toggle-slider rounded-circle"/>
+                                        </label>
+                                    </div>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col>
+                                    <div className="mt-2">
+                                        <p className="mb--1">Jeux amenés</p>
+                                        <label className="custom-toggle">
+                                            <input id="jeuxRecuReservation"
+                                                   type="checkbox"
+                                                   checked={info.jeuxRecuReservation}
+                                                   onChange={(event) => handleSelector(event, !(info.jeuxRecuReservation))}/>
+                                            <span className="custom-toggle-slider rounded-circle"/>
+                                        </label>
+                                    </div>
+                                </Col>
+                                <Col>
+                                    <div className="mt-2">
+                                        <p className="mb--1">Jeux reçus</p>
+                                        <label className="custom-toggle">
+                                            <input id="jeuxAmenesReservation"
+                                                   type="checkbox"
+                                                   checked={info.jeuxAmenesReservation}
+                                                   onChange={(event) => handleSelector(event, !(info.jeuxAmenesReservation))}/>
+                                            <span className="custom-toggle-slider rounded-circle"/>
+                                        </label>
+                                    </div>
+                                </Col>
+                            </Row>
+                        </Col>
+                        <Col md={3}>
+
+                        </Col>
+                        <Col md={5}>
+                            <Row className="mt-3 font-weight-400">
+                                <h3>Contact</h3>
+                            </Row>
+                            <Row className="mt-2">
+                                <Label for="datePremierContactReservation">
+                                    Date 1er Contact
+                                </Label>
+                            </Row>
+                            <Row className="mt-1">
+                                <Col>
+                                    <Input type="date"
+                                           name="datePremierContactReservation"
+                                           id="datePremierContactReservation"
+                                           value={info.datePremierContactReservation ? new Date(info.datePremierContactReservation).toISOString().slice(0, 10) : ""}
+                                           onChange={(event) => handleChanges(event)}/>
+                                </Col>
+                                <Col>
+                                    <Button onClick={() => resetDate("datePremierContactReservation")}>
+                                        Réinitialiser
+                                    </Button>
+                                </Col>
+                            </Row>
+                            <Row className="mt-2">
+                                <Label for="dateSecondContactReservation">
+                                    Date 2nd Contact
+                                </Label>
+                            </Row>
+                            <Row className="mt-2">
+                                <Col>
+                                    <Input type="date"
+                                           name="dateSecondContactReservation"
+                                           id="dateSecondContactReservation"
+                                           value={info.dateSecondContactReservation ? new Date(info.dateSecondContactReservation).toISOString().slice(0, 10) : ""}
+
+                                           onChange={(event) => handleChanges(event)}/>
+                                </Col>
+                                <Col>
+                                    <Button onClick={() => resetDate("dateSecondContactReservation")}>
+                                        Réinitialiser
+                                    </Button>
+                                </Col>
+                            </Row>
+                            <Row className="mt-3 font-weight-400">
+                                <h3>Facturation</h3>
+                            </Row>
+                            <Row className="mt-2">
+                                <Label for="dateEnvoiFactureReservation">
+                                    Envoi Facture
+                                </Label>
+                            </Row>
+                            <Row className="mt-2">
+                                <Col>
+                                    <Input type="date"
+                                           name="dateEnvoiFactureReservation"
+                                           id="dateEnvoiFactureReservation"
+                                           value={info.dateEnvoiFactureReservation ? new Date(info.dateEnvoiFactureReservation).toISOString().slice(0, 10) : ""}
+                                           onChange={(event) => handleChanges(event)}/>
+                                </Col>
+                                <Col>
+                                    <Button onClick={() => resetDate("dateEnvoiFactureReservation")}>
+                                        Réinitialiser
+                                    </Button>
+                                </Col>
+                            </Row>
+                            <Row className="mt-2">
+                                <Label for="datePaiementFactureReservation">
+                                    Paiement Facture
+                                </Label>
+                            </Row>
+                            <Row className="mt-2">
+                                <Col>
+                                    <Input type="date"
+                                           name="datePaiementFactureReservation"
+                                           id="datePaiementFactureReservation"
+                                           value={info.datePaiementFactureReservation ? new Date(info.datePaiementFactureReservation).toISOString().slice(0, 10) : ""}
+                                           onChange={(event) => handleChanges(event)}/>
+                                </Col>
+                                <Col>
+                                    <Button onClick={() => resetDate("datePaiementFactureReservation")}>
+                                        Réinitialiser
+                                    </Button>
+                                </Col>
+                            </Row>
+
+                        </Col>
+                    </Row>
+                    <hr/>
+                    {!isPending ?
+                        <ReservationEmplacements info={info}
+                                                 updateData={updateData}/> : <Waiting/>}
+                    <hr/>
+                    <ReservationJeuxReserves info={info}
+                                             deleteGameReservation={deleteGameReservation}
+                                             addNewZoneGameReservation={addNewZoneGameReservation}
+                                             updateGameReservation={updateGameReservation}
+                                             changeZoneJeu={changeZoneJeu}/>
                 </div>
-                <hr/>
-                <Row>
-
-                    <Col md={4}>
-                        <Row className="justify-content-center ">
-                            <p className="mb--1">Etat de la Réservation</p>
-                            <WorkFlowSelector selected={info.workflowReservation} id="workflowReservation"
-                                              handleChanges={handleChanges}/>
-                        </Row>
-                        <div className="justify-content-center mt-2 ">
-                            <p className="mb--1">Placé:</p>
-                            <label className="custom-toggle">
-                                <input id="estPlaceReservation"
-                                       type="checkbox"
-                                       checked={info.estPlaceReservation}
-                                       onChange={(event) => handleSelector(event, !(info.estPlaceReservation))}/>
-                                <span className="custom-toggle-slider rounded-circle"/>
-                            </label>
-                        </div>
-                        <div>
-                            <p className="mb--1">Déplace:</p>
-                            <label className="custom-toggle">
-                                <input id="seDeplaceReservation"
-                                       type="checkbox"
-                                       checked={info.seDeplaceReservation}
-                                       onChange={(event) => handleSelector(event, !info.seDeplaceReservation)}/>
-                                <span className="custom-toggle-slider rounded-circle"/>
-                            </label>
-                        </div>
-                        <div>
-                            <p className="mb--1">Bénévoles:</p>
-                            <label className="custom-toggle">
-                                <input id="besoinAnimateurReservation"
-                                       type="checkbox"
-                                       checked={info.besoinAnimateurReservation}
-                                       onChange={(event) => handleSelector(event, !(info.besoinAnimateurReservation))}/>
-                                <span className="custom-toggle-slider rounded-circle"/>
-                            </label>
-                        </div>
-                    </Col>
-                    <Col md={3}>
-
-                    </Col>
-                    <Col md={5}>
-                        <Row className="mt-1">
-                            <Label for="datePremierContactReservation">
-                                Date 1er Contact
-                            </Label>
-                            <Input type="date"
-                                   name="datePremierContactReservation"
-                                   id="datePremierContactReservation"
-                                   value={info.datePremierContactReservation ? new Date(info.datePremierContactReservation).toISOString().slice(0, 10) : ""}
-
-                                   onChange={(event) => handleChanges(event)}/>
-                        </Row>
-
-                        <Row className="mt-2">
-                            <Label for="dateSecondContactReservation">
-                                Date 2nd Contact
-                            </Label>
-                            <Input type="date"
-                                   name="dateSecondContactReservation"
-                                   id="dateSecondContactReservation"
-                                   value={info.dateSecondContactReservation ? new Date(info.dateSecondContactReservation).toISOString().slice(0, 10) : ""}
-
-                                   onChange={(event) => handleChanges(event)}/>
-                        </Row>
-                        <Row className="mt-2">
-                            <Label for="dateEnvoiFactureReservation">
-                                Envoi Facture
-                            </Label>
-                            <Input type="date"
-                                   name="dateEnvoiFactureReservation"
-                                   id="dateEnvoiFactureReservation"
-                                   value={info.dateEnvoiFactureReservation ? new Date(info.dateEnvoiFactureReservation).toISOString().slice(0, 10) : ""}
-                                   onChange={(event) => handleChanges(event)}/>
-                        </Row>
-                        <Row className="mt-2">
-                            <Label for="datePaiementFactureReservation">
-                                Paiement Facture
-                            </Label>
-                            <Input type="date"
-                                   name="datePaiementFactureReservation"
-                                   id="datePaiementFactureReservation"
-                                   value={info.datePaiementFactureReservation ? new Date(info.datePaiementFactureReservation).toISOString().slice(0, 10) : ""}
-                                   onChange={(event) => handleChanges(event)}/>
-                        </Row>
-
-                    </Col>
-                </Row>
-                <hr/>
-                {!isPending ?
-                    <ReservationEmplacements info={info}
-                                             updateData={updateData}/> : <Waiting/>}
-            </div>
             }
         </div>
     )

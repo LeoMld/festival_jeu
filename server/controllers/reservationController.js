@@ -1,6 +1,8 @@
 const utils = require("../utils/utils");
 const Reservation = require("../models/reservationModel")
-
+const Emplacement = require("../models/emplacementModel")
+const EspaceReserve = require("../models/espaceReserveModel")
+const Zone = require("../models/zoneModel");
 
 module.exports = {
     getReservations: async (req, res) => {
@@ -19,6 +21,8 @@ module.exports = {
             .then(async (result) => {
                 // We retrieve the emplacements of a festival
                 result.emplacements = await Emplacement.retrieveEmplacements(result.FK_idFestival)
+                // We retrieve the zones of the festival
+                result.zones = await Zone.getAFestivalZones(result.FK_idFestival)
                 res.status(200).json(result)
             })
             .catch((e) => {
@@ -26,21 +30,18 @@ module.exports = {
             })
     },
 
-    updateReservation : async (req,res)=>{
-        let body=req.body
-        if(body.remiseReservation){
-            //update the whole reservation
-        } else {
-            let colName = Object.keys(body)[0]
-            let value = body[colName]
-            await Reservation.updateSingleCol(req.params.id, colName, value)
-                .then((result) => {
-                    res.status(200).json(result.rowCount)
-                })
-                .catch((e) => {
-                    res.status(503).json(e)
-                })
-        }
+    updateReservation: async (req, res) => {
+        let body = req.body
+        let colName = Object.keys(body)[0]
+        let value = body[colName]
+        await Reservation.updateSingleCol(req.params.id, colName, value)
+            .then((result) => {
+                res.status(200).json(result.rowCount)
+            })
+            .catch((e) => {
+                res.status(503).json(e)
+            })
+
     },
 
     // Create new reserved spaces for a reservation
@@ -76,7 +77,6 @@ module.exports = {
             await Reservation.updateSingleCol(idReservation, "prixReservation", parseFloat(prixReservation))
             res.status(200).json()
         } catch (err) {
-            console.log(err)
             res.status(503).json()
         }
     }

@@ -27,7 +27,7 @@ module.exports = {
             error.emplacementsErr.push(newRow)
             emplacement = emplacements[i]
             // We check the name of the emplacement
-            if (emplacement.libelleEmplacement.length <= 2 || emplacement.libelleEmplacement.length >= 20) {
+            if (emplacement.libelleEmplacement.length <= 2 || emplacement.libelleEmplacement.length >= 25) {
                 error.emplacementsErr[i].libelleEmplacementErr = 1
                 error.generalStatus = 1
             }

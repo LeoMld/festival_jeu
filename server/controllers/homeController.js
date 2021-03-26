@@ -18,21 +18,23 @@ module.exports = {
         const email = req.sanitize(req.body.email);
         const password = req.sanitize(req.body.password);
 
+
         //search if the user exist
         try {
             const user = await usersModel.searchUser(email)
             let jwtToken = null
 
+
             //if an user exist
             if (user[0]) {
                 data.exist = true
                 const match = await bcrypt.compare(password, user[0].mdpUtilisateur);
+
                 if (match) {
                     data.match = true
                     console.log(user)
                     jwtToken = await token.connect(user[0].idUtilisateur, user[0].typeUtilisateur)
                     //if it's the good password
-                    console.log("token : "+jwtToken)
                     const refreshToken = await token.createRefreshToken(user[0].idUtilisateur, user[0].typeUtilisateur)
                     //put exp time afer tested
                     data.type = user[0].typeUtilisateur

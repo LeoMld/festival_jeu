@@ -74,14 +74,15 @@ function Festival(props) {
                     {!festival.currentFestival ?
                         (errorChanging === null ? (((isChanging) ?
                             <Waiting/> :
-                            <Button
-                                outline
-                                color="primary"
-                                onClick={() => {
-                                    changeCurrentFestival()
-                                }}>
-                                Définir Festival Courant
-                            </Button>)) :
+                            (token.getType() === 1 &&
+                                <Button
+                                    outline
+                                    color="primary"
+                                    onClick={() => {
+                                        changeCurrentFestival()
+                                    }}>
+                                    Définir Festival Courant
+                                </Button>))) :
                             <Alert color="danger">
                                 {errorChanging}
                             </Alert>) :
@@ -141,6 +142,7 @@ function Festival(props) {
                 </tbody>
             </Table>
             <div className="btn-wrapper text-center mb-3">
+                {token.getType() === 1 &&
                 <Button
                     className="mb-3"
                     outline
@@ -149,7 +151,7 @@ function Festival(props) {
                     onClick={() => setModalState(!modalState)}
                 >
                     Modifier
-                </Button>
+                </Button>}
                 {errorFestivalToSee ? <Alert color="danger">
                         {errorFestivalToSee}
                     </Alert> :

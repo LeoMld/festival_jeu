@@ -58,12 +58,14 @@ class Navigation extends Component {
         window.location.reload(false);
     };
 
+
+
     render() {
 
+        console.log(token.getType())
 
-        switch (token.getType()) {
             //return the navbar for an administrator
-            case 1 || 0:
+            if(token.getType() === 1 || token.getType() === 0){
                 return (
                     <Navbar
                         className="navbar-main navbar-transparent navbar-light headroom"
@@ -135,7 +137,7 @@ class Navigation extends Component {
                                 <Nav className="align-items-lg-center ml-lg-auto" navbar>
 
                                     <NavItem>
-                                        <Link className="nav-link" to="/"> <i className="ni ni-circle-08"/>
+                                        <Link className="nav-link" to="/compte"> <i className="ni ni-circle-08"/>
                                             Mon compte</Link>
                                     </NavItem>
                                     <NavItem>
@@ -152,8 +154,9 @@ class Navigation extends Component {
 
 
                 );
-            //return the navbar for a visitor
-            default:
+            }else{
+                //return the navbar for a visitor
+
                 return (
                     <Navbar
 
@@ -218,8 +221,11 @@ class Navigation extends Component {
                     </Navbar>
 
                 );
+            }
 
-        }
+
+
+
 
 
     }

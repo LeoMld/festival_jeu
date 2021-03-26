@@ -12,12 +12,11 @@ function ReservationEmplacements(props) {
         const nbEmplacements = props.info.emplacements.length
         let espaces = [nbEmplacements]
         for (let i = 0; i < nbEmplacements; i++) {
-            const emptySpace = {
+            espaces[i] = {
                 ["nombreTables" + i]: 0,
                 ["metreCarres" + i]: 0,
                 idEmplacement: props.info.emplacements[i].idEmplacement
             }
-            espaces[i] = emptySpace
         }
         return espaces
     }
@@ -141,9 +140,7 @@ function ReservationEmplacements(props) {
 
     return (
         <Row className="mt-2">
-            <div>
-                <h3 className="font-weight-600">Réserver des emplacements</h3>
-            </div>
+            <h3 className="font-weight-600 mb-3">Réserver des emplacements</h3>
             <Table className="table  table-bordered">
                 <thead className="table-light">
                 <tr>
@@ -214,7 +211,7 @@ function ReservationEmplacements(props) {
                 </tr>
                 <tr className="table-active">
                     <th>Ancien Prix Total</th>
-                    <th>{props.info.prixReservation}€</th>
+                    <th>{parseFloat(props.info.prixReservation).toFixed(2)}€</th>
                     <th className="align-middle">Totaux (avec remise)</th>
                     <th className="align-middle">{isNaN(allPrice() - remiseReservation) ? (0).toFixed(2) : (allPrice() - remiseReservation).toFixed(2)}€</th>
                 </tr>
@@ -246,7 +243,7 @@ function ReservationEmplacements(props) {
                 </tfoot>}
                 {props.info.payeReservation &&
                 <tfoot>
-                <tr  className="table-success">
+                <tr className="table-success">
                     <td colSpan={5} className="font-weight-800">
                         Cette réservation a déjà été payée
                     </td>
