@@ -51,8 +51,6 @@ module.exports = {
     //get all editors
     getEditeurs: async (client) => {
         const clientUsed = await DB.getPoolClient(client)
-        const queryText = `SELECT * FROM "Personne" WHERE "estEditeur"=true;`
-        let result = await clientUsed.query(queryText,[])
         const queryText = `SELECT *
                            FROM "Personne"
                            WHERE "estEditeur" = true;`

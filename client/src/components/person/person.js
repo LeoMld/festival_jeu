@@ -8,6 +8,7 @@ function Person(props){
     const [person,setPerson]=useState(props.person)
     const [errorExposant,setErrorExposant]=useState(false)
     const [errorEditeur,setErrorEditeur]=useState(false)
+    let tokenType = token.getType()
     let url;
     let typePerson
     if(props.type===1){
@@ -58,7 +59,13 @@ function Person(props){
             }
             <td >
                 <label className="custom-toggle">
-                    <input onChange={()=> {handleChangeEditeur(!person.estEditeur)}} checked={person.estEditeur} type="checkbox" defaultChecked={person.estEditeur}/>
+                    <input
+                        onChange={()=> {handleChangeEditeur(!person.estEditeur)}}
+                        checked={person.estEditeur}
+                        type="checkbox"
+                        defaultChecked={person.estEditeur}
+                        disabled={tokenType!==1}
+                    />
                     <span className="custom-toggle-slider rounded-circle"/>
                 </label>
                 {errorEditeur && <Alert color="danger" toggle={()=>{setErrorEditeur(false)}}> L'Editeur possède encore des jeux</Alert>}
@@ -66,14 +73,27 @@ function Person(props){
             </td>
             <td >
                 <label className="custom-toggle">
-                    <input onChange={()=> {handleChangeExposant(!person.estExposant)}} checked={person.estExposant} type="checkbox" defaultChecked={person.estExposant}/>
+                    <input
+                        onChange={()=> {handleChangeExposant(!person.estExposant)}}
+                        checked={person.estExposant}
+                        type="checkbox"
+                        defaultChecked={person.estExposant}
+                        disabled={tokenType!==1}
+
+                    />
                     <span className="custom-toggle-slider rounded-circle"/>
                 </label>
                 {errorExposant && <Alert color="danger" toggle={()=>{setErrorExposant(false)}}> L'Exposant possède encore des reservations</Alert>}
             </td>
             <td >
                 <label className="custom-toggle">
-                    <input onChange={()=> {handleChangeExposantInactif(!person.exposantInactif)}} checked={person.exposantInactif} type="checkbox" defaultChecked={person.exposantInactif}/>
+                    <input
+                        onChange={()=> {handleChangeExposantInactif(!person.exposantInactif)}}
+                        checked={person.exposantInactif}
+                        type="checkbox"
+                        defaultChecked={person.exposantInactif}
+                        disabled={tokenType!==1}
+                    />
                     <span className="custom-toggle-slider rounded-circle"></span>
                 </label>
             </td>

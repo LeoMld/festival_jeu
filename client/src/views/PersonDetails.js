@@ -23,6 +23,7 @@ function PersonDetails(props) {
             }
         })
     }
+    let tokenType = token.getType()
 
     let typePerson = props.type === 1 ? "editeurs" : "exposants"
     const {
@@ -126,7 +127,7 @@ function PersonDetails(props) {
                                 <Collapse isOpen={openDetail}>
                                     <Card>
                                         <CardBody>
-                                            {editPerson && <div>
+                                            {editPerson && tokenType===1 && <div>
                                                 <Button
                                                     color="success"
                                                     type="button"
@@ -142,9 +143,10 @@ function PersonDetails(props) {
                                             </div>
 
                                             }
-                                            {!editPerson && <Button
+                                            {!editPerson && tokenType===1 && <Button
                                                 color="default"
                                                 type="button"
+                                                disabled={tokenType!==1}
                                                 onClick={() => setEditPerson(!editPerson)}
                                             >
                                                 Editer
@@ -245,16 +247,19 @@ function PersonDetails(props) {
                                 <Collapse isOpen={openContact}>
                                     <Card>
                                         <CardBody>
-                                            <div>
-                                                <Button
-                                                    className="mb-2"
-                                                    color="default"
-                                                    type="button"
-                                                    onClick={() => openModal(null, 1)}
-                                                >
-                                                    Ajouter
-                                                </Button>
-                                            </div>
+                                            {tokenType === 1 &&
+                                                <div>
+
+                                                    <Button
+                                                        className="mb-2"
+                                                        color="default"
+                                                        type="button"
+                                                        onClick={() => openModal(null, 1)}
+                                                    >
+                                                        Ajouter
+                                                    </Button>
+                                                </div>
+                                            }
                                             <Table>
                                                 <thead>
                                                 <tr>
@@ -270,9 +275,9 @@ function PersonDetails(props) {
                                                 })}
                                                 </tbody>
                                             </Table>
-                                            <ContactModal setInfo={setInfo} info={info} modalState={modalState}
+                                            {tokenType===1 && <ContactModal setInfo={setInfo} info={info} modalState={modalState}
                                                           setModalState={setModalState} contact={contact}
-                                                          state={state} initError={initError}/>
+                                                          state={state} initError={initError}/> }
                                         </CardBody>
                                     </Card>
                                 </Collapse>
@@ -317,7 +322,6 @@ function PersonDetails(props) {
                                                 </tbody>
                                             </table>
 
-
                                         </CardBody>
                                     </Card>
                                 </Collapse>
@@ -328,7 +332,12 @@ function PersonDetails(props) {
 
                         </Row>
                         }
-                        {info.reservations && <Row>"hi"</Row>}
+                        {info.reservations &&
+                            <Row>
+
+
+                            </Row>
+                        }
 
 
 
@@ -339,6 +348,4 @@ function PersonDetails(props) {
             </div>
         )
 }
-
-
 export default PersonDetails;
