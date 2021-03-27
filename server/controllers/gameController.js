@@ -27,7 +27,7 @@ module.exports = {
     getAllGames: async (req,res) => {
         await jeux.getAllGames().then(result => {
             if(result.length===0){
-                res.status(200).json('No games')
+                res.status(200).json([])
             }else{
                 res.status(200).json(result)
 
@@ -43,7 +43,7 @@ module.exports = {
         const idFest = await utils.getFestivalToDisplay(req)
         await jeux.getAllGamesCurrentFestival(idFest).then(result => {
             if(result.length===0){
-                res.status(200).json('No games')
+                res.status(200).json([])
             }else{
                 res.status(200).json(result)
 

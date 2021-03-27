@@ -40,6 +40,7 @@ function GameList() {
     const openAddTypeModal = ()=>{
         setModalTypeState(!modalTypeState)
     }
+    console.log("games vaut"+games)
 
 
     return(
@@ -94,6 +95,8 @@ function GameList() {
                     })}
                 </tbody>
             </table>
+            {games && games.length === 0 && <Row className="justify-content-center">Il n'y a pas encore de jeux prévu</Row>}
+
 
             {isPending &&
             <Waiting name={"games"}/>
