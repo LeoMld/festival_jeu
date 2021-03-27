@@ -19,9 +19,9 @@ const jeuPresent = require("../models/jeuPresentModel")
 module.exports = {
     createPersonReservation: async (idFestival, idPerson, client) => {
         const clientUsed = await DB.getPoolClient(client)
-        const text = 'INSERT INTO "Reservation" ("FK_idPersonne","FK_idFestival") VALUES ($1,$2);'
+        const text = 'INSERT INTO "Reservation" ("FK_idPersonne","FK_idFestival") VALUES ($1,$2) RETURNING *;'
         const values = [idPerson, idFestival]
-        clientUsed.query(text, values)
+        return (await clientUsed.query(text, values)).rows[0]
     },
 
     //Get a festival reservations

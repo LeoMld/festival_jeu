@@ -1,6 +1,7 @@
 const utils = require("../utils/utils");
 const Reservation = require("../models/reservationModel")
 const Emplacement = require("../models/emplacementModel")
+const Person = require("../models/personModel")
 const EspaceReserve = require("../models/espaceReserveModel")
 const Zone = require("../models/zoneModel");
 
@@ -27,7 +28,34 @@ module.exports = {
             })
             .catch((e) => {
                 res.status(503).json(e)
+
             })
+    },
+    createNewReservations : async(req,res)=>{
+        try{
+            let idFestival = await utils.getFestivalToDisplay(req)
+            console.log(idFestival)
+            console.log("OK")
+            const personnes = await Person.getPersonsWithoutReservations(idFestival)
+            if(personnes.length===0){
+                res.status(200).json({data:"No Reservations to create"})
+
+            }else{
+                console.log(personnes)
+                for (const p of personnes) {
+                    await Reservation.createPersonReservation(idFestival,p.idPersonne)
+                }
+                await Reservation.getFestivalReservations(idFestival)
+                    .then((result) => {
+                        res.status(200).json(result)
+                    })
+                    .catch((e) => {
+                        res.status(503).json(e)
+                    })
+            }
+        }catch (e){
+            res.status(503).json(e)
+        }
     },
 
     updateReservation: async (req, res) => {

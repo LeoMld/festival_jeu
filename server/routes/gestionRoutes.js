@@ -13,6 +13,7 @@ const token = require('../utils/token')
 
 router.get('/zone', zoneController.getAllZonesFestival)
 router.get("/reservations", reservationController.getReservations)
+router.post("/reservations", reservationController.createNewReservations)
 router.get("/reservations/:id", reservationController.getAReservation)
 router.put("/reservations/:id", reservationController.updateReservation)
 router.post("/notes", noteController.createNote)

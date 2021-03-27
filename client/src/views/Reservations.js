@@ -1,16 +1,34 @@
 import useAxios from "../utils/useAxios";
-import {Badge, Button, Card, CardBody, Col, Row, Table, UncontrolledCollapse} from "reactstrap";
-import React, {useEffect} from "react";
+import {Alert, Badge, Button, Card, CardBody, Col, Row, Table, UncontrolledCollapse} from "reactstrap";
+import React, {useEffect, useState} from "react";
 import Waiting from "../components/utils/Waiting";
 import Reservation from "../components/reservation/reservation";
 import CollapseFilterResa from "../components/reservation/CollapseFilterResa";
+import token from "../utils/token";
+import axios from "axios";
 
 
 function Reservations() {
     const {data: reservations, setData: setReservations, isPending, error} = useAxios("/api/gestion/reservations")
+    const [errorReservation,setErrorReservation] = useState(false)
+    const [noMoreToAdd,setNoMoreToAdd] = useState(false)
+    /*useEffect(()=>{
+    },[reservations])*/
 
-    useEffect(()=>{
-    },[reservations])
+    const createNewReservations = ()=>{
+        axios.post("/api/gestion/reservations",{},{ headers: { Authorization: token.getToken() } })
+            .then((res)=>{
+                if(res.data.length>0){
+                    setReservations(res.data)
+
+                }else{
+                    setNoMoreToAdd(true)
+                }
+            })
+            .catch(()=>{
+                setErrorReservation(true)
+            })
+    }
 
     return (
         <div>
@@ -25,21 +43,32 @@ function Reservations() {
                 </Row>
 
                 { reservations && !isPending && <div className="mr-md ml-md">
-                    <Col  className="d-flex flex-row mb-sm-3">
-                        <Button id="toggler" color="info"  type="button">
-                            Filtres
-                        </Button>
-                    </Col>
-                    <UncontrolledCollapse toggler="#toggler">
+                    {errorReservation && <Alert color="danger" toggle={()=>{setErrorReservation(false)}}> Erreurs lors de la créations des réservations</Alert>}
+                    {noMoreToAdd && <Alert color="warning" toggle={()=>{setNoMoreToAdd(false)}}> Tous les exposants ont déjà une réservation</Alert>}
+                    <Row className="d-flex justify-content-between">
+
+                        <Col  className="d-flex flex-row mb-sm-3">
+                            <Button id="toggler" color="info"  type="button">
+                                Filtres
+                            </Button>
+                        </Col>
+                        <Col></Col>
+
+                        <Col  className="d-flex flex-row mb-sm-3">
+                            <Button  type="button" color="info" onClick={createNewReservations}>
+                                Rafraichir les Reservations
+                            </Button>
+                        </Col>
+
+
+                    </Row>
+                    <UncontrolledCollapse toggler="#toggler" className="mb-sm-3">
                         <Card>
                             <CardBody>
                                 {reservations &&  <CollapseFilterResa resa={reservations} setResa={setReservations}/>}
                             </CardBody>
                         </Card>
                     </UncontrolledCollapse>
-                    <Row className="ml-lg-9 mb-sm-3">
-
-                    </Row>
                     <Table className="table-striped table-bordered table-responsive-sm">
                         <thead>
                         <tr>

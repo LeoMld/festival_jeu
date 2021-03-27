@@ -1,6 +1,7 @@
 import {Button, Col, Form, Input, Label, Modal, ModalBody, ModalFooter, Row} from "reactstrap"
 import {useState} from "react";
 import axios from "axios";
+import token from "../../utils/token";
 
 function CreatePerson(props) {
     let person = props.type===1?"Editeur":"Exposant"
@@ -71,7 +72,7 @@ function CreatePerson(props) {
             type:props.type,
             person:personDetail,
             contact:contactDetail
-        }).then((result)=>{
+        },{ headers: { Authorization: token.getToken() } }).then((result)=>{
             props.addPerson(result.data.person)
             defaultValues()
         }).catch((error)=>{
