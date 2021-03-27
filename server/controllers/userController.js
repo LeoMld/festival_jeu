@@ -6,7 +6,7 @@ const bcrypt = require("bcrypt");
 module.exports = {
 
     // Retrieve the festival to display of the user
-    getFestivalToDisplay: (req, res) => {
+    getFestivalToDisplay: async (req, res) => {
         Utils.getFestivalToDisplay(req)
             .then((festivalToSee) => {
                 res.status(200).json({idFestival: festivalToSee})
