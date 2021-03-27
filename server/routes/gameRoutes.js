@@ -8,6 +8,7 @@ const gameController = require('../controllers/gameController');
 
 router.get('/FestivalCourant', gameController.getAllGamesFestivalCourant)
 router.get('/', gameController.getAllGames)
+router.get('/TypesJeux', gameController.getTypesJeux)
 
 router.use(token.privateRouteAdminOrga);
 
@@ -15,7 +16,6 @@ router.get('/:id', gameController.getGame)
 
 router.use(token.privateRouteAdmin);
 
-router.get('/TypesJeux', gameController.getTypesJeux)
 router.post('/TypesJeux', gameController.createType)
 router.delete('/TypesJeux/:id', gameController.deleteType)
 router.post('/', gameController.createGame)
