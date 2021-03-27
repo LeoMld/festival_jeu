@@ -110,7 +110,7 @@ function Reservation(props){
                                name="datePremierContactReservation"
                                id="datePremierContactReservation"
                                value={r.datePremierContactReservation?new Date(r.datePremierContactReservation).toISOString().slice(0, 10):""}
-
+                               disabled={token.getType()!==1}
                                onChange={(event)=>handleChanges(event)}/>
                     </Col>
                     <Col>
@@ -121,7 +121,7 @@ function Reservation(props){
                                name="dateSecondContactReservation"
                                id="dateSecondContactReservation"
                                value={r.dateSecondContactReservation?new Date(r.dateSecondContactReservation).toISOString().slice(0, 10):""}
-
+                                disabled={token.getType()!==1}
                                onChange={(event)=>handleChanges(event)}/>
                     </Col>
                 </Row>
@@ -135,7 +135,9 @@ function Reservation(props){
                             <input id="estPlaceReservation"
                                    type="checkbox"
                                    checked={r.estPlaceReservation}
-                                   onChange={(event)=>handleSelector(event,!(r.estPlaceReservation))}/>
+                                   onChange={(event)=>handleSelector(event,!(r.estPlaceReservation))}
+                                   disabled={token.getType()!==1}
+                            />
                             <span className="custom-toggle-slider rounded-circle"/>
                         </label>
                     </Col>
@@ -145,7 +147,9 @@ function Reservation(props){
                             <input id="seDeplaceReservation"
                                    type="checkbox"
                                    checked={r.seDeplaceReservation}
-                                   onChange={(event)=>handleSelector(event,!r.seDeplaceReservation)}/>
+                                   onChange={(event)=>handleSelector(event,!r.seDeplaceReservation)}
+                                   disabled={token.getType()!==1}
+                            />
                             <span className="custom-toggle-slider rounded-circle"/>
                         </label>
                     </Col>
@@ -155,7 +159,9 @@ function Reservation(props){
                             <input id="besoinAnimateurReservation"
                                    type="checkbox"
                                    checked={r.besoinAnimateurReservation}
-                                   onChange={(event)=>handleSelector(event,!(r.besoinAnimateurReservation))}/>
+                                   onChange={(event)=>handleSelector(event,!(r.besoinAnimateurReservation))}
+                                   disabled={token.getType()!==1}
+                            />
                             <span className="custom-toggle-slider rounded-circle"/>
                         </label>
                     </Col>
@@ -169,7 +175,9 @@ function Reservation(props){
                                name="dateEnvoiFactureReservation"
                                id="dateEnvoiFactureReservation"
                                value={r.dateEnvoiFactureReservation?new Date(r.dateEnvoiFactureReservation).toISOString().slice(0, 10):""}
-                               onChange={(event)=>handleChanges(event)}/>
+                               onChange={(event)=>handleChanges(event)}
+                               disabled={token.getType()!==1}
+                        />
                     </Col>
                     <Col>
                         <Label for="datePaiementFactureReservation" className="mb--2">
@@ -179,7 +187,9 @@ function Reservation(props){
                                name="datePaiementFactureReservation"
                                id="datePaiementFactureReservation"
                                value={r.datePaiementFactureReservation?new Date(r.datePaiementFactureReservation).toISOString().slice(0, 10):""}
-                               onChange={(event)=>handleChanges(event)}/>
+                               onChange={(event)=>handleChanges(event)}
+                               disabled={token.getType()!==1}
+                        />
                     </Col>
                 </Row>
             </td>
@@ -198,8 +208,13 @@ function Reservation(props){
                 </Row>
             </Col></td>
             <td>
-                <Input type="textarea" id={"textNote"+props.index} defaultValue={r.textNote}/>
-                <Button className=" mt-2" color="secondary" size="sm" onClick={(event)=>handleEditNote(event)}>Valider Commentaire</Button>
+                <Input
+                    type="textarea"
+                    id={"textNote"+props.index}
+                    defaultValue={r.textNote}
+                    disabled={token.getType()!==1}
+                />
+                {token.getType()===1 && <Button className=" mt-2" color="secondary" size="sm" onClick={(event)=>handleEditNote(event)}>Valider Commentaire</Button>}
             </td>
         </tr>
     )

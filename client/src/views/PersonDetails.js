@@ -1,13 +1,14 @@
 import React, {useState} from "react";
 import axios from "axios";
 import useAxios from "../utils/useAxios";
-import {Button, Card, CardBody, Col, Collapse, Input, Label, Row, Table} from "reactstrap";
+import {Badge, Button, Card, CardBody, Col, Collapse, Input, Label, Row, Table} from "reactstrap";
 import Waiting from "../components/utils/Waiting";
 import token from "../utils/token";
 import Contact from "../components/contact/contact";
 import ContactModal from "../components/contact/contactModal";
 import Game from "../components/game/Game";
 import ModalNewGame from "../components/game/ModalNewGame";
+import Reservation from "../components/reservation/reservation";
 
 //TODO FIX PROTOTYPE JEUX
 
@@ -334,7 +335,37 @@ function PersonDetails(props) {
                         }
                         {info.reservations &&
                             <Row>
+                                <Table className="table-striped table-bordered table-responsive-sm">
+                                    <thead>
+                                    <tr>
+                                        <th>
+                                            Exposant
+                                        </th>
+                                        <th colSpan={2}>
 
+                                            Suivi des échanges
+                                            <div className="user-select-none justify-content-start ">
+                                                <Badge className="mr-sm-3" color="success">Présent</Badge>
+                                                <Badge className="mr-sm-3" color="warning">Présence non confirmée</Badge>
+                                                <Badge color="danger">Absent</Badge>
+                                            </div>
+                                        </th>
+                                        <th>
+                                            Prix (€)
+                                        </th>
+                                        <th>
+                                            Commentaires
+                                        </th>
+
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                        {info.reservations.map((r,index)=>{
+                                            <Reservation key={index} index={index} r={r}/>
+                                        })
+                                        }
+                                    </tbody>
+                                </Table>
 
                             </Row>
                         }
