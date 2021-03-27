@@ -31,7 +31,7 @@ module.exports = {
         return await jwt.sign({
             userId: id,
             type: type
-        }, process.env.refresh_token, {
+        }, process.env.REFRESH_TOKEN, {
             expiresIn: '3d'
         })
     },

@@ -74,7 +74,7 @@ function Zones() {
         <div className="justify-content-center mr-7 ml-7">
             <h1 className="font-weight-900 mt-5 mb-5">Liste des zones et de leurs jeux</h1>
             <h2 className="text-left font-weight-300">Navigation rapide</h2>
-            {(!isPending && zones.length === 0 || (!isPending && token.getType() === 2 && zones.length === 1)) &&
+            {zones && (zones.length === 0 || (token.getType() === 2 && zones.length === 1)) &&
             <p>Il n'y a rien à afficher pour le moment.</p>}
             <Row>
                 <Col>

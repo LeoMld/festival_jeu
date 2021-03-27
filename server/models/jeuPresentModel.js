@@ -31,7 +31,7 @@ module.exports = {
     // We put all the reserved games in the zone given into the default zone
     setZoneToDefault: async (idZoneDefault, idZone, client) => {
         const clientUsed = DB.getPoolClient(client)
-        const queryText = 'UPDATE "JeuPresent" SET "PK_idZone" = $2, "estPlace" = false WHERE "PK_idZone" = $1;'
+        const queryText = 'UPDATE "JeuPresent" SET "PK_idZone" = $2, "estPlace" = false, "derniereModification"= now() WHERE "PK_idZone" = $1;'
         const queryValues = [idZone, idZoneDefault]
         clientUsed.query(queryText, queryValues)
     },
@@ -67,7 +67,7 @@ module.exports = {
 
     updateEstPlace: async (idJeu, idZone, idReservation, val, client) => {
         const clientUsed = await DB.getPoolClient(client)
-        const queryText = `UPDATE "JeuPresent" SET "estPlace" = '${val}' WHERE "PK_idReservation" = '${idReservation}'
+        const queryText = `UPDATE "JeuPresent" SET "estPlace" = '${val}', "derniereModification" = now() WHERE "PK_idReservation" = '${idReservation}'
         AND "PK_idJeu" = '${idJeu}' AND "PK_idZone" = '${idZone}';`
         return await clientUsed.query(queryText, [])
     },
