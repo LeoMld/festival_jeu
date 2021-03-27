@@ -22,7 +22,6 @@ router.post('/', gameController.createGame)
 
 router.put('/:id', gameController.handleGame)
 router.get('/:id', gameController.getGame)
-
 router.delete('/:id', gameController.deleteGame)
 
 module.exports = router;
