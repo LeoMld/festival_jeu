@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import {Alert, Button, Col, Input, Modal, Row, Table} from "reactstrap";
+import {Alert, Button, Col, Input, Label, Modal, Row, Table} from "reactstrap";
 import token from "../../utils/token";
 import axios from "axios";
 import Axios from "axios";
@@ -33,6 +33,9 @@ function ReservationJeuxReserves(props) {
     const [gameToDelete, setGameToDelete] = useState()
     const [errorDelete, setErrorDelete] = useState(null)
     const [isDeleting, setIsDeleting] = useState(false)
+
+    const [nbJeuxExposesReservation, setNbJeuxExposesReservation] = useState(props.info.nbJeuxExposesReservation)
+    const [nbJeuxTombolaReservation, setNbJeuxTombolaReservation] = useState(props.info.nbJeuxTombolaReservation)
 
     // We update the prototype
     const handlePrototypeChange = async (val, idJeu) => {
@@ -194,7 +197,7 @@ function ReservationJeuxReserves(props) {
                                         token.getType() === 1 &&
                                         <Button block
                                                 size="sm"
-                                                disabled={isNaN(prixRenvoi[index].prixRenvoi)}
+                                                disabled={isNaN(prixRenvoi[index].prixRenvoi) || prixRenvoi[index].prixRenvoi === ""}
                                                 onClick={() => changePrixRenvoi(game.PK_idJeu, game.PK_idZone, index)}>
                                             Valider
                                         </Button>}
@@ -220,7 +223,7 @@ function ReservationJeuxReserves(props) {
                                         <Input type="select"
                                                name="select"
                                                id={"zoneSelector" + game.PK_idJeu}
-                                               defaultValue={displayLibelleZone(game.PK_idZone)}>
+                                               defaultValue={game.PK_idZone}>
                                             size="sm">
                                             {props.info.zones.map((z, index) => {
                                                     return (
@@ -282,6 +285,46 @@ function ReservationJeuxReserves(props) {
                 </tr>
                 </tfoot>}
             </Table>
+            <div className="container-sm mr-9 ml-9 mt-3">
+                <Row>
+                    <Col>
+                        <Label>
+                            Nombre de jeux exposés
+                        </Label>
+                        <Input
+                            type="text"
+                            disabled={token.getType() !== 1}
+                            value={nbJeuxExposesReservation}
+                            onChange={(event) => setNbJeuxExposesReservation(event.target.value)}
+                        />
+                        {token.getType() === 1 &&
+                        <Button block disabled={isNaN(nbJeuxExposesReservation) || nbJeuxTombolaReservation === ""}
+                                onClick={() => {
+                                    props.updateReservation("nbJeuxExposesReservation", {nbJeuxExposesReservation}, nbJeuxExposesReservation)
+                                }}>
+                            Valider
+                        </Button>}
+                    </Col>
+                    <Col>
+                        <Label>
+                            Nombre de jeux pour la tombola
+                        </Label>
+                        <Input
+                            type="text"
+                            disabled={token.getType() !== 1}
+                            value={nbJeuxTombolaReservation}
+                            onChange={(event) => setNbJeuxTombolaReservation(event.target.value)}
+                        />
+                        {token.getType() === 1 &&
+                        <Button block disabled={isNaN(nbJeuxTombolaReservation) || nbJeuxTombolaReservation === ""}
+                                onClick={() => {
+                                    props.updateReservation("nbJeuxTombolaReservation", {nbJeuxTombolaReservation}, nbJeuxTombolaReservation)
+                                }}>
+                            Valider
+                        </Button>}
+                    </Col>
+                </Row>
+            </div>
             <CreateNewJeuPresent modalState={modalStateJeuPresent}
                                  setModalState={setModalStateJeuPresent}
                                  info={props.info}

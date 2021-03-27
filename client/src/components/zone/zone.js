@@ -57,8 +57,9 @@ function Zone(props) {
     }
 
     // Called when the user wants to change the zone of a reserved game
-    const handleChangeZone = (idJeu, idReservation) => {
-        const idNewZone = document.getElementById("zoneSelector" + idJeu).value
+    const handleChangeZone = (idJeu, idReservation, idZone) => {
+        console.log("zoneSelector" + idJeu + idZone + idReservation)
+        const idNewZone = document.getElementById("zoneSelector" + idJeu + idZone + idReservation).value
         const data = {
             idJeu,
             idReservation,
@@ -177,9 +178,11 @@ function Zone(props) {
                             </thead>
                             <tbody>
                             {zone.games.length === 0 &&
-                            <td colSpan={token.getType() !== 2 ? 11 : 8}>
-                                Cette zone ne comporte pas encore de jeu.
-                            </td>
+                            <tr>
+                                <td colSpan={token.getType() !== 2 ? 11 : 8}>
+                                    Cette zone ne comporte pas encore de jeu.
+                                </td>
+                            </tr>
                             }
                             {zone.games.map((game, index) => {
                                 return (
@@ -203,18 +206,18 @@ function Zone(props) {
                                                     </label>
                                                 </Col>
                                             </td> :
-                                            <i style={{"font-size": "3rem"}}
+                                            <i style={{fontSize: "3rem"}}
                                                className={game.prototype ? "ni ni-check-bold text-green" : "ni ni-fat-remove text-red"}/>}
                                         {token.getType() !== 2 &&
                                         <>
                                             <td className="align-middle">
                                                 <p>Reçu</p>
-                                                <i style={{"font-size": "3rem"}}
+                                                <i style={{fontSize: "3rem"}}
                                                    className={game.jeuxRecuReservation ? "ni ni-check-bold text-green" : "ni ni-fat-remove text-red"}/>
                                             </td>
                                             <td>
                                                 <p>Bénévoles</p>
-                                                <i style={{"font-size": "3rem"}}
+                                                <i style={{fontSize: "3rem"}}
                                                    className={game.besoinAnimateurReservation ? "ni ni-check-bold text-green" : "ni ni-fat-remove text-red"}/>
                                             </td>
                                             {token.getType() === 1 &&
@@ -224,27 +227,27 @@ function Zone(props) {
                                                         <p className="mb-1">Placer</p>
                                                         <Input type="select"
                                                                name="select"
-                                                               id={"zoneSelector" + game.PK_idJeu}
-                                                               size="sm"
-                                                               defaultValue={zone.libelleZone}>
-                                                            {props.zones.map((z, index) => {
+                                                               id={"zoneSelector" + game.PK_idJeu + game.PK_idZone + game.PK_idReservation}
+                                                               bsSize="sm"
+                                                               defaultValue={zone.idZone}>
+                                                            {props.zones.map((z, index2) => {
                                                                     return (
                                                                         <option value={z.idZone}
-                                                                                key={index}>{z.libelleZone}</option>
+                                                                                key={index2}>{z.libelleZone}</option>
                                                                     )
                                                                 }
                                                             )}
                                                         </Input>
                                                         <Button block
                                                                 size="sm mb-2"
-                                                                onClick={() => handleChangeZone(game.PK_idJeu, game.PK_idReservation)}>
+                                                                onClick={() => handleChangeZone(game.PK_idJeu, game.PK_idReservation, game.PK_idZone)}>
                                                             Valider
                                                         </Button>
                                                     </Col>
                                                 </Row>
                                             </td>}
                                             <td className="align-middle">
-                                                <Link style={{"font-size": "2.5rem"}}
+                                                <Link style={{fontSize: "2.5rem"}}
                                                       to={'/reservations/' + game.PK_idReservation}>
                                                     <i className="ni ni-book-bookmark"/>
                                                 </Link>

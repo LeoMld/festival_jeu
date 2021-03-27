@@ -11,6 +11,7 @@ const noteController = require("../controllers/noteController")
 const jeuPresentController = require("../controllers/jeuPresentController")
 const token = require('../utils/token')
 
+router.get("/jeuxEditeur", jeuPresentController.getAllGamesEditeur)
 router.get('/zone', zoneController.getAllZonesFestival)
 router.get("/reservations", reservationController.getReservations)
 router.get("/reservations/:id", reservationController.getAReservation)

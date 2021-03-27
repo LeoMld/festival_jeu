@@ -90,7 +90,7 @@ function ReservationEmplacements(props) {
 
     // Check if we only have numbers
     const ready = () => {
-        return isNaN((allPrice() - remiseReservation))
+        return isNaN((allPrice() - remiseReservation)) || remiseReservation === "" || isNaN(remiseReservation)
     }
 
     // Save the new reserved spaces in the database

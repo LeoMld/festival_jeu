@@ -62,8 +62,6 @@ class Navigation extends Component {
 
     render() {
 
-        console.log(token.getType())
-
             //return the navbar for an administrator
             if(token.getType() === 1 || token.getType() === 0){
                 return (
@@ -201,7 +199,7 @@ class Navigation extends Component {
                                     </NavItem>
 
                                     <NavItem>
-                                        <Link className="nav-link" to="/">Editeurs</Link>
+                                        <Link className="nav-link" to="/JeuxEditeurs">Editeurs</Link>
                                     </NavItem>
 
                                 </Nav>
