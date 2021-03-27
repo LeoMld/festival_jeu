@@ -7,12 +7,13 @@ const router = express.Router();
 const gameController = require('../controllers/gameController');
 
 
-router.get('/', gameController.getAllGames)
+router.get('/FestivalCourant', gameController.getAllGamesFestivalCourant)
 
 router.get('/TypesJeux', gameController.getTypesJeux)
 
 router.use(token.privateRoute);
 
+router.get('/', gameController.getAllGames)
 
 router.post('/TypesJeux', gameController.createType)
 router.delete('/TypesJeux/:id', gameController.deleteType)

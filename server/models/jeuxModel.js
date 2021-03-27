@@ -66,6 +66,14 @@ module.exports = {
         const queryText = 'SELECT * FROM "Jeu" JOIN "Personne" ON "FK_idPersonne"="Personne"."idPersonne" JOIN "TypeJeu" TJ on TJ."idTypeJeu" = "Jeu"."FK_idTypeJeu"  ;'
         return (await clientUsed.query(queryText)).rows
     },
+
+    // Retrieve all games of the current festival
+    getAllGamesCurrentFestival: async (idFest,client) => {
+        const clientUsed = await DB.getPoolClient(client)
+        const queryText = 'SELECT DISTINCT "idJeu","libelleJeu", "nombreJoueur", "ageMinimum", "duree", "libelleTypeJeu", "prototype", "nomPersonne",TJ."idTypeJeu",TJ."libelleTypeJeu" FROM "Jeu" JOIN "Personne" ON "FK_idPersonne"="Personne"."idPersonne" JOIN "TypeJeu" TJ on TJ."idTypeJeu" = "Jeu"."FK_idTypeJeu" JOIN "Reservation" R on "Personne"."idPersonne" = R."FK_idPersonne" JOIN "Zone" Z on R."FK_idFestival" = Z."FK_idFestival" WHERE R."FK_idFestival"=$1 AND "libelleZone" != $2 ;'
+        const queryValues = [idFest,"Indéfinie"]
+        return (await clientUsed.query(queryText,queryValues)).rows
+    },
     //retrieve all games from an editor
     getEditorGames: async (idEditor, client) => {
         const clientUsed = await DB.getPoolClient(client)
