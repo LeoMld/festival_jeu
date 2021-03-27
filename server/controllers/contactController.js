@@ -85,8 +85,8 @@ module.exports ={
         }
         else{
             await Contact.createContact(body.prenomContact,body.nomContact,body.mailContact,body.telFixeContact,body.telPortableContact,body.fonctionContact,body.principal,body.idPersonne)
-                .then(()=>{
-                    res.status(201).json({inserted:true})
+                .then((result)=>{
+                    res.status(201).json(result)
                 }).catch((error)=>{
                     res.status(503).json({
                         error:error,
@@ -97,41 +97,46 @@ module.exports ={
     },
     //Update a contact
     updateContact: async (req,res)=>{
-        /* let params = {
-                    idContact:1,
-                    prenomContact:'testUPDATEContact',
-                    nomContact:'testContact',
-                    mailContact:'testContact',
-                    telFixeContact:111,
-                    telPortableContact:111,
-                    fonctionContact:'testContact',
-                    principal:true,
-                }*/
-        const body = req.body;
-        let idContact = req.params.id;
-        let telFixeContact = body.telFixeContact;
-        let telPortableContact = body.telPortableContact;
-        if(isNaN(idContact)){
-            utils.sendErrorNumber(req,res,Object.keys({idContact})[0])
-        }
-        else if(isNaN(telFixeContact)){
-            utils.sendErrorNumber(req,res,Object.keys({telFixeContact})[0])
-        }
-        else if(isNaN(telPortableContact)){
-            utils.sendErrorNumber(req,res,Object.keys({telPortableContact})[0])
-        }else{
-            await Contact.updateContact(idContact,body.prenomContact,body.nomContact,body.mailContact,body.telFixeContact,body.telPortableContact,body.fonctionContact,body.principal)
-                .then(()=>{
-                    res.status(201).json({updated:true})
-                }).catch((error)=>{
-                    res.status(503).json({
-                        error:error,
-                        updated:false
+        if(req.body.telPortableContact!==undefined){
+            const body = req.body;
+            let idContact = req.params.id;
+            let telFixeContact = body.telFixeContact;
+            let telPortableContact = body.telPortableContact;
+            if(isNaN(idContact)){
+                utils.sendErrorNumber(req,res,Object.keys({idContact})[0])
+            }
+            else if(isNaN(telFixeContact)){
+                utils.sendErrorNumber(req,res,Object.keys({telFixeContact})[0])
+            }
+            else if(isNaN(telPortableContact)){
+                utils.sendErrorNumber(req,res,Object.keys({telPortableContact})[0])
+            }else{
+                await Contact.updateContact(idContact,body.prenomContact,body.nomContact,body.mailContact,body.telFixeContact,body.telPortableContact,body.fonctionContact,body.principal,body.FK_idPersonne)
+                    .then(()=>{
+                        res.status(200).json({updated:true})
+                    }).catch((error)=>{
+                        console.log(error)
+                        res.status(503).json({
+                            error:error,
+                            updated:false
+                        })
                     })
+            }
+        }else if (req.body.principal!==undefined){
+            let body = req.body
+            console.log(body)
+            await Contact.updatePrincipal(body.idPersonne,req.params.id,body.principal).then(()=>{
+                res.status(200).json({updated:true})
+            }).catch((e)=>{
+                console.log(e)
+                res.status(503).json({
+                    error:e,
+                    updated:false
                 })
+            })
+        }else{
+            res.status(400).json({msg:"Données invalides"})
         }
-
-
     },
     //Delete a contact
     deleteContact: async (req,res)=>{

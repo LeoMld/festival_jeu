@@ -9,7 +9,7 @@ function WorkFlowSelector(props) {
 
     if (props.disabled === undefined) {
         return (
-            <Input type="select" name="select" id={props.id} defaultValue={props.selected}
+            <Input type="select" name="select" id={props.id} defaultValue={props.selected} disabled={!!props.disabled}
                    onChange={(event) => props.handleChanges(event)}>
                 {props.type && <option value={10} key={10}>{props.type}</option>}
                 {state.map((i, index) => {

@@ -7,6 +7,7 @@ import pdf from "../../utils/pdf"
 import {Link} from "react-router-dom";
 
 function Reservation(props){
+    let tokenType = token.getType()
     let [r,setR] = useState(props.r)
     let [color,setColor] = useState(r.workflowReservation)
     const colorStateReservation = () =>{
@@ -79,6 +80,9 @@ function Reservation(props){
             })
         }
     }
+    const badLuck = ()=>{
+        console.log("Nice Try")
+    }
     return(
         <tr key={props.index}>
             <td>
@@ -95,7 +99,7 @@ function Reservation(props){
                 <Row>
                     <Col md={6}>
                         <p className="mb--1">Etat de la Réservation</p>
-                        <WorkFlowSelector selected={r.workflowReservation} id="workflowReservation" handleChanges={handleChanges}/>
+                        <WorkFlowSelector selected={r.workflowReservation} id="workflowReservation" handleChanges={tokenType===1?handleChanges:badLuck} disabled={token.getToken()!==1}/>
                     </Col>
                     <Col md={6}>
                         <div className={colorStateReservation()+ " mt-4"} style={{minHeight:"15px"}}> </div>
@@ -111,7 +115,7 @@ function Reservation(props){
                                id="datePremierContactReservation"
                                value={r.datePremierContactReservation?new Date(r.datePremierContactReservation).toISOString().slice(0, 10):""}
                                disabled={token.getType()!==1}
-                               onChange={(event)=>handleChanges(event)}/>
+                               onChange={tokenType===1?(event)=>handleChanges(event):badLuck}/>
                     </Col>
                     <Col>
                         <Label for="dateSecondContactReservation" className="mb--2">
@@ -122,7 +126,7 @@ function Reservation(props){
                                id="dateSecondContactReservation"
                                value={r.dateSecondContactReservation?new Date(r.dateSecondContactReservation).toISOString().slice(0, 10):""}
                                 disabled={token.getType()!==1}
-                               onChange={(event)=>handleChanges(event)}/>
+                               onChange={tokenType===1?(event)=>handleChanges(event):badLuck}/>
                     </Col>
                 </Row>
 
@@ -135,7 +139,7 @@ function Reservation(props){
                             <input id="estPlaceReservation"
                                    type="checkbox"
                                    checked={r.estPlaceReservation}
-                                   onChange={(event)=>handleSelector(event,!(r.estPlaceReservation))}
+                                   onChange={tokenType===1?(event)=>handleSelector(event,!(r.estPlaceReservation)):badLuck}
                                    disabled={token.getType()!==1}
                             />
                             <span className="custom-toggle-slider rounded-circle"/>
@@ -147,7 +151,7 @@ function Reservation(props){
                             <input id="seDeplaceReservation"
                                    type="checkbox"
                                    checked={r.seDeplaceReservation}
-                                   onChange={(event)=>handleSelector(event,!r.seDeplaceReservation)}
+                                   onChange={tokenType===1?(event)=>handleSelector(event,!r.seDeplaceReservation):badLuck}
                                    disabled={token.getType()!==1}
                             />
                             <span className="custom-toggle-slider rounded-circle"/>
@@ -159,7 +163,7 @@ function Reservation(props){
                             <input id="besoinAnimateurReservation"
                                    type="checkbox"
                                    checked={r.besoinAnimateurReservation}
-                                   onChange={(event)=>handleSelector(event,!(r.besoinAnimateurReservation))}
+                                   onChange={tokenType===1?(event)=>handleSelector(event,!(r.besoinAnimateurReservation)):badLuck}
                                    disabled={token.getType()!==1}
                             />
                             <span className="custom-toggle-slider rounded-circle"/>
@@ -175,7 +179,7 @@ function Reservation(props){
                                name="dateEnvoiFactureReservation"
                                id="dateEnvoiFactureReservation"
                                value={r.dateEnvoiFactureReservation?new Date(r.dateEnvoiFactureReservation).toISOString().slice(0, 10):""}
-                               onChange={(event)=>handleChanges(event)}
+                               onChange={tokenType===1?(event)=>handleChanges(event):badLuck}
                                disabled={token.getType()!==1}
                         />
                     </Col>
@@ -187,7 +191,7 @@ function Reservation(props){
                                name="datePaiementFactureReservation"
                                id="datePaiementFactureReservation"
                                value={r.datePaiementFactureReservation?new Date(r.datePaiementFactureReservation).toISOString().slice(0, 10):""}
-                               onChange={(event)=>handleChanges(event)}
+                               onChange={tokenType===1?(event)=>handleChanges(event):badLuck}
                                disabled={token.getType()!==1}
                         />
                     </Col>
@@ -207,15 +211,14 @@ function Reservation(props){
                     </Button>
                 </Row>
             </Col></td>
-            <td>
+            {token.getType()===1 && <td>
                 <Input
                     type="textarea"
                     id={"textNote"+props.index}
                     defaultValue={r.textNote}
-                    disabled={token.getType()!==1}
                 />
-                {token.getType()===1 && <Button className=" mt-2" color="secondary" size="sm" onClick={(event)=>handleEditNote(event)}>Valider Commentaire</Button>}
-            </td>
+                  <Button className=" mt-2" color="secondary" size="sm" onClick={(event)=>handleEditNote(event)}>Valider Commentaire</Button>
+            </td>}
         </tr>
     )
 }

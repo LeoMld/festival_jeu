@@ -54,11 +54,11 @@ function Reservations() {
                         </Col>
                         <Col></Col>
 
-                        <Col  className="d-flex flex-row mb-sm-3">
+                        {token.getType()===1 && <Col  className="d-flex flex-row mb-sm-3">
                             <Button  type="button" color="info" onClick={createNewReservations}>
                                 Rafraichir les Reservations
                             </Button>
-                        </Col>
+                        </Col>}
 
 
                     </Row>
@@ -87,9 +87,9 @@ function Reservations() {
                             <th>
                                 Prix (€)
                             </th>
-                            <th>
+                            {token.getType()===1 && <th>
                                 Commentaires
-                            </th>
+                            </th>}
 
                         </tr>
                         </thead>

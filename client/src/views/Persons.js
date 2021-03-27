@@ -5,6 +5,7 @@ import CreatePerson from "../components/person/createPerson"
 import {Button, Col, Row, Table} from "reactstrap"
 import useAxios from "../utils/useAxios";
 import Waiting from "../components/utils/Waiting";
+import token from "../utils/token";
 
 function Persons(props){
     let url;
@@ -27,16 +28,18 @@ function Persons(props){
             <Col>
                 <h1 className="font-weight-900">Liste des {props.type===1?"Editeurs":"Exposants"}</h1>
             </Col>
-            <Col>
-                <Button
-                    color="success"
-                    type="button"
-                    onClick={() => setModalState(!modalState)}
-                >
-                    Nouvel {props.type===1?"Editeur":"Exposant"}
-                </Button>
-            </Col>
-            <CreatePerson modalState = {modalState} setModalState = {setModalState} type={props.type} addPerson={addPerson}/>
+                {token.getType() === 1 &&
+                <Col>
+                    <Button
+                        color="success"
+                        type="button"
+                        onClick={() => setModalState(!modalState)}
+                    >
+                        Nouvel {props.type === 1 ? "Editeur" : "Exposant"}
+                    </Button>
+                </Col>}
+                {token.getType() === 1 &&   <CreatePerson modalState = {modalState} setModalState = {setModalState} type={props.type} addPerson={addPerson}/> }
+
         </Row>
 
             <Table className="align-items-center table-bordered" responsive>

@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import axios from "axios";
 import useAxios from "../utils/useAxios";
 import {Badge, Button, Card, CardBody, Col, Collapse, Input, Label, Row, Table} from "reactstrap";
@@ -67,6 +67,7 @@ function PersonDetails(props) {
     let [modalState, setModalState] = useState(false)
     let [modalStateAddGame,setModalStateAddGame] =useState(false)
 
+    useEffect(()=>{},[info])
 
     let [contact, setContact] = useState()
     const handleSubmit = () => {
@@ -267,18 +268,19 @@ function PersonDetails(props) {
                                                     <th>Nom - Prenom</th>
                                                     <th>Mail</th>
                                                     <th>Téléphone Portable</th>
+                                                    <th>Principal</th>
                                                 </tr>
                                                 </thead>
                                                 <tbody>
                                                 {info.contacts.map((c, index) => {
                                                     return (<Contact c={c} openModal={openModal} key={index}
-                                                                     index={index}/>)
+                                                                     index={index} info={info} setInfo={setInfo}/>)
                                                 })}
                                                 </tbody>
                                             </Table>
-                                            {tokenType===1 && <ContactModal setInfo={setInfo} info={info} modalState={modalState}
+                                             <ContactModal setInfo={setInfo} info={info} modalState={modalState}
                                                           setModalState={setModalState} contact={contact}
-                                                          state={state} initError={initError}/> }
+                                                          state={state} initError={initError}/>
                                         </CardBody>
                                     </Card>
                                 </Collapse>
@@ -335,37 +337,41 @@ function PersonDetails(props) {
                         }
                         {info.reservations &&
                             <Row>
-                                <Table className="table-striped table-bordered table-responsive-sm">
-                                    <thead>
-                                    <tr>
-                                        <th>
-                                            Exposant
-                                        </th>
-                                        <th colSpan={2}>
+                                {info.reservations.length > 0 &&
 
-                                            Suivi des échanges
-                                            <div className="user-select-none justify-content-start ">
-                                                <Badge className="mr-sm-3" color="success">Présent</Badge>
-                                                <Badge className="mr-sm-3" color="warning">Présence non confirmée</Badge>
-                                                <Badge color="danger">Absent</Badge>
-                                            </div>
-                                        </th>
-                                        <th>
-                                            Prix (€)
-                                        </th>
-                                        <th>
-                                            Commentaires
-                                        </th>
+                                    <Table className="table-striped table-bordered table-responsive-sm">
+                                        <thead>
+                                        <tr>
+                                            <th>
+                                                Exposant
+                                            </th>
+                                            <th colSpan={2}>
 
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                        {info.reservations.map((r,index)=>{
-                                            <Reservation key={index} index={index} r={r}/>
+                                                Suivi des échanges
+                                                <div className="user-select-none justify-content-start ">
+                                                    <Badge className="mr-sm-3" color="success">Présent</Badge>
+                                                    <Badge className="mr-sm-3" color="warning">Présence non
+                                                        confirmée</Badge>
+                                                    <Badge color="danger">Absent</Badge>
+                                                </div>
+                                            </th>
+                                            <th>
+                                                Prix (€)
+                                            </th>
+                                            {token.getToken()===1 && <th>
+                                                Commentaires
+                                            </th>}
+
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {info.reservations.map((r, index) => {
+                                           return( <Reservation key={index} index={index} r={r}/> )
                                         })
                                         }
-                                    </tbody>
-                                </Table>
+                                        </tbody>
+                                    </Table>
+                                }
 
                             </Row>
                         }

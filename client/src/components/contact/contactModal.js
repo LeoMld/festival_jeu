@@ -55,11 +55,12 @@ function ContactModal(props){
         axios.post("/api/gestion/contact",contact,{headers:{Authorization:token.getToken()}})
             .then((res) =>
             {
-                let newContacts = contacts
-                newContacts.push(contact)
-                props.setInfo({...props.info,contacts:newContacts})
+                console.log(res)
+                props.setInfo({...props.info,contacts:res.data})
                 initContactNull()
                 setErrorDetail(initError)
+                props.setModalState(!props.modalState)
+                props.initError()
             })
             .catch(e=>{
                 if(e.response && e.response.data.code === 0){
@@ -236,18 +237,21 @@ function ContactModal(props){
                     }}>
                         Valider
                     </Button>
-                        <Button color="danger" type="button" onClick={()=>{
+                         <Button color="danger" type="button" onClick={()=>{
                             if(props.state===1){
                                 initContactNull()
+                                props.setModalState(!props.modalState)
+
                             }else{
                                 setContact(props.contact)
                                 setUpdate(false)
+                                props.setModalState(!props.modalState)
                             }
                         }}>
                             Annuler
                         </Button>
                     </div>}
-                    {!update &&
+                    {!update && token.getType()===1 &&
                     <Button color="primary" type="button" onClick={()=>{setUpdate(true)}}>
                         Modifier
                     </Button>
