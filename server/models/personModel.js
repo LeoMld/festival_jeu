@@ -51,14 +51,14 @@ module.exports={
     //get all non inactif editor
     getEditeurs: async (client)=>{
         const clientUsed = await DB.getPoolClient(client)
-        const queryText = `SELECT * FROM "Personne" WHERE "estEditeur"=true AND "exposantInactif"=false;`
+        const queryText = `SELECT * FROM "Personne" WHERE "estEditeur"=true;`
         let result = await clientUsed.query(queryText,[])
         return result.rows
     },
     //get all non inactif exposant
     getExposants: async (client)=>{
         const clientUsed = await DB.getPoolClient(client)
-        const queryText = `SELECT * FROM "Personne" WHERE "estExposant"=true AND "exposantInactif"=false;`
+        const queryText = `SELECT * FROM "Personne" WHERE "estExposant"=true ORDER BY "exposantInactif";`
         let result = await clientUsed.query(queryText,[])
         return result.rows
     },

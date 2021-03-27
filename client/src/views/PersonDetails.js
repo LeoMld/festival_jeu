@@ -278,7 +278,7 @@ function PersonDetails(props) {
                                 </Collapse>
                             </Col>
                         </Row>
-                        {(info.games || info.reservations.length !== 0) &&
+                        {info.games &&
                         <Row className="m-2 inline-flex">
                             {info.games.length !== 0 &&
                             <Col className="w-50 p-2">
@@ -328,6 +328,8 @@ function PersonDetails(props) {
 
                         </Row>
                         }
+                        {info.reservations && <Row>"hi"</Row>}
+
 
 
                     </div>
