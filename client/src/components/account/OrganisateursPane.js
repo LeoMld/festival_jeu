@@ -216,6 +216,7 @@ function OrganisateursPane(){
 
                     </Modal>
                 </Row>
+                <h4 className="font-weight-600">Gestion des organisateurs</h4>
                 <hr style={{width:"20%"}}/>
                 {errorOrgas && <Alert color="danger" >{errorOrgas}</Alert>}
                 <Table striped>
