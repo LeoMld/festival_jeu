@@ -24,7 +24,7 @@ module.exports = {
             userId: id,
             type: type
         }, process.env.JWT_SIGN, {
-            expiresIn: '15m'
+            expiresIn: '15s'
         })
 
     },
@@ -32,7 +32,9 @@ module.exports = {
        return await jwt.sign({
             userId: id,
             type: type
-        }, process.env.refresh_token)
+        }, process.env.refresh_token,{
+           expiresIn: '3d'
+       })
     },
 
     // Retrieve the status of the user connected, if there is any

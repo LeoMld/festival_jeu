@@ -1,4 +1,5 @@
 import jwt_decode from "jwt-decode";
+import axios from "axios";
 
 const token = {
 
@@ -31,7 +32,18 @@ const token = {
             const decoded = jwt_decode(token.getToken());
             return decoded.type
         }catch (e){
-            return 2
+            let RT = localStorage.getItem("refreshToken")
+            if(RT){
+                 axios.post("/api/token",{token:RT})
+                    .then(async (res)=>{
+                        await token.setToken(res.data.accessToken)
+                        await token.setRefreshToken(res.data.refreshToken)
+                        return jwt_decode(res.data.accessToken)
+                    })
+            }else{
+
+                return 2
+            }
         }
 
     },
