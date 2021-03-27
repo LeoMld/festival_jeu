@@ -4,9 +4,8 @@ const jwt = require('jsonwebtoken');
 getStatus = async (token) => {
     try {
         const decoded = jwt.verify(token, process.env.JWT_SIGN)
-
-        if (decoded.type) {
-            return await decoded.type
+        if (decoded.type !== undefined) {
+            return decoded.type
         } else {
             return 2
         }
@@ -28,13 +27,13 @@ module.exports = {
         })
 
     },
-    createRefreshToken : async (id,type)=>{
-       return await jwt.sign({
+    createRefreshToken: async (id, type) => {
+        return await jwt.sign({
             userId: id,
             type: type
-        }, process.env.refresh_token,{
-           expiresIn: '3d'
-       })
+        }, process.env.refresh_token, {
+            expiresIn: '3d'
+        })
     },
 
     // Retrieve the status of the user connected, if there is any
@@ -56,10 +55,11 @@ module.exports = {
         }
     },
 
-    privateRoute: async (req, res, next) => {
+    privateRouteAdminOrga: async (req, res, next) => {
         try {
-            if (await getStatus(req.headers.authorization) !== (0 || 1)) {
-                res.status(401).json({code: 0})
+            const status = await getStatus(req.headers.authorization)
+            if (status === 2) {
+                res.status(403).json({code: 0})
             } else {
                 next();
             }
@@ -68,5 +68,16 @@ module.exports = {
         }
     },
 
-
+    privateRouteAdmin: async (req, res, next) => {
+        try {
+            const status = await getStatus(req.headers.authorization)
+            if (status !== 1) {
+                res.status(403).json({code: 0})
+            } else {
+                next();
+            }
+        } catch (e) {
+            console.log(e)
+        }
+    },
 }

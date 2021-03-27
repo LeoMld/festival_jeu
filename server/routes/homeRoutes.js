@@ -4,13 +4,9 @@ const router = express.Router();
 // We import the controller of the homeRoutes routes
 const homeController = require('../controllers/homeController');
 
-
-router.delete('')
 router.get('/token', homeController.getStatus)
 router.post('/token', homeController.refreshToken)
 
-
 router.post('/login', homeController.login)
-
 
 module.exports = router;
