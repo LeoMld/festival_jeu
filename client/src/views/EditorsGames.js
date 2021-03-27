@@ -1,18 +1,18 @@
 import React from 'react'
 import useAxios from "../utils/useAxios";
-import {Alert, Col, ListGroup, ListGroupItem, ListGroupItemHeading, Row} from "reactstrap";
+import {Alert, Col, ListGroup, ListGroupItem, Row} from "reactstrap";
 import Waiting from "../components/utils/Waiting";
 import EditorGames from "../components/person/EditorGames";
 
 function EditorsGames() {
 
-    const {data: editorsGames, setData: setEditorGames, isPending, error} = useAxios('/api/gestion/jeuxEditeur')
+    const {data: editorsGames, setData: setEditorGames, isPending, error} = useAxios('/api/gestion/jeuPresent/editeur')
 
     return (
         <div className="justify-content-center mr-7 ml-7">
             <h1 className="font-weight-900 mt-5 mb-5">Liste des éditeurs et de leurs jeux</h1>
             <h2 className="text-left font-weight-300">Navigation rapide</h2>
-            {!isPending && editorsGames.length === 0 &&
+            {editorsGames && editorsGames.length === 0 &&
             <p>Il n'y a rien à afficher pour le moment.</p>}
             <Row>
                 <Col>
