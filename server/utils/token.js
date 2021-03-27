@@ -24,7 +24,7 @@ module.exports = {
             userId: id,
             type: type
         }, process.env.JWT_SIGN, {
-            expiresIn: '15s'
+            expiresIn: '15m'
         })
 
     },
