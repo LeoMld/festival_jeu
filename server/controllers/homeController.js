@@ -32,15 +32,12 @@ module.exports = {
 
                 if (match) {
                     data.match = true
-                    console.log(user)
                     jwtToken = await token.connect(user[0].idUtilisateur, user[0].typeUtilisateur)
-                    console.log(jwtToken)
                     //if it's the good password
                     const refreshToken = await token.createRefreshToken(user[0].idUtilisateur, user[0].typeUtilisateur)
-                    console.log(refreshToken)
                     //put exp time afer tested
                     data.type = user[0].typeUtilisateur
-                    res.status(200).json({token: jwtToken, refreshToken : refreshToken,data: data})
+                    res.status(200).json({token: jwtToken, refreshToken: refreshToken, data: data})
                 } else {
                     res.status(401).json({token: jwtToken, data: data})
                 }
@@ -48,23 +45,21 @@ module.exports = {
                 res.status(401).json({token: jwtToken, data: data})
             }
         } catch (err) {
-            console.log(err)
             res.status(503).json({error: err})
         }
 
     },
-    refreshToken : async (req,res) =>{
+    refreshToken: async (req, res) => {
         const refreshToken = req.body.token
-        console.log(req.body)
-        if (refreshToken == null) return res.status(401).json({logged:false})
+        if (refreshToken == null) return res.status(401).json({logged: false})
         //verif if token is already used
         //if (!refreshTokens.includes(refreshToken)) return res.sendStatus(403)
         jwt.verify(refreshToken, process.env.REFRESH_TOKEN, async (err, user) => {
-            if (err) return res.status(403).json({logged:false})
+            if (err) return res.status(403).json({logged: false})
             const accessToken = await token.connect(user.userId, user.type)
             const refreshToken = await token.createRefreshToken(user.userId, user.type)
 
-            res.status(201).json({ accessToken: accessToken,refreshToken : refreshToken })
+            res.status(201).json({accessToken: accessToken, refreshToken: refreshToken})
         })
     }
 }
