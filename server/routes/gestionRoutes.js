@@ -19,7 +19,7 @@ router.put("/reservations/:id", reservationController.updateReservation)
 router.post("/notes", noteController.createNote)
 router.put("/notes/:id", noteController.updateNote)
 
-router.use(token.privateRoute);
+router.use(token.privateRouteAdminOrga);
 
 router.get('/festival', festivalController.getAllFestivals)
 router.post('/festival', festivalController.createFestival)
