@@ -223,7 +223,7 @@ function ReservationJeuxReserves(props) {
                                         <Input type="select"
                                                name="select"
                                                id={"zoneSelector" + game.PK_idJeu}
-                                               defaultValue={displayLibelleZone(game.PK_idZone)}>
+                                               defaultValue={game.PK_idZone}>
                                             size="sm">
                                             {props.info.zones.map((z, index) => {
                                                     return (

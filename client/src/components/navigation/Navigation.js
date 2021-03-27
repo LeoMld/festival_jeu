@@ -62,8 +62,6 @@ class Navigation extends Component {
 
     render() {
 
-        console.log(token.getType())
-
             //return the navbar for an administrator
             if(token.getType() === 1 || token.getType() === 0){
                 return (
