@@ -70,7 +70,7 @@ module.exports = {
     // Retrieve all games of the current festival
     getAllGamesCurrentFestival: async (idFest,client) => {
         const clientUsed = await DB.getPoolClient(client)
-        const queryText = 'SELECT DISTINCT "idJeu","idZone","libelleJeu","libelleZone", "nombreJoueur", "ageMinimum", "duree", "libelleTypeJeu", "prototype", "nomPersonne","idTypeJeu" FROM "JeuPresent"\n' +
+        const queryText = 'SELECT DISTINCT "idJeu", "libelleJeu", "nombreJoueur", "ageMinimum", "duree", "libelleTypeJeu", "prototype", "nomPersonne","idTypeJeu" FROM "JeuPresent"\n' +
             '    JOIN "Jeu" ON "JeuPresent"."PK_idJeu" = "Jeu"."idJeu" ' +
             '    JOIN "Personne" ON "FK_idPersonne"="Personne"."idPersonne" ' +
             '    JOIN "TypeJeu" TJ on TJ."idTypeJeu" = "Jeu"."FK_idTypeJeu" ' +
