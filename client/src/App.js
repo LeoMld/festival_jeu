@@ -22,6 +22,7 @@ import Zones from "./views/Zones"
 import Reservations from "./views/Reservations"
 import ReservationDetail from "./views/ReservationDetail"
 import Account from "./views/Account";
+import EditorsGames from "./views/EditorsGames";
 
 import axios from "axios";
 
@@ -78,6 +79,7 @@ function App() {
 
                     <Route path="/Zones" exact component={Zones}/>
                     <Route path="/ListeJeux" exact component={AllGames}/>
+                    <Route path="/JeuxEditeurs" exact component={EditorsGames}/>
 
                     {token.getType() !== 2 ?
                         <Route path="/Reservations" exact component={Reservations}/>

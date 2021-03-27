@@ -1,5 +1,8 @@
 const Zone = require('../models/zoneModel')
 const JeuPresent = require('../models/jeuPresentModel')
+const Person = require('../models/personModel')
+const utils = require("../utils/utils");
+
 module.exports = {
     // Update the game in the zone
     changeZoneJeuPresent: (req, res) => {
@@ -65,5 +68,30 @@ module.exports = {
                 console.log(err)
                 res.status(503).json()
             })
+    },
+
+    // Retrieve all the games in the festival for each editor
+    getAllGamesEditeur: async (req, res) => {
+        try {
+            const idFestival = await utils.getFestivalToDisplay(req)
+            const editors = await Person.getEditeurs()
+            // Will contain the editors and their games of the current festival
+            const data = []
+            for (let i = 0; i < editors.length; i++) {
+                const games = await JeuPresent.getGamesReservedEditor(editors[i].idPersonne, idFestival)
+                console.log(games)
+                // We only keep the editors with games on the festival
+                if (games.length !== 0) {
+                    const editor = editors[i]
+                    editor.games = games
+                    data.push(editor)
+                }
+            }
+            console.log(data)
+            res.status(200).json(data)
+        } catch (err) {
+            console.log(err)
+            res.status(503).json()
+        }
     }
 }

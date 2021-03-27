@@ -201,7 +201,7 @@ class Navigation extends Component {
                                     </NavItem>
 
                                     <NavItem>
-                                        <Link className="nav-link" to="/">Editeurs</Link>
+                                        <Link className="nav-link" to="/JeuxEditeurs">Editeurs</Link>
                                     </NavItem>
 
                                 </Nav>
