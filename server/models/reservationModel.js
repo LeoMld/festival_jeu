@@ -50,6 +50,12 @@ module.exports = {
         let info = (await clientUsed.query(text, values)).rows[0]
         info["espace"] = await EspaceReserve.getReservationsSpaces(idReservation, clientUsed)
         info["jeuPresents"] = await jeuPresent.getReservationGames(idReservation, clientUsed)
+        let prixRenvoi = await jeuPresent.getFactureGames(info.idReservation, clientUsed)
+        if (prixRenvoi.prixrenvoitotal) {
+            info["prixRenvoiTotal"] = parseInt(prixRenvoi.prixrenvoitotal)
+        } else {
+            info["prixRenvoiTotal"] = 0
+        }
         return info
 
 

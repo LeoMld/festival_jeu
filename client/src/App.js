@@ -22,8 +22,10 @@ import Zones from "./views/Zones"
 import Reservations from "./views/Reservations"
 import ReservationDetail from "./views/ReservationDetail"
 import Account from "./views/Account";
+import EditorsGames from "./views/EditorsGames";
 
 import axios from "axios";
+import Facturation from "./views/Facturation";
 
 function App() {
 
@@ -78,11 +80,18 @@ function App() {
 
                     <Route path="/Zones" exact component={Zones}/>
                     <Route path="/ListeJeux" exact component={AllGames}/>
+                    <Route path="/JeuxEditeurs" exact component={EditorsGames}/>
 
                     {token.getType() !== 2 ?
                         <Route path="/Reservations" exact component={Reservations}/>
                         :
                         <Route path="/Reservations" exact><Redirect to="/Connexion"/></Route>
+                    }
+
+                    {token.getType() !== 2 ?
+                        <Route path="/Facturation" exact component={Facturation}/>
+                        :
+                        <Route path="/Facturation" exact><Redirect to="/Connexion"/></Route>
                     }
                     {token.getType() !== 2 ?
                         <Route path="/Reservations/:id" exact component={ReservationDetail}/>

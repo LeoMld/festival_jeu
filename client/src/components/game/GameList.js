@@ -14,10 +14,14 @@ function GameList() {
 
     //the state to add a type trough a modal
     const [modalTypeState, setModalTypeState] = useState(false)
-
-
+    let routeGames= ""
+    if(token.getType()!==2){
+        routeGames = "/api/games"
+    }else{
+        routeGames = "/api/games/FestivalCourant"
+    }
     //states related to all the games
-    const {data: games, setData: setGames, isPending, error} = useAxios("/api/games")
+    const {data: games, setData: setGames, isPending, error} = useAxios(routeGames)
 
     //get all types of game
     const {data: types} = useAxios("/api/games/TypesJeux")
@@ -36,6 +40,7 @@ function GameList() {
     const openAddTypeModal = ()=>{
         setModalTypeState(!modalTypeState)
     }
+    console.log("games vaut"+games)
 
 
     return(
@@ -90,6 +95,8 @@ function GameList() {
                     })}
                 </tbody>
             </table>
+            {games && games.length === 0 && <Row className="justify-content-center">Il n'y a pas encore de jeux prévu</Row>}
+
 
             {isPending &&
             <Waiting name={"games"}/>

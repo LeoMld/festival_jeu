@@ -2,7 +2,7 @@ import React, {useState} from 'react'
 import useAxios from "../utils/useAxios";
 import token from "../utils/token";
 
-import {Alert, Button, Col, Row, UncontrolledAlert} from "reactstrap";
+import {Alert, Button, Col, ListGroup, ListGroupItem, Row, UncontrolledAlert} from "reactstrap";
 
 import Waiting from "../components/utils/Waiting";
 import Zone from "../components/zone/zone";
@@ -73,8 +73,45 @@ function Zones() {
     return (
         <div className="justify-content-center mr-7 ml-7">
             <h1 className="font-weight-900 mt-5 mb-5">Liste des zones et de leurs jeux</h1>
+            <h2 className="text-left font-weight-300">Navigation rapide</h2>
+            {(!isPending && zones.length === 0 || (!isPending && token.getType() === 2 && zones.length === 1)) &&
+            <p>Il n'y a rien à afficher pour le moment.</p>}
+            <Row>
+                <Col>
+                    <ListGroup>
+                        {!isPending && !error &&
+                        zones.map((zone, index) => {
+                            if (index % 3 === (token.getType() !== 2 ? 0 : 1)) return (
+                                <ListGroupItem key={"nav" + index} tag="a" href={"#" + index}>
+                                    {zone.libelleZone}
+                                </ListGroupItem>
+                            )
+                        })}
+                    </ListGroup>
+                </Col>
+                <Col>
+                    {!isPending && !error &&
+                    zones.map((zone, index) => {
+                        if (index % 3 === (token.getType() !== 2 ? 1 : 2)) return (
+                            <ListGroupItem key={"nav" + index} tag="a" href={"#" + index.toString()}>
+                                {zone.libelleZone}
+                            </ListGroupItem>
+                        )
+                    })}
+                </Col>
+                <Col>
+                    {!isPending && !error &&
+                    zones.map((zone, index) => {
+                        if (index % 3 === (token.getType() !== 2 ? 2 : (zone.libelleZone === "Indéfinie" ? -1 : 0))) return (
+                            <ListGroupItem key={"nav" + index} tag="a" href={"#" + index.toString()}>
+                                {zone.libelleZone}
+                            </ListGroupItem>
+                        )
+                    })}
+                </Col>
+            </Row>
             {token.getType() === 1 &&
-            <div className="d-flex flex-row-reverse mb-sm-3">
+            <div className="d-flex flex-row-reverse mb-sm-3 mt-4">
                 <Button
                     color="success"
                     outline
@@ -100,7 +137,7 @@ function Zones() {
                 (!isPending ? (zones.map((zone, index) => {
                         if (token.getType() !== 2 || (token.getType() === 2 && zone.libelleZone !== "Indéfinie"))
                             return (
-                                <Row className="mb-3 mt-3" key={index}>
+                                <Row className="mb-3 mt-3" key={index} id={index}>
                                     <Col>
                                         <Zone zones={zones} zone={zone} updateZone={updateZone} deleteZone={deleteZone}
                                               updateGameZone={updateGameZone} changeZoneJeu={changeZoneJeu}/>
