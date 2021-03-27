@@ -11,7 +11,6 @@ module.exports = {
         const idReservation = req.body.idReservation
         const idNewZone = req.body.idNewZone
         const idFestival = req.body.idFestival
-        console.log(idJeu + " " + idZone + " " + idNewZone + " " + idReservation + " " + idFestival)
         Zone.changeZoneJeuPresent(idZone, idJeu, idReservation, idNewZone, idFestival)
             .then(() => {
                 // All is fine
