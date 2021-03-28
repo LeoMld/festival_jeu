@@ -79,7 +79,6 @@ module.exports = {
             const data = []
             for (let i = 0; i < editors.length; i++) {
                 const games = await JeuPresent.getGamesReservedEditor(editors[i].idPersonne, idFestival)
-                console.log(editors[i].nomPersonne)
                 // We only keep the editors with games on the festival
                 if (games.length !== 0) {
                     const editor = editors[i]
