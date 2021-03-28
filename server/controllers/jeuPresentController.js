@@ -84,10 +84,12 @@ module.exports = {
                 if (games.length !== 0) {
                     const editor = editors[i]
                     editor.games = games
+                    for(let j = 0; j<games.length; j++){
+                        editor.games[j].nomPersonne = editors[i].nomPersonne
+                    }
                     data.push(editor)
                 }
             }
-            console.log(data)
             res.status(200).json(data)
         } catch (err) {
             console.log(err)
