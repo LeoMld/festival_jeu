@@ -300,15 +300,15 @@ function PersonDetails(props) {
                                             } color="success" outline type="button">
                                                 Ajouter un jeu
                                             </Button>}
-                                            <table className="table table-striped">
+                                            <Table className="table table-striped table-responsive-sm table-responsive-md">
                                                 <thead>
                                                 <tr>
                                                     <th className="text-center">#</th>
                                                     <th>Titre</th>
-                                                    <th className="d-none d-lg-table-cell">Nombre de joueurs</th>
-                                                    <th className="d-none d-lg-table-cell">Âge minimum</th>
-                                                    <th className="d-none d-lg-table-cell">Durée</th>
-                                                    <th className="d-none d-lg-table-cell">Type</th>
+                                                    <th className=" d-lg-table-cell">Nombre de joueurs</th>
+                                                    <th className=" d-lg-table-cell">Âge minimum</th>
+                                                    <th className=" d-lg-table-cell">Durée</th>
+                                                    <th className=" d-lg-table-cell">Type</th>
                                                     {token.getType() === 1 && <th>Prototype</th>}
                                                     {token.getType() === 1 && <th>Action</th>}
 
@@ -323,7 +323,7 @@ function PersonDetails(props) {
                                                 })
                                                 }
                                                 </tbody>
-                                            </table>
+                                            </Table>
 
                                         </CardBody>
                                     </Card>

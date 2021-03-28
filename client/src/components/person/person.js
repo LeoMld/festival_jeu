@@ -43,6 +43,9 @@ function Person(props){
                 setPerson({...person,exposantInactif:bool})
             })
     }
+    const badLuck = ()=>{
+        console.log("Nice Try")
+    }
     return(
         <tr key={props.index}>
             <td>
@@ -60,7 +63,7 @@ function Person(props){
             <td >
                 <label className="custom-toggle">
                     <input
-                        onChange={()=> {handleChangeEditeur(!person.estEditeur)}}
+                        onChange={()=> {tokenType===1?handleChangeEditeur(!person.estEditeur):badLuck()}}
                         checked={person.estEditeur}
                         type="checkbox"
                         defaultChecked={person.estEditeur}
@@ -74,7 +77,7 @@ function Person(props){
             <td >
                 <label className="custom-toggle">
                     <input
-                        onChange={()=> {handleChangeExposant(!person.estExposant)}}
+                        onChange={()=> {tokenType===1?handleChangeExposant(!person.estExposant):badLuck()}}
                         checked={person.estExposant}
                         type="checkbox"
                         defaultChecked={person.estExposant}
@@ -88,7 +91,7 @@ function Person(props){
             <td >
                 <label className="custom-toggle">
                     <input
-                        onChange={()=> {handleChangeExposantInactif(!person.exposantInactif)}}
+                        onChange={()=> {tokenType===1?handleChangeExposantInactif(!person.exposantInactif):badLuck()}}
                         checked={person.exposantInactif}
                         type="checkbox"
                         defaultChecked={person.exposantInactif}
