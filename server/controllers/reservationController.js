@@ -71,6 +71,18 @@ module.exports = {
             })
 
     },
+    updateNonResponseReservation : async (req, res) => {
+        let idFestival = await utils.getFestivalToDisplay(req)
+        await Reservation.updateWorkFlowNoResponse(idFestival)
+            .then((result)=>{
+                console.log(result)
+                res.status(200).json(result)
+            })
+            .catch((e)=>{
+                console.log(e)
+                res.status(503).json(e)
+            })
+    },
 
     // Create new reserved spaces for a reservation
     saveNewEmplacements: async (req, res) => {

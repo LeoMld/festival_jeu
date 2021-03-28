@@ -12,5 +12,7 @@ router.get("/:id", reservationController.getAReservation)
 router.use(token.privateRouteAdmin)
 
 router.put("/:id", reservationController.updateReservation)
+router.post("/", reservationController.createNewReservations)
+router.put("/", reservationController.updateNonResponseReservation)
 
 module.exports = router;

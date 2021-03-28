@@ -90,6 +90,12 @@ module.exports = {
     },
 
     //==========================UPDATE=============================
+    updateWorkFlowNoResponse : async (idFestival,client)=>{
+        const clientUsed = await DB.getPoolClient(client)
+        const queryText = 'UPDATE "Reservation" SET "workflowReservation"=3 WHERE "workflowReservation"=2 AND "FK_idFestival"=$1'
+        return (await clientUsed.query(queryText, [idFestival])).rowCount
+
+    },
     updateSingleCol: async (idReservation, colName, colValue) => {
         const client = await DB.pool.connect()
         try {

@@ -1,6 +1,6 @@
 import {Button, Col, Input, Label, Row} from "reactstrap";
 import WorkFlowSelector from "../utils/WorkFlowSelector";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import token from "../../utils/token";
 import axios from "axios";
 import pdf from "../../utils/pdf"
@@ -25,16 +25,18 @@ function Reservation(props){
                 return ""
         }
     }
+
     const handleChanges = async (event)=>{
         let info={}
         let value= event.target.value
         info[event.target.id]=value
-        console.log(info)
         axios.put("/api/gestion/reservations/"+r.idReservation,info,{ headers: { Authorization: token.getToken() } })
             .then((res)=>{
                 setR({...r,[event.target.name]:value})
                 if(event.target.id==="workflowReservation"){
+                    setR({...r,[event.target.id]:value})
                     setColor(parseInt(value))
+                    console.log(r)
                 }
             })
             .catch(()=>{
@@ -99,7 +101,7 @@ function Reservation(props){
                 <Row>
                     <Col md={6}>
                         <p className="mb--1">Etat de la Réservation</p>
-                        <WorkFlowSelector selected={r.workflowReservation} id="workflowReservation" handleChanges={tokenType===1?handleChanges:badLuck} disabled={token.getToken()!==1}/>
+                        <WorkFlowSelector selected={r.workflowReservation} id="workflowReservation" handleChanges={tokenType===1?handleChanges:badLuck} disabled={token.getToken()===1}/>
                     </Col>
                     <Col md={6}>
                         <div className={colorStateReservation()+ " mt-4"} style={{minHeight:"15px"}}> </div>
