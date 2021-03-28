@@ -273,15 +273,12 @@ module.exports = {
             console.log()
             if (games.length===0){
                 await updatePersonEditeur(req, res)
-                    .catch((err)=>{
-                        res.status(503).json({updated: false})
-
-                    })
             }else{
                 res.status(400).json({updated:false})
             }
         }else if(body.estExposant!==undefined){
-            const reservations = Reservation.getPersonReservations(req.params.id)
+            const reservations = await Reservation.getPersonReservations(req.params.id)
+            console.log(reservations)
             if(reservations.length===0) {
 
                 await updatePersonExposant(req, res).catch((err) => {
@@ -289,7 +286,7 @@ module.exports = {
 
                 })
             }else{
-            res.status(400).json({updated:false})
+                res.status(400).json({updated:false})
         }
         }else if(body.exposantInactif!==undefined){
             await updatePersonInactif(req, res).catch((err)=>{
