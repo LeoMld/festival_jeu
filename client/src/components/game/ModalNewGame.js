@@ -45,7 +45,7 @@ function ModalNewGame(props) {
         setData: setPersons,
         isPending: isPendingPersons,
         error: errorPersons
-    } = useAxios("/api/gestion/personnes")
+    } = useAxios("/api/gestion/editeurs")
 
     const addGameView = (game) => {
         if (props.type === 1) {
@@ -183,7 +183,7 @@ function ModalNewGame(props) {
                                             </InputGroupText>
                                         </InputGroupAddon>
 
-                                        <Input id="proprietaire" type="select" name="select">
+                                        {persons && <Input id="proprietaire" type="select" name="select">
                                             {persons.map((person, index) => {
                                                 return (
                                                     <option id={"proprietaire"+person.idPersonne} key={index}
@@ -193,7 +193,7 @@ function ModalNewGame(props) {
                                             })}
 
 
-                                        </Input>
+                                        </Input>}
                                     </InputGroup>
                                 </FormGroup>
                                 <FormGroup className="mb-3">
