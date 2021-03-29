@@ -30,23 +30,22 @@ import Facturation from "./views/Facturation";
 function App() {
 
     const history = useHistory()
-    axios.interceptors.request.use(async (config)=>{
+    axios.interceptors.request.use(async (config) => {
         console.log(config)
         console.log(config.method)
         const accessToken = config.headers.Authorization
         let exp;
-        try{
+        try {
             exp = token.getTokenExp(accessToken)
-        }
-        catch (e){
+        } catch (e) {
             exp = 0
         }
-        let now=new Date().getTime()/1000
-        if(exp< (now + 5)){
+        let now = new Date().getTime() / 1000
+        if (exp < (now + 5)) {
             console.log("Gonna Exp")
-            const refreshToken  = token.getRefreshToken()
-            await axios.post("/api/token",{token:refreshToken})
-                .then(async (res)=>{
+            const refreshToken = token.getRefreshToken()
+            await axios.post("/api/token", {token: refreshToken})
+                .then(async (res) => {
                     await token.setToken(res.data.accessToken)
                     await token.setRefreshToken(res.data.refreshToken)
                     config.headers.Authorization = res.data.accessToken
@@ -55,10 +54,9 @@ function App() {
 
         }
         return config
-    },(err)=>{
+    }, (err) => {
         return Promise.reject(err)
     })
-
 
 
     return (
@@ -149,8 +147,6 @@ function App() {
                 </Switch>
 
             </div>
-
-
             <Footer/>
         </div>
     );

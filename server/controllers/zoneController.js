@@ -10,31 +10,12 @@ module.exports = {
     // Retrieve all the zones of a festival
     getAllZonesFestival: async (req, res) => {
         try {
-            const idFestival = await utils.getFestivalToDisplay(req)
+            const idFestival = (await utils.getFestivalToDisplay(req)).idFestival
             const zones = await Zone.getAFestivalZones(idFestival)
             // We need the games in each zones
             for (let i = 0; i < zones.length; i++) {
                 // We retrieve the reserved games for each zone
-                zones[i].games = await JeuPresent.getGamesReserved(zones[i].idZone)
-                for (let j = 0; j < zones[i].games.length; j++) {
-                    // And now the info of all those games
-                    const game = await Jeu.getGame(zones[i].games[j].PK_idJeu)
-                    zones[i].games[j].libelleJeu = game[0].libelleJeu
-                    zones[i].games[j].nombreJoueur = game[0].nombreJoueur
-                    zones[i].games[j].ageMinimum = game[0].ageMinimum
-                    zones[i].games[j].duree = game[0].duree
-                    zones[i].games[j].prototype = game[0].prototype
-                    // The type of the game
-                    const typeGame = await Jeu.getTypeJeu(game[0].FK_idTypeJeu)
-                    zones[i].games[j].libelleTypeJeu = typeGame.libelleTypeJeu
-                    // The editor of the game
-                    const editor = await Person.getPerson(game[0].FK_idPersonne)
-                    zones[i].games[j].nomPersonne = editor.nomPersonne
-                    // We retrieve the reservation
-                    const reservation = await Reservation.getReservation(zones[i].games[j].PK_idReservation)
-                    zones[i].games[j].besoinAnimateurReservation = reservation.besoinAnimateurReservation
-                    zones[i].games[j].jeuxRecuReservation = reservation.jeuxRecuReservation
-                }
+                zones[i].games = await JeuPresent.getGamesReservedZone(zones[i].idZone)
             }
             res.status(200).json(zones)
 
@@ -49,7 +30,7 @@ module.exports = {
     createNewZone: async (req, res) => {
         try {
             const body = req.body;
-            const idFestival = await utils.getFestivalToDisplay(req)
+            const idFestival = (await utils.getFestivalToDisplay(req)).idFestival
             const nameZone = body.libelleZone
             // We check the length of the zone
             if (nameZone.length > 2 && nameZone.length < 50) {

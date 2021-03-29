@@ -40,7 +40,7 @@ module.exports = {
 
     //return all the games of the current festival
     getAllGamesFestivalCourant: async (req,res) => {
-        const idFest = await utils.getFestivalToDisplay(req)
+        const idFest = (await utils.getFestivalToDisplay(req)).idFestival
         await jeux.getAllGamesCurrentFestival(idFest).then(result => {
             if(result.length===0){
                 res.status(200).json([])

@@ -37,9 +37,9 @@ module.exports = {
     },
 
     // Retrieve the games reserved of a zone
-    getGamesReserved: async (idZone, client) => {
+    getGamesReservedZone: async (idZone, client) => {
         const clientUsed = DB.getPoolClient(client)
-        const queryText = 'SELECT * from "JeuPresent" WHERE "PK_idZone" = $1 ORDER BY "derniereModification" DESC;'
+        const queryText = 'SELECT * from "JeuPresent" JOIN "Jeu" J ON J."idJeu" = "JeuPresent"."PK_idJeu" JOIN "TypeJeu" TJ ON TJ."idTypeJeu" = J."FK_idTypeJeu" JOIN "Personne" P ON P."idPersonne" = J."FK_idPersonne" JOIN "Reservation" R ON R."idReservation" = "JeuPresent"."PK_idReservation" WHERE "PK_idZone" = $1 ORDER BY "derniereModification" DESC;'
         const queryValues = [idZone]
         return (await clientUsed.query(queryText, queryValues)).rows
     },

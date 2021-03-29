@@ -9,7 +9,7 @@ module.exports = {
     getFestivalToDisplay: async (req, res) => {
         Utils.getFestivalToDisplay(req)
             .then((festivalToSee) => {
-                res.status(200).json({idFestival: festivalToSee})
+                res.status(200).json(festivalToSee)
             })
             .catch(() => {
                 res.status(503).json()

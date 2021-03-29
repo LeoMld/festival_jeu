@@ -73,7 +73,7 @@ module.exports = {
     // Retrieve all the games in the festival for each editor
     getAllGamesEditeur: async (req, res) => {
         try {
-            const idFestival = await utils.getFestivalToDisplay(req)
+            const idFestival = (await utils.getFestivalToDisplay(req)).idFestival
             const editors = await Person.getEditeurs()
             // Will contain the editors and their games of the current festival
             const data = []

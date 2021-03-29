@@ -31,12 +31,12 @@ class Footer extends React.Component {
                   </span>
                   </Button>
                   <UncontrolledTooltip delay={0} target="tooltip475038074">
-                    Follow us
+                    Suivez-nous sur twitter !
                   </UncontrolledTooltip>
                   <Button
                       className="btn-icon-only rounded-circle ml-1"
                       color="facebook"
-                      href=""
+                      href="https://www.facebook.com/festivaldujeudemontpellier/"
                       id="tooltip837440414"
                       target="_blank"
                   >
@@ -45,7 +45,7 @@ class Footer extends React.Component {
                   </span>
                   </Button>
                   <UncontrolledTooltip delay={0} target="tooltip837440414">
-                    Like us
+                    Aimez-nous sur facebook !
                   </UncontrolledTooltip>
                   <Button
                       className="btn-icon-only rounded-circle ml-1"
@@ -59,7 +59,7 @@ class Footer extends React.Component {
                   </span>
                   </Button>
                   <UncontrolledTooltip delay={0} target="tooltip829810202">
-                    Follow us
+                    Un ballon
                   </UncontrolledTooltip>
                   <Button
                       className="btn-icon-only rounded-circle ml-1"
@@ -73,7 +73,7 @@ class Footer extends React.Component {
                   </span>
                   </Button>
                   <UncontrolledTooltip delay={0} target="tooltip495507257">
-                    Star on Github
+                    Le projet sur GitHub
                   </UncontrolledTooltip>
                 </Col>
               </Row>
@@ -99,17 +99,13 @@ class Footer extends React.Component {
 
                     </NavItem>
                     <NavItem>
-
                       <NavLink
                           href=""
                           target="_blank"
                       >
-                        About Us
-
+                        À propos
                       </NavLink>
                     </NavItem>
-
-
                   </Nav>
                 </Col>
               </Row>

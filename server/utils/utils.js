@@ -19,9 +19,9 @@ module.exports = {
             .then((festivalToSee) => {
                 // In case there is no current festival
                 if (festivalToSee === undefined || festivalToSee.idFestival === null) {
-                    festivalToSee = noFestival
+                    festivalToSee = {idFestival: noFestival, nameFestival: "Festival non reconnu"}
                 } else {
-                    festivalToSee = festivalToSee.idFestival
+                    festivalToSee = festivalToSee
                 }
                 return festivalToSee
             })

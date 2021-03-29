@@ -93,7 +93,7 @@ module.exports = {
     // We retrieve the festival to see of a user
     retrieveFestivalUser: async (idUtilisateur, client) => {
         const clientUsed = await DB.getPoolClient(client)
-        const queryText = 'SELECT "FK_idFestival" AS "idFestival"  FROM "Utilisateur" WHERE "idUtilisateur" = $1;'
+        const queryText = 'SELECT "FK_idFestival" AS "idFestival", "nameFestival"  FROM "Utilisateur" JOIN "Festival" ON "idFestival"="Utilisateur"."FK_idFestival" WHERE "idUtilisateur" = $1;'
         const queryValues = [idUtilisateur]
         let festivalToSee = (await clientUsed.query(queryText, queryValues)).rows[0]
         // If it's null, it's automatically the current one

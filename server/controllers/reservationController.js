@@ -7,7 +7,7 @@ const Zone = require("../models/zoneModel");
 
 module.exports = {
     getReservations: async (req, res) => {
-        const idFestival = await utils.getFestivalToDisplay(req)
+        const idFestival = (await utils.getFestivalToDisplay(req)).idFestival
         await Reservation.getFestivalReservations(idFestival)
             .then((result) => {
                 res.status(200).json(result)
@@ -31,19 +31,16 @@ module.exports = {
 
             })
     },
-    createNewReservations : async(req,res)=>{
-        try{
-            let idFestival = await utils.getFestivalToDisplay(req)
-            console.log(idFestival)
-            console.log("OK")
+    createNewReservations: async (req, res) => {
+        try {
+            let idFestival = (await utils.getFestivalToDisplay(req)).idFestival
             const personnes = await Person.getPersonsWithoutReservations(idFestival)
-            if(personnes.length===0){
-                res.status(200).json({data:"No Reservations to create"})
-
-            }else{
+            if (personnes.length === 0) {
+                res.status(200).json({data: "No Reservations to create"})
+            } else {
                 console.log(personnes)
                 for (const p of personnes) {
-                    await Reservation.createPersonReservation(idFestival,p.idPersonne)
+                    await Reservation.createPersonReservation(idFestival, p.idPersonne)
                 }
                 await Reservation.getFestivalReservations(idFestival)
                     .then((result) => {
@@ -53,7 +50,7 @@ module.exports = {
                         res.status(503).json(e)
                     })
             }
-        }catch (e){
+        } catch (e) {
             res.status(503).json(e)
         }
     },
@@ -71,14 +68,14 @@ module.exports = {
             })
 
     },
-    updateNonResponseReservation : async (req, res) => {
-        let idFestival = await utils.getFestivalToDisplay(req)
+    updateNonResponseReservation: async (req, res) => {
+        let idFestival = (await utils.getFestivalToDisplay(req)).idFestival
         await Reservation.updateWorkFlowNoResponse(idFestival)
-            .then((result)=>{
+            .then((result) => {
                 console.log(result)
                 res.status(200).json(result)
             })
-            .catch((e)=>{
+            .catch((e) => {
                 console.log(e)
                 res.status(503).json(e)
             })
