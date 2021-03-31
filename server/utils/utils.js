@@ -33,7 +33,7 @@ module.exports = {
         let idsDone = []
         let i = 0
         let idJeu
-        while (i !== result.length - 1) {
+        while (i !== result.length) {
             idJeu = result[i].idJeu
             // Already done ?
             if (!idsDone.includes(idJeu)) {

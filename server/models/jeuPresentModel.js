@@ -46,7 +46,7 @@ module.exports = {
 
     getGamesReservedEditor: async (idPersonne, idFestival, client) => {
         const clientUsed = DB.getPoolClient(client)
-        const queryText = 'SELECT DISTINCT "libelleJeu", "libelleZone", "nombreJoueur", "ageMinimum", "duree", "libelleTypeJeu", "prototype" ' +
+        const queryText = 'SELECT DISTINCT "idJeu", "libelleJeu", "libelleZone", "nombreJoueur", "ageMinimum", "duree", "libelleTypeJeu", "prototype" ' +
             'from "JeuPresent" ' +
             'JOIN "Reservation" R ON "PK_idReservation" = R."idReservation" ' +
             'JOIN "Jeu" J ON J."idJeu" = "JeuPresent"."PK_idJeu" ' +

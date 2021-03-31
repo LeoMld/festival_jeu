@@ -80,8 +80,8 @@ module.exports = {
                     const editor = editors[i]
                     const newResult = utils.zonesGames(games)
                     editor.games = newResult
-                    for(let j = 0; j<newResult.length; j++){
-                        editor.games[j].nomPersonne = editors[i].nomPersonne
+                    for (let j = 0; j < newResult.length; j++) {
+                        editor.games[j].nomPersonne = editor.nomPersonne
                     }
                     data.push(editor)
                 }
