@@ -78,8 +78,9 @@ module.exports = {
                 // We only keep the editors with games on the festival
                 if (games.length !== 0) {
                     const editor = editors[i]
-                    editor.games = games
-                    for(let j = 0; j<games.length; j++){
+                    const newResult = utils.zonesGames(games)
+                    editor.games = newResult
+                    for(let j = 0; j<newResult.length; j++){
                         editor.games[j].nomPersonne = editors[i].nomPersonne
                     }
                     data.push(editor)

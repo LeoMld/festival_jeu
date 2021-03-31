@@ -25,5 +25,31 @@ module.exports = {
                 }
                 return festivalToSee
             })
+    },
+
+    // Regroup the same games that are in a different zone
+    zonesGames: (result) => {
+        let newResult = []
+        let idsDone = []
+        let i = 0
+        let idJeu
+        while (i !== result.length - 1) {
+            idJeu = result[i].idJeu
+            // Already done ?
+            if (!idsDone.includes(idJeu)) {
+                idsDone.push(idJeu)
+                // We retrieve all similar games
+                const games = result.filter(value => value.idJeu === idJeu)
+                let game = result[i]
+                game.zones = []
+                // We add the zones to the game
+                for (let z = 0; z < games.length; z++) {
+                    game.zones.push(games[z].libelleZone)
+                }
+                newResult.push(game)
+            }
+            i++
+        }
+        return newResult
     }
 }

@@ -45,29 +45,8 @@ module.exports = {
             if (result.length === 0) {
                 res.status(200).json([])
             } else {
-                let idsDone = []
-                let newResult = []
-                let i = 0
-                let idJeu
-                while (i !== result.length - 1) {
-                    idJeu = result[i].idJeu
-                    // Already done ?
-                    if (!idsDone.includes(idJeu)) {
-                        idsDone.push(idJeu)
-                        // We retrieve all similar games
-                        const games = result.filter(value => value.idJeu === idJeu)
-                        let game = result[i]
-                        game.zones = []
-                        // We add the zones to the game
-                        for (let z = 0; z < games.length; z++) {
-                            game.zones.push(games[z].libelleZone)
-                        }
-                        newResult.push(game)
-                    }
-                    i++
-                }
+                const newResult = utils.zonesGames(result)
                 res.status(200).json(newResult)
-
             }
         }).catch((error) => {
             res.status(503).json({error: error})
