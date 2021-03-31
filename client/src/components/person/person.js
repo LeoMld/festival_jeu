@@ -24,7 +24,6 @@ function Person(props){
             .then(()=>{
                 setPerson({...person,estExposant:bool})
             }).catch(()=>{
-                console.log("set")
                 setErrorExposant(true)
         })
     }
@@ -33,7 +32,6 @@ function Person(props){
             .then(()=>{
                 setPerson({...person,estEditeur:bool})
             }).catch(()=>{
-                console.log("set")
                 setErrorEditeur(true)
         })
     }

@@ -47,7 +47,6 @@ const checkContactInputs = (contact)=>{
 module.exports ={
     //retrieve all contact from a person
     /*getAllContact: async (req,res)=>{
-        console.log(req.params)
         let idPersone=parseInt(req.params.idPersone);
         if(isNaN(idPersone)){
             utils.sendErrorNumber(req,res,Object.keys({idPersone})[0])
@@ -115,7 +114,6 @@ module.exports ={
                     .then(()=>{
                         res.status(200).json({updated:true})
                     }).catch((error)=>{
-                        console.log(error)
                         res.status(503).json({
                             error:error,
                             updated:false
@@ -124,11 +122,9 @@ module.exports ={
             }
         }else if (req.body.principal!==undefined){
             let body = req.body
-            console.log(body)
             await Contact.updatePrincipal(body.idPersonne,req.params.id,body.principal).then(()=>{
                 res.status(200).json({updated:true})
             }).catch((e)=>{
-                console.log(e)
                 res.status(503).json({
                     error:e,
                     updated:false

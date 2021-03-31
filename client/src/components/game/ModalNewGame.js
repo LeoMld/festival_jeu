@@ -54,7 +54,6 @@ function ModalNewGame(props) {
             props.setGames({...props.games, games: newGames})
         } else {
             const newGames = props.games
-            console.log(game)
             newGames.push(game)
             props.setGames(newGames)
         }
@@ -78,12 +77,8 @@ function ModalNewGame(props) {
 
                 Axios.post('/api/games/', {game}, {headers: {Authorization: token.getToken()}})
                     .then(res => {
-                        try {
-                            game.idJeu = res.data.idJeu
-                            addGameView(game)
-                        } catch (e) {
-                            console.log(e)
-                        }
+                        game.idJeu = res.data.idJeu
+                        addGameView(game)
 
                         props.setModalState(!props.modalState)
                         setIsChanging(false)

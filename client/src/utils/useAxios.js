@@ -16,7 +16,6 @@ const useAxios = (url) => {
                 setIsPending(false);
             })
             .catch(err => {
-                console.log(err)
                 setError(err.message)
                 setIsPending(false);
                 //if the token is not the good one

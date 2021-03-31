@@ -39,7 +39,6 @@ function Login() {
 
     const onSubmit = () => {
         axios.post('/api/login', {email, password}).then(res => {
-            console.log(res.data)
             if (res.data.data.exist && res.data.data.match) {
                 token.setToken(res.data.token)
                 token.setRefreshToken(res.data.refreshToken)

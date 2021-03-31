@@ -38,7 +38,6 @@ module.exports = {
             if (personnes.length === 0) {
                 res.status(200).json({data: "No Reservations to create"})
             } else {
-                console.log(personnes)
                 for (const p of personnes) {
                     await Reservation.createPersonReservation(idFestival, p.idPersonne)
                 }
@@ -72,11 +71,9 @@ module.exports = {
         let idFestival = (await utils.getFestivalToDisplay(req)).idFestival
         await Reservation.updateWorkFlowNoResponse(idFestival)
             .then((result) => {
-                console.log(result)
                 res.status(200).json(result)
             })
             .catch((e) => {
-                console.log(e)
                 res.status(503).json(e)
             })
     },

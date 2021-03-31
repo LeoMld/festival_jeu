@@ -78,11 +78,9 @@ module.exports = {
     },
     getPersonsWithoutReservations : async (idFestival,client)=>{
         const clientUsed = await DB.getPoolClient(client)
-        console.log("OKOK")
         const query = 'SELECT P."idPersonne" FROM "Personne" P WHERE  P."exposantInactif" = false AND P."estExposant"=true EXCEPT SELECT R."FK_idPersonne" FROM "Reservation" R WHERE R."FK_idFestival"=$1;'
         const values = [idFestival]
         let res = (await clientUsed.query(query,values)).rows
-        console.log(res)
         return res
 
     },

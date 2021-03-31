@@ -40,8 +40,6 @@ function GameList() {
     const openAddTypeModal = ()=>{
         setModalTypeState(!modalTypeState)
     }
-    console.log("games vaut"+games)
-
 
     return(
 

@@ -58,7 +58,6 @@ function Zone(props) {
 
     // Called when the user wants to change the zone of a reserved game
     const handleChangeZone = (idJeu, idReservation, idZone) => {
-        console.log("zoneSelector" + idJeu + idZone + idReservation)
         const idNewZone = document.getElementById("zoneSelector" + idJeu + idZone + idReservation).value
         const data = {
             idJeu,
@@ -184,7 +183,7 @@ function Zone(props) {
                                 </td>
                             </tr>
                             }
-                            {zone.games.map((game, index) => {
+                            {zone.games && zone.games.map((game, index) => {
                                 return (
                                     <tr key={index}>
                                         <td className="align-middle">{game.libelleJeu}</td>

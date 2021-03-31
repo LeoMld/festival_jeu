@@ -49,17 +49,14 @@ VALUES ('${prenomContact}','${nomContact}','${mailContact}',${telFixeContact},${
         }
     },
     updatePrincipal: async (idPerson,idContact,principal)=>{
-        console.log(idPerson + idContact)
         const clientUsed = await DB.pool.connect();
         try{
             if(principal){
                 await clientUsed.query('BEGIN')
                 let queryText = 'UPDATE "Contact" SET "principal"=false WHERE "FK_idPersonne"=$1;'
                 let res = await clientUsed.query(queryText,[idPerson])
-                console.log(res)
                 queryText = 'UPDATE "Contact" SET "principal"=true WHERE "idContact"=$1;'
                 res = await clientUsed.query(queryText,[idContact])
-                console.log(res)
                 await clientUsed.query('COMMIT')
             }else{
                 let queryText = 'UPDATE "Contact" SET "principal"=false WHERE "idContact"=$1;'
@@ -67,7 +64,6 @@ VALUES ('${prenomContact}','${nomContact}','${mailContact}',${telFixeContact},${
             }
         }catch (e){
             await clientUsed.query('ROLLBACK')
-            console.log(e)
             throw e
         }finally {
             clientUsed.release()

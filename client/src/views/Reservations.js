@@ -34,11 +34,9 @@ function Reservations() {
     const updateNonResponseReservations = ()=>{
         axios.put("/api/gestion/reservations",{},{ headers: { Authorization: token.getToken() } })
             .then(async (res)=>{
-                console.log(res.data)
                 setReservations([])
                 axios.get("/api/gestion/reservations",{ headers: { Authorization: token.getToken() } })
                     .then((result)=>{
-                        console.log(result)
                         setReservations(result.data)
                         setUpdated(true)
                         setNumberUpdated(res.data)

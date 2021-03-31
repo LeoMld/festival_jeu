@@ -40,7 +40,6 @@ function ModalType(props){
                 setIsChangingDelete(false)
 
             }).catch(e => {
-            console.log(e)
             setIsChangingDelete(false)
             setError(true)
             //if the token is not the good one

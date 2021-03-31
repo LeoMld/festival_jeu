@@ -55,7 +55,6 @@ function ContactModal(props){
         axios.post("/api/gestion/contact",contact,{headers:{Authorization:token.getToken()}})
             .then((res) =>
             {
-                console.log(res)
                 props.setInfo({...props.info,contacts:res.data})
                 initContactNull()
                 setErrorDetail(initError)

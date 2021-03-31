@@ -15,14 +15,12 @@ function Contact(props){
                     setError(false)
                 }else{
                     let newContacts = changeViewCurrentPrincipal(props.c.idContact)
-                    console.log(newContacts)
                     props.setInfo({...props.info,contacts:newContacts})
                     setError(false)
                 }
 
             })
             .catch((e)=>{
-                console.log(e)
                 setError(true)
             })
     }

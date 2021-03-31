@@ -22,7 +22,6 @@ module.exports = {
         } catch (err) {
             // An error occured
             res.status(503).json()
-            console.log(err)
         }
     },
 

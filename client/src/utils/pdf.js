@@ -24,7 +24,6 @@ const pdf = {
 
 
         r.espace.map(res => {
-            console.log(res)
             let data = {
                 idEspace: res.idEspace.toString(),
                 idEmplacement: res.FK_idEmplacement.toString(),
@@ -40,7 +39,6 @@ const pdf = {
 
 
         /*result.push(Object.assign({}, data))*/
-        console.log(result)
         let headers = createHeaders([
             "idEspace",
             "idEmplacement",

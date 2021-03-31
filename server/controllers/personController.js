@@ -270,7 +270,6 @@ module.exports = {
 
         }else if(body.estEditeur!==undefined){
             const games = await Games.getEditorGames(req.params.id)
-            console.log()
             if (games.length===0){
                 await updatePersonEditeur(req, res)
             }else{
@@ -278,7 +277,6 @@ module.exports = {
             }
         }else if(body.estExposant!==undefined){
             const reservations = await Reservation.getPersonReservations(req.params.id)
-            console.log(reservations)
             if(reservations.length===0) {
 
                 await updatePersonExposant(req, res).catch((err) => {

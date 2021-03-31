@@ -23,7 +23,6 @@ module.exports = {
                 res.status(200).json(result)
             })
             .catch((e) => {
-                console.log(e)
                 res.status(503).json()
             })
     },
@@ -45,7 +44,6 @@ module.exports = {
                     res.status(200).json(id)
                 })
                 .catch((e) => {
-                    console.log(e)
                     res.status(503).json()
                 })
         })
@@ -59,7 +57,6 @@ module.exports = {
                 res.status(200).json({deleted:true})
             })
             .catch((e) => {
-                console.log(e)
                 res.status(503).json()
             })
     },
@@ -97,7 +94,6 @@ module.exports = {
                     res.status(200).json()
                 })
                 .catch((err) => {
-                    console.log(err)
                     res.status(503).json()
                 })
         }else{
@@ -129,7 +125,6 @@ module.exports = {
                             res.status(200).json()
                         })
                         .catch((err) => {
-                            console.log(err)
                             res.status(503).json()
                         })
                 }

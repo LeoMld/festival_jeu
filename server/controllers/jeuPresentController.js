@@ -32,7 +32,6 @@ module.exports = {
                 res.status(200).json()
             })
             .catch((err) => {
-                console.log(err)
                 // An error occured
                 res.status(503).json()
             })
@@ -44,13 +43,11 @@ module.exports = {
         const idZone = req.body.idZone
         const idReservation = req.body.idReservation
         const prixRenvoi = req.body.prixRenvoi
-        console.log("here")
         JeuPresent.addGameReservation(idJeu, idZone, idReservation, prixRenvoi)
             .then((newGame) => {
                 res.status(201).json(newGame)
             })
             .catch((err) => {
-                console.log(err)
                 res.status(503).json()
             })
     },
@@ -65,7 +62,6 @@ module.exports = {
                 res.status(200).json()
             })
             .catch((err) => {
-                console.log(err)
                 res.status(503).json()
             })
     },
@@ -91,7 +87,6 @@ module.exports = {
             }
             res.status(200).json(data)
         } catch (err) {
-            console.log(err)
             res.status(503).json()
         }
     }

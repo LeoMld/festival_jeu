@@ -36,7 +36,6 @@ function Reservation(props){
                 if(event.target.id==="workflowReservation"){
                     setR({...r,[event.target.id]:value})
                     setColor(parseInt(value))
-                    console.log(r)
                 }
             })
             .catch(()=>{
@@ -48,7 +47,6 @@ function Reservation(props){
         info[event.target.id]=val
         setR({...r,[event.target.id]:val})
 
-        console.log(info)
         axios.put("/api/gestion/reservations/"+r.idReservation,info,{ headers: { Authorization: token.getToken() } })
             .then((res)=>{
                 setR({...r,[event.target.id]:val})
@@ -71,7 +69,6 @@ function Reservation(props){
                 })
         }else{
             info["idReservation"]=r.idReservation
-            console.log(info)
             axios.post("/api/gestion/notes",info,{ headers: { Authorization: token.getToken() }})
             .then((res)=>{
                 setR({...r,textNote:valeur})

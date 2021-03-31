@@ -12,18 +12,15 @@ function Selector(props){
         const changePrototype = ()=>{
 
             props.game.prototype = !props.game.prototype
-            console.log(props.games)
             if(props.type===1){
                 props.setGames({...props.games,games:props.games.games})
             }else{
                 props.setGames(prev => ([...prev, ...[]]))
             }
-            console.log(props.games)
 
             const bool = props.game.prototype
             axios.put(props.url,{bool},{ headers: { Authorization: token.getToken() } })
                 .catch(err => {
-                    console.log("Erreur lors du changement " + err)
                     if(err.response.data.code === 0){
                         token.destroyToken()
                     }
