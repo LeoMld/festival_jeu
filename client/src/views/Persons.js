@@ -36,12 +36,16 @@ function Persons(props){
 
     useEffect(()=>{
         if(persons){
+
+
             const indexDebut = (nbPagin-1)*10
             const indexFin = (persons.length <= nbPagin*10-1) ? persons.length: nbPagin*10
+
             let personsPage = []
             for(let i = indexDebut; i<indexFin; i++){
                 personsPage.push(persons[i])
             }
+            console.log(personsPage)
             setPersonsToDisplay(personsPage)
         }
 
@@ -87,7 +91,8 @@ function Persons(props){
                 </thead>
 
                 <tbody>
-                {persons && personsToDisplay.map((p,index)=>{
+                {persons && personsToDisplay && personsToDisplay.map((p,index)=>{
+
                     return(<Person person={p} type={props.type} index={index}/>)
                 })}
                 </tbody>
@@ -106,7 +111,7 @@ function Persons(props){
                     pageRangeDisplayed={5}
                     onChange={(pageNumber)=>{setNbPagin(pageNumber)}}
                     getPageUrl={(nb) => {
-                        return nb
+                        return nb.toString()
                     }}
                 />
             </Row>}

@@ -1,10 +1,12 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import axios from 'axios';
 import {Link} from "react-router-dom";
 import token from "../../utils/token";
 import {Alert} from "reactstrap";
 
 function Person(props){
+
+
     const [person,setPerson]=useState(props.person)
 
     let tokenType = token.getType()
@@ -20,6 +22,11 @@ function Person(props){
     }
     const [errorExposant,setErrorExposant]=useState(false)
     const [errorEditeur,setErrorEditeur]=useState(false)
+
+    useEffect(()=>{
+        setPerson(props.person)
+    },[props.person])
+
     const handleChangeExposant = (bool)=>{
         axios.put(url+person.idPersonne,{estExposant:bool},{ headers: { Authorization: token.getToken() } })
             .then(()=>{
