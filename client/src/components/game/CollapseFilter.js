@@ -61,7 +61,7 @@ function CollapseFilter(props) {
 
     const handleChange = () => {
         setIsPending(true)
-        axios.get("/api/games", {headers: {Authorization: token.getToken()}})
+        axios.get(props.routesGames, {headers: {Authorization: token.getToken()}})
             .then(({data}) => {
                 setGamesFilter(data);
                 setIsPending(false)

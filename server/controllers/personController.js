@@ -40,9 +40,10 @@ const checkPersonInputs = async (data)=>{
             error.nbError += 1
         }
     }
+    console.log(error)
     return error
 }
-const checkInputs = (data)=>{
+const checkInputs = async (data)=>{
     let error={
         nbError:0,
         nomPersonne:false,
@@ -58,22 +59,12 @@ const checkInputs = (data)=>{
         estExposant:false,
     }
     let contact=data.contact
-    let person=data.person
-    //TODO REGEX sur mail et téléphone
-    if(isNaN(parseInt(contact.telFixeContact))){
-        error.telFixeContact=true
-        error.nbError+=1
-    }
-    if(isNaN(parseInt(contact.telPortableContact))){
-        error.telPortableContact=true
-        error.nbError+=1
-
-    }
+    let person = data.person
     if(person.nomPersonne===""){
         error.nomPersonne=true
         error.nbError+=1
 
-    }if(person.statutEditeur==="" && data.type===1){
+    }if(person.statutEditeur==="" && person.estEditeur===true){
         error.statutEditeur=true
         error.nbError+=1
 
@@ -83,6 +74,7 @@ const checkInputs = (data)=>{
         error.nbError+=1
 
     }
+
     if(contact.nomContact===""){
         error.nomContact=true
         error.nbError+=1
@@ -117,10 +109,12 @@ const updatePersonInactif = async (req,res)=>{
 }
 const  updatePersonEditeur = async (req,res)=>{
     let body=req.body
+
     await Person.updatePersonEditeur(req.params.id,body.estEditeur)
         .then(()=>{
             res.status(200).json({updated: true})
         }).catch(err=>{
+            console.log(err)
             res.status(503).json({updated: false})
         })
 }
@@ -267,25 +261,38 @@ module.exports = {
     //======================== UPDATE ========================
     updatePerson : async (req,res)=>{
         let body = req.body;
-        let err = await checkPersonInputs(body)
-        if(err.nbError!==0){
-            res.status(400).json(err)
+        console.log(body)
+        console.log(req.params)
+        if(body.nomPersonne!==undefined){
+            let err = await checkPersonInputs(body)
+            if(err.nbError!==0){
+                console.log(err)
+                res.status(400).json(err)
 
-        }else if(body.nomPersonne!==undefined){
-            await Person.updatePerson(req.params.id,body.nomPersonne, body.adressePersonne, body.statutEditeur, body.estEditeur, body.exposantInactif, body.estExposant)
-                .then(()=>{
-                    res.status(200).json({updated: true})
-                }).catch((err)=>{
-                    res.status(503).json({updated: false})
-                })
+            }else{
+                console.log("Strange")
+                await Person.updatePerson(req.params.id,body.nomPersonne, body.adressePersonne, body.statutEditeur, body.estEditeur, body.exposantInactif, body.estExposant)
+                    .then(()=>{
+                        res.status(200).json({updated: true})
+                    }).catch((err)=>{
+                        res.status(503).json({updated: false})
+                    })
+            }
+
         }else if(body.estEditeur!==undefined){
-            const games = await Games.getEditorGames(req.params.id)
-            if (games.length===0){
+            console.log("Ok")
+            if(body.estEditeur===true){
                 await updatePersonEditeur(req, res)
             }else{
-                res.status(400).json({updated:false})
+                const games = await Games.getEditorGames(req.params.id)
+                if (games.length===0){
+                    await updatePersonEditeur(req, res)
+                }else{
+                    res.status(400).json({updated:false})
+                }
             }
         }else if(body.estExposant!==undefined){
+            console.log("Wtf")
             const reservations = await Reservation.getPersonReservations(req.params.id)
             if(reservations.length===0) {
 
@@ -297,6 +304,7 @@ module.exports = {
                 res.status(400).json({updated:false})
         }
         }else if(body.exposantInactif!==undefined){
+            console.log("Wait")
             await updatePersonInactif(req, res).catch((err)=>{
               res.status(503).json({updated: false})
 

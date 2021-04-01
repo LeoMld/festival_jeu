@@ -79,7 +79,7 @@ function GameList() {
                 <UncontrolledCollapse toggler="#toggler">
                     <Card>
                         <CardBody>
-                            {games && types && <CollapseFilter setNbPagin={setNbPagin} types={types.data} games={games} setGames={setGames}/>}
+                            {games && types && <CollapseFilter routesGames={routeGames} setNbPagin={setNbPagin} types={types.data} games={games} setGames={setGames}/>}
                         </CardBody>
                     </Card>
                 </UncontrolledCollapse>

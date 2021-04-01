@@ -75,6 +75,7 @@ function CreatePerson(props) {
         },{ headers: { Authorization: token.getToken() } }).then((result)=>{
             props.addPerson(result.data.person)
             defaultValues()
+            props.setModalState(false)
         }).catch((error)=>{
             setErrorDetail(error.response.data)
         })

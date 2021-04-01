@@ -45,6 +45,12 @@ function ProfilePane(){
                 if(e.response.status === 401){
                     setErrorModify("Mauvais mot de passe")
 
+                }else if(e.response.status === 400){
+                    setErrorModify("Vous devez renseigner un mail valide")
+
+                }else{
+                    setErrorModify("Erreur lors de la modification")
+
                 }
                 setIsChanging(false)
 

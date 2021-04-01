@@ -81,10 +81,15 @@ module.exports ={
             res.status(400).json(err)
         }
         else{
-            await Contact.createContact(body.prenomContact,body.nomContact,body.mailContact,body.telFixeContact,body.telPortableContact,body.fonctionContact,body.principal,body.idPersonne)
+            let telFixe = body.telFixeContact || null
+            let telPortable = body.telPortableContact || null
+            let fonction = body.fonctionContact || null
+
+            await Contact.createContact(body.prenomContact,body.nomContact,body.mailContact,telFixe,telPortable,fonction,body.principal,body.idPersonne)
                 .then((result)=>{
                     res.status(201).json(result)
                 }).catch((error)=>{
+                    console.log(error)
                     res.status(503).json({
                         error:error,
                         inserted:false
@@ -100,11 +105,13 @@ module.exports ={
                 res.status(400).json(err)
             }else{
                 const body = req.body;
+                console.log(body)
                 let idContact = req.params.id;
                 await Contact.updateContact(idContact,body.prenomContact,body.nomContact,body.mailContact,body.telFixeContact,body.telPortableContact,body.fonctionContact,body.principal,body.FK_idPersonne)
                     .then(()=>{
                         res.status(200).json({updated:true})
                     }).catch((error)=>{
+                        console.log(error)
                         res.status(503).json({
                             error:error,
                             updated:false
