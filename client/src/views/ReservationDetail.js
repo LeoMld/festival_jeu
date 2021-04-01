@@ -172,7 +172,8 @@ function ReservationDetail(props) {
                             </Row>
                             <Row className="justify-content-center">
                                 <p className="mb-1 mt-2">Etat de la Réservation</p>
-                                <WorkFlowSelector disabled={token.getType() !== 1} selected={info.workflowReservation}
+                                <WorkFlowSelector disabled={token.getType() !== 1}
+                                                  selected={info.workflowReservation}
                                                   id="workflowReservation"
                                                   handleChanges={handleChanges}/>
                             </Row>

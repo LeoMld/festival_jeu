@@ -3,7 +3,6 @@ import WorkFlowSelector from "../utils/WorkFlowSelector";
 import React, {useEffect, useState} from "react";
 import token from "../../utils/token";
 import axios from "axios";
-import pdf from "../../utils/pdf"
 import {Link} from "react-router-dom";
 
 function Reservation(props){
@@ -30,23 +29,24 @@ function Reservation(props){
 
     useEffect(()=>{
         setR(props.r)
+        setColor(parseInt(props.r.workflowReservation))
         setTextNote(props.r.textNote)
         document.getElementById("textNote"+(props.index+(props.nbPagin-1)*5)).value = props.r.textNote
-
     },[props.r])
 
     useEffect(()=>{
         if(props.nbPagin){
-            setColor(r.workflowReservation)
-            let newResas = [...props.reservations]
-            newResas[(props.index+(props.nbPagin-1)*5)] = r
-            props.setReservations(newResas)
+            if(r !== props.r){
+                setColor(parseInt(r.workflowReservation))
+                let newResas = [...props.reservations]
+                newResas[(props.index+(props.nbPagin-1)*5)] = r
+                props.setReservations(newResas)
+            }
         }else{
             let newResas = [...props.reservations.reservations]
             newResas[props.index] = r
             props.setReservations({...props.reservations,reservations:newResas})
         }
-
     },[r])
 
 
@@ -57,11 +57,12 @@ function Reservation(props){
         info[event.target.id]=value
         axios.put("/api/gestion/reservations/"+r.idReservation,info,{ headers: { Authorization: token.getToken() } })
             .then((res)=>{
-
-                setR({...r,[event.target.name]:value})
                 if(event.target.id==="workflowReservation"){
-                    setR({...r,[event.target.id]:value})
                     setColor(parseInt(value))
+                    setR({...r,[event.target.id]:value})
+                }
+                else{
+                    setR({...r,[event.target.name]:value})
                 }
             })
             .catch(()=>{
@@ -140,7 +141,7 @@ function Reservation(props){
                 <Row>
                     <Col md={6}>
                         <p className="mb--1">Etat de la Réservation</p>
-                        <WorkFlowSelector selected={r.workflowReservation} id="workflowReservation" handleChanges={tokenType===1?handleChanges:badLuck} disabled={token.getToken()===1}/>
+                        <WorkFlowSelector selected={props.r.workflowReservation} id="workflowReservation" handleChanges={tokenType === 1 ? handleChanges : badLuck} disabled={token.getType() !== 1}/>
                     </Col>
                     <Col md={6}>
                         <div className={colorStateReservation()+ " mt-4"} style={{minHeight:"15px"}}> </div>
