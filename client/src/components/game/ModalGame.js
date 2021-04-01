@@ -23,7 +23,7 @@ import among_modify from "../../assets/images/amongus/among_modify.png"
 function ModalGame(props){
 
     const [isChanging, setIsChanging] = useState(false)
-    const [error, setError] = useState(false)
+    const [error, setError] = useState()
 
 
 
@@ -41,12 +41,17 @@ function ModalGame(props){
                 props.setModalState(!props.modalState)
                 setIsChanging(false)
             }).catch(e => {
-                setIsChanging(false)
-                setError(true)
-                //if the token is not the good one
-                if(e.response.data.code === 0){
-                    token.destroyToken()
+                if(e.response.status === 400){
+                    setError("Veuillez renseigner un libellé au jeu")
+                }else{
+                    setIsChanging(false)
+                    setError("Erreur lors du changement des données, veuillez recharger la page et réessayer")
+                    //if the token is not the good one
+                    if(e.response.data.code === 0){
+                        token.destroyToken()
+                    }
                 }
+
         })
 
 
@@ -172,7 +177,7 @@ function ModalGame(props){
                 </Card>
             </div>
             {error && <Alert color="danger">
-                Erreur lors du changement des données, veuillez recharger la page et réessayer
+                {error}
             </Alert> }
         </Modal>
 
