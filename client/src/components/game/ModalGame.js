@@ -29,19 +29,20 @@ function ModalGame(props){
 
     const handleChange = (game)=>{
         setIsChanging(true)
+        if(document.getElementById("libelleChamp").value.length > 1){
+            props.game.libelleJeu = document.getElementById("libelleChamp").value
+            props.game.duree = document.getElementById("duree").value
+            props.game.nombreJoueur = document.getElementById("nombreJoueur").value
+            props.game.ageMinimum = document.getElementById("age").value
 
-        props.game.libelleJeu = document.getElementById("libelleChamp").value
-        props.game.duree = document.getElementById("duree").value
-        props.game.nombreJoueur = document.getElementById("nombreJoueur").value
-        props.game.ageMinimum = document.getElementById("age").value
-
-
-        Axios.put('/api/games/'+props.game.idJeu, {game},{ headers: { Authorization: token.getToken() } })
-            .then(res => {
-                props.setModalState(!props.modalState)
-                setIsChanging(false)
-            }).catch(e => {
+            Axios.put('/api/games/'+props.game.idJeu, {game},{ headers: { Authorization: token.getToken() } })
+                .then(res => {
+                    setError()
+                    props.setModalState(!props.modalState)
+                    setIsChanging(false)
+                }).catch(e => {
                 if(e.response.status === 400){
+                    setIsChanging(false)
                     setError("Veuillez renseigner un libellé au jeu")
                 }else{
                     setIsChanging(false)
@@ -52,7 +53,12 @@ function ModalGame(props){
                     }
                 }
 
-        })
+            })
+        }else{
+            setIsChanging(false)
+            setError("Veuillez renseigner un libellé au jeu")
+        }
+
 
 
 
@@ -170,7 +176,9 @@ function ModalGame(props){
                                     <Input  defaultValue={props.game.duree} id="duree" placeholder="durée" type="text" />
                                 </InputGroup>
                             </FormGroup>
-
+                            {error && <Alert color="danger">
+                                {error}
+                            </Alert> }
                             {!isChanging && <div className="text-center">
                                 <Button
                                     onClick={()=>{handleChange(props.game)}}
@@ -186,9 +194,7 @@ function ModalGame(props){
                     </CardBody>
                 </Card>
             </div>
-            {error && <Alert color="danger">
-                {error}
-            </Alert> }
+
         </Modal>
 
 
