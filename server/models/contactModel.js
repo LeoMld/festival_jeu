@@ -11,7 +11,8 @@ module.exports = {
             }
             let queryText = `INSERT INTO "Contact" 
 ("prenomContact","nomContact","mailContact","telFixeContact","telPortableContact","fonctionContact","principal","FK_idPersonne") 
-VALUES ('${prenomContact}','${nomContact}','${mailContact}',${telFixeContact},${telPortableContact},'${fonctionContact}',${principal},${FK_idPersonne});`
+VALUES ('${prenomContact}','${nomContact}','${mailContact}',${telFixeContact===undefined?NULL:telFixeContact},${telPortableContact},'${fonctionContact}',${principal},${FK_idPersonne});`
+            console.log(queryText)
             await clientUsed.query(queryText,[])
             queryText = 'SELECT * FROM "Contact" WHERE "FK_idPersonne"=$1;'
             return (await clientUsed.query(queryText,[FK_idPersonne])).rows
@@ -32,9 +33,10 @@ VALUES ('${prenomContact}','${nomContact}','${mailContact}',${telFixeContact},${
                 await clientUsed.query(queryText,[idPersonne])
             }
             let queryText = `UPDATE "Contact" SET "prenomContact"='${prenomContact}',"nomContact"='${nomContact}',
-                        "mailContact"='${mailContact}',"telFixeContact"=${telFixeContact},"telPortableContact"=${telPortableContact},
+                        "mailContact"='${mailContact}',"telFixeContact"='${telFixeContact}',"telPortableContact"='${telPortableContact}',
                         "fonctionContact"='${fonctionContact}',"principal"=${principal} 
                         WHERE "idContact" = ${idContact} ;`
+            console.log(queryText)
             let result= await clientUsed.query(queryText,[])
             if (result.rowCount === 0){
                 throw {error:"No contact with that id"}

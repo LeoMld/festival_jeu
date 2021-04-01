@@ -43,7 +43,7 @@ const checkPersonInputs = async (data)=>{
     console.log(error)
     return error
 }
-const checkInputs = (data)=>{
+const checkInputs = async (data)=>{
     let error={
         nbError:0,
         nomPersonne:false,
@@ -59,22 +59,12 @@ const checkInputs = (data)=>{
         estExposant:false,
     }
     let contact=data.contact
-    let person=data.person
-    //TODO REGEX sur mail et téléphone
-    if(isNaN(parseInt(contact.telFixeContact))){
-        error.telFixeContact=true
-        error.nbError+=1
-    }
-    if(isNaN(parseInt(contact.telPortableContact))){
-        error.telPortableContact=true
-        error.nbError+=1
-
-    }
+    let person = data.person
     if(person.nomPersonne===""){
         error.nomPersonne=true
         error.nbError+=1
 
-    }if(person.statutEditeur==="" && data.type===1){
+    }if(person.statutEditeur==="" && person.estEditeur===true){
         error.statutEditeur=true
         error.nbError+=1
 
@@ -84,6 +74,7 @@ const checkInputs = (data)=>{
         error.nbError+=1
 
     }
+
     if(contact.nomContact===""){
         error.nomContact=true
         error.nbError+=1

@@ -87,6 +87,9 @@ function ContactModal(props){
                 //retrouver le contact dans l'array
                 let index=getElement(contact.idContact)
                 let newContacts = [...contacts]
+                if(contact.principal){
+                    newContacts.forEach(c=>c.principal=false)
+                }
                 newContacts[index]=contact
                 let localInfo = props.info
                 localInfo.contacts=newContacts
@@ -99,8 +102,6 @@ function ContactModal(props){
                     token.destroyToken()
                 }
                 setErrorDetail(e.response.data)
-                setUpdate(false)
-                setContact(props.contact)
             })
     }
     const handleDelete = async ()=>{
