@@ -93,7 +93,6 @@ function PersonDetails(props) {
             estExposant:document.getElementById("estExposant").checked,
             exposantInactif:document.getElementById("exposantInactif").checked
         }
-        console.log(localPerson)
         axios.put("/api/gestion/" + typePerson + "/" + props.match.params.idPerson, localPerson,{headers: {Authorization: token.getToken()}})
             .then((res) => {
                 setEditPerson(!editPerson)

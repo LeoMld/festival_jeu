@@ -103,7 +103,6 @@ const checkInputs = (data)=>{
         error.fonctionContact=true
         error.nbError+=1
     }
-    console.log(error)
     return error
 }
 
@@ -182,7 +181,6 @@ module.exports = {
                 if(error.person !== undefined || error.contacts !== undefined ||error.games !== undefined || error.reservations !== undefined){
                     res.status(503).json(error)
                 }else{
-                    console.log(info.reservations)
                     res.status(200).json(info)
                 }
             }else{
@@ -273,9 +271,7 @@ module.exports = {
     //======================== UPDATE ========================
     updatePerson : async (req,res)=>{
         let body = req.body;
-        console.log(body)
         let err = await checkPersonInputs(body)
-        console.log(err)
         if(err.nbError!==0){
             res.status(400).json(err)
 
