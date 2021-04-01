@@ -11,7 +11,7 @@ module.exports = {
             }
             let queryText = `INSERT INTO "Contact" 
 ("prenomContact","nomContact","mailContact","telFixeContact","telPortableContact","fonctionContact","principal","FK_idPersonne") 
-VALUES ('${prenomContact}','${nomContact}','${mailContact}',${telFixeContact===undefined?NULL:telFixeContact},${telPortableContact},'${fonctionContact}',${principal},${FK_idPersonne});`
+VALUES ('${prenomContact}','${nomContact}','${mailContact}','${telFixeContact}','${telPortableContact}','${fonctionContact}',${principal},${FK_idPersonne});`
             console.log(queryText)
             await clientUsed.query(queryText,[])
             queryText = 'SELECT * FROM "Contact" WHERE "FK_idPersonne"=$1;'

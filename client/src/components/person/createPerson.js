@@ -74,6 +74,7 @@ function CreatePerson(props) {
             contact:contactDetail
         },{ headers: { Authorization: token.getToken() } }).then((result)=>{
             props.addPerson(result.data.person)
+            console.log(result.data)
             defaultValues()
             props.setModalState(false)
         }).catch((error)=>{

@@ -91,10 +91,6 @@ const checkInputs = async (data)=>{
         error.nbError+=1
 
     }
-    if(contact.fonctionContact===""){
-        error.fonctionContact=true
-        error.nbError+=1
-    }
     return error
 }
 
@@ -236,8 +232,10 @@ module.exports = {
         let body = req.body;
         let person = body.person
         let contact = body.contact
-        let error=checkInputs(body)
+        let error=await checkInputs(body)
+        console.log(error)
         if(error.nbError!==0){
+            console.log("wtf")
             res.status(400).json(error)
         }
         else{
