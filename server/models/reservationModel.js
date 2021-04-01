@@ -56,7 +56,15 @@ module.exports = {
         const text = 'SELECT * FROM "Reservation" JOIN "Personne" ON "Reservation"."FK_idPersonne"="Personne"."idPersonne" LEFT JOIN "Note" ON "Reservation"."idReservation"="Note"."FK_idReservation" WHERE "idReservation"=$1;'
         const values = [idReservation]
         let info = (await clientUsed.query(text, values)).rows[0]
-        info = await fillReservationInfo(info,clientUsed)
+        let espace = await EspaceReserve.getReservationsSpaces(info.idReservation, clientUsed)
+        info["espace"] = await EspaceReserve.getReservationsSpaces(idReservation, clientUsed)
+        info["jeuPresents"] = await jeuPresent.getReservationGames(idReservation, clientUsed)
+        let prixRenvoi = await jeuPresent.getFactureGames(info.idReservation, clientUsed)
+        if (prixRenvoi.prixrenvoitotal) {
+            info["prixRenvoiTotal"] = parseInt(prixRenvoi.prixrenvoitotal)
+        } else {
+            info["prixRenvoiTotal"] = 0
+        }
         return info
 
 
