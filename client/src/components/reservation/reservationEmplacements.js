@@ -15,7 +15,9 @@ function ReservationEmplacements(props) {
             espaces[i] = {
                 ["nombreTables" + i]: 0,
                 ["metreCarres" + i]: 0,
-                idEmplacement: props.info.emplacements[i].idEmplacement
+                idEmplacement: props.info.emplacements[i].idEmplacement,
+                coutTable : props.info.emplacements[i].coutTable,
+                coutMetreCarre: props.info.emplacements[i].coutMetreCarre,
             }
         }
         return espaces
@@ -98,16 +100,28 @@ function ReservationEmplacements(props) {
         setIsPending(true)
         const prixReservation = (allPrice() - remiseReservation).toFixed(2)
         // The data we need to send
-        const data = {
+        const dataToSend = {
             idReservation: props.info.idReservation,
             inputsEspaces,
             remiseReservation,
             prixReservation
         }
-        Axios.post('/api/gestion/espacesReserves', data, {headers: {Authorization: token.getToken()}})
+        Axios.post('/api/gestion/espacesReserves', dataToSend, {headers: {Authorization: token.getToken()}})
             .then(({data}) => {
                 // We need to update the parent component
-                props.updateData(data, remiseReservation, prixReservation)
+                const espaces = []
+                dataToSend.inputsEspaces.map((espace, index) => {
+                    const newEspace = data.filter(value => value.FK_idEmplacement === espace.idEmplacement)[0]
+                    espaces.push({
+                        nombreTables : espace["nombreTables"+index],
+                        metreCarres : espace["metreCarres"+index],
+                        coutTable : espace.coutTable,
+                        coutMetreCarre: espace.coutMetreCarre,
+                        FK_idEmplacement: newEspace.FK_idEmplacement,
+                        idEspace: newEspace.idEspace
+                    })
+                })
+                props.updateData(espaces, remiseReservation, prixReservation)
                 setIsPending(false)
             })
             .catch((err) => {
