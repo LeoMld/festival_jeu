@@ -102,6 +102,20 @@ function ContactModal(props){
                 setUpdate(false)
             })
     }
+    const handleDelete = async ()=>{
+        axios.delete("/api/gestion/contact/"+contact.idContact,{headers:{Authorization:token.getToken()}})
+            .then(()=>{
+                // We remove the contact
+                console.log(contacts)
+                const reNewContacts = props.info.contacts.filter(item => item.idContact !== parseInt(contact.idContact))
+                console.log(reNewContacts)
+                // We update the contacts
+                props.setInfo({...props.info,contacts:reNewContacts})
+                props.setModalState(false)
+
+            })
+
+    }
 
     return(
         <div>
@@ -251,9 +265,15 @@ function ContactModal(props){
                         </Button>
                     </div>}
                     {!update && token.getType()===1 &&
-                    <Button color="primary" type="button" onClick={()=>{setUpdate(true)}}>
-                        Modifier
-                    </Button>
+                        <div>
+                            <Button color="danger" type="button" onClick={()=>{handleDelete()}}>
+                                Supprimer
+                            </Button>
+                            <Button color="primary" type="button" onClick={()=>{setUpdate(true)}}>
+                                Modifier
+                            </Button>
+
+                        </div>
                     }
 
                 </ModalFooter>
