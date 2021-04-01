@@ -10,6 +10,7 @@ function Reservation(props){
     let tokenType = token.getType()
     let [r,setR] = useState(props.r)
     let [color,setColor] = useState(r.workflowReservation)
+    let [textNote,setTextNote] = useState("")
     const colorStateReservation = () =>{
         switch(color) {
             case 3:
@@ -26,9 +27,22 @@ function Reservation(props){
         }
     }
 
+
     useEffect(()=>{
         setR(props.r)
+        setTextNote(props.r.textNote)
+        document.getElementById("textNote"+(props.index+(props.nbPagin-1)*5)).value = props.r.textNote
+
     },[props.r])
+
+    useEffect(()=>{
+        setColor(r.workflowReservation)
+        let newResas = [...props.reservations]
+        newResas[(props.index+(props.nbPagin-1)*5)] = r
+        props.setReservations(newResas)
+    },[r])
+
+
 
     const handleChanges = async (event)=>{
         let info={}
@@ -36,6 +50,7 @@ function Reservation(props){
         info[event.target.id]=value
         axios.put("/api/gestion/reservations/"+r.idReservation,info,{ headers: { Authorization: token.getToken() } })
             .then((res)=>{
+
                 setR({...r,[event.target.name]:value})
                 if(event.target.id==="workflowReservation"){
                     setR({...r,[event.target.id]:value})
@@ -60,7 +75,7 @@ function Reservation(props){
             })
     }
     const handleEditNote = async (event)=>{
-        let valeur = document.getElementById("textNote"+props.index).value
+        let valeur = textNote
         let info = {textNote : valeur}
         if(r.idNote!==null){
             info["idNote"]=r.idNote
@@ -75,8 +90,10 @@ function Reservation(props){
             info["idReservation"]=r.idReservation
             axios.post("/api/gestion/notes",info,{ headers: { Authorization: token.getToken() }})
             .then((res)=>{
-                setR({...r,textNote:valeur})
-                setR({...r,idNote:res.data.idNote})
+                let rBis = {...r}
+                rBis.textNote = valeur
+                rBis.idNote = res.data.idNote
+                setR(rBis)
             })
             .catch(()=>{
                 setR(props.r)
@@ -223,8 +240,11 @@ function Reservation(props){
             {token.getType()===1 && <td>
                 <Input
                     type="textarea"
-                    id={"textNote"+props.index}
-                    defaultValue={r.textNote}
+                    id={"textNote"+(props.index+(props.nbPagin-1)*5)}
+                    value={textNote}
+                    onChange={(event)=>{
+                        setTextNote(event.target.value)
+                    }}
                 />
                   <Button className=" mt-2" color="secondary" size="sm" onClick={(event)=>handleEditNote(event)}>Valider Commentaire</Button>
             </td>}

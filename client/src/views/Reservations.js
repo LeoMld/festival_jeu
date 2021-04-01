@@ -21,8 +21,8 @@ function Reservations() {
 
     useEffect(()=>{
         if(reservations){
-            const indexDebut = (nbPagin-1)*10
-            const indexFin = (reservations.length <= nbPagin*10-1) ? reservations.length: nbPagin*10
+            const indexDebut = (nbPagin-1)*5
+            const indexFin = (reservations.length <= nbPagin*5-1) ? reservations.length: nbPagin*5
             let reservationsPage = []
             for(let i = indexDebut; i<indexFin; i++){
                 reservationsPage.push(reservations[i])
@@ -141,7 +141,7 @@ function Reservations() {
                         <tbody>
                         {reservationsToDisplay.map((r,index) => {
                             return (
-                                <Reservation key={index} index={index} r={r}/>
+                                <Reservation nbPagin={nbPagin} reservations={reservations} setReservations={setReservations} key={index} index={index} r={r}/>
                             )
                         })}
                         </tbody>

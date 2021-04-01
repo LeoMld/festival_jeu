@@ -6,6 +6,7 @@ import {Col, Container, Progress, Row} from "reactstrap";
 function Facturation(){
 
     const {data:reservations,setData:setReservation,isPending,error} = useAxios("/api/gestion/Reservations")
+
     const [CAprevu,setCAprevu] = useState(1)
     const [CAactuel,setCAactuel] = useState(0)
     const [nbResaPrevuPayee,setnbResaPrevuPayee] = useState(1)
