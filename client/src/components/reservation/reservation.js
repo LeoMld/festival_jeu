@@ -52,17 +52,37 @@ function Reservation(props){
 
 
     const handleChanges = async (event)=>{
+        const id = event.target.id
         let info={}
         let value= event.target.value
-        info[event.target.id]=value
+        info[id]=value
         axios.put("/api/gestion/reservations/"+r.idReservation,info,{ headers: { Authorization: token.getToken() } })
             .then((res)=>{
-                if(event.target.id==="workflowReservation"){
-                    setColor(parseInt(value))
-                    setR({...r,[event.target.id]:value})
-                }
-                else{
-                    setR({...r,[event.target.name]:value})
+                switch(id){
+                    case "workflowReservation":
+                        setColor(parseInt(value))
+                        setR({...r,[id]:value})
+                        break;
+                    case "datePaiementFactureReservation":
+                        setR({...r, payeReservation: value !== "", [id]: value})
+                        break;
+                    case "datePremierContactReservation":
+                        if (value !== "") {
+                            setR({...r, workflowReservation: '1', [id]: value})
+                        } else {
+                            setR({...r, [id]: value})
+                        }
+                        break;
+                    case "dateSecondContactReservation":
+                        if (value !== "") {
+                            setR({...r, workflowReservation: '2', [id]: value})
+                        } else {
+                            setR({...r, [id]: value})
+                        }
+                        break;
+                    default:
+                        setR({...r,[event.target.name]:value})
+
                 }
             })
             .catch(()=>{
