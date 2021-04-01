@@ -40,6 +40,10 @@ function ModalType(props){
                 setIsChangingDelete(false)
 
             }).catch(e => {
+                if(e.response.status === 400){
+                    setMessageError("Ce type est encore lié à plusieurs jeux, suppression impossible ")
+                }
+
             setIsChangingDelete(false)
             setError(true)
             //if the token is not the good one

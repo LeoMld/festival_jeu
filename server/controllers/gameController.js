@@ -112,8 +112,11 @@ module.exports = {
 
     deleteType: async (req, res) => {
         try {
-            await jeux.deleteType(req.params.id)
-            res.status(200).json('type deleted')
+            await jeux.deleteType(req.params.id).then(()=>{
+                res.status(200).json('type deleted')
+            }).catch(()=>{
+                res.status(400).json()
+            })
         } catch (err) {
             res.status(503).json({error: err})
         }
@@ -138,7 +141,7 @@ module.exports = {
                     .then((result) => {
                         res.status(201).json({inserted: true, idJeu: result})
                     }).catch((error) => {
-                    console.log(error)
+
                     res.status(503).json({
                         error: error,
                         inserted: false

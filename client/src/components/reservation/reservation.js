@@ -28,6 +28,7 @@ function Reservation(props){
 
 
     useEffect(()=>{
+        if(props.r === undefined){}
         setR(props.r)
         setColor(parseInt(props.r.workflowReservation))
         setTextNote(props.r.textNote)
