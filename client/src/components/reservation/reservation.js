@@ -26,6 +26,10 @@ function Reservation(props){
         }
     }
 
+    useEffect(()=>{
+        setR(props.r)
+    },[props.r])
+
     const handleChanges = async (event)=>{
         let info={}
         let value= event.target.value

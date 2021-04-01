@@ -139,7 +139,7 @@ function Reservations() {
                         </tr>
                         </thead>
                         <tbody>
-                        {reservations.map((r,index) => {
+                        {reservationsToDisplay.map((r,index) => {
                             return (
                                 <Reservation key={index} index={index} r={r}/>
                             )
@@ -154,7 +154,7 @@ function Reservations() {
                     itemClass="page-item"
                     linkClass="page-link"
                     activePage={nbPagin}
-                    itemsCountPerPage={10}
+                    itemsCountPerPage={5}
                     totalItemsCount={reservations.length}
                     pageRangeDisplayed={5}
                     onChange={(pageNumber)=>{setNbPagin(pageNumber)}}

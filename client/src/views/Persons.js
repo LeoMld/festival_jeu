@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react'
 import Person from "../components/person/person"
 import CreatePerson from "../components/person/createPerson"
 
-import {Button, Col, Row, Table} from "reactstrap"
+import {Button, Col, Input, Row, Table} from "reactstrap"
 import useAxios from "../utils/useAxios";
 import Waiting from "../components/utils/Waiting";
 import token from "../utils/token";
@@ -28,20 +28,26 @@ function Persons(props){
        url = "/api/gestion/editeurs";
     }
     const {data:persons,setData:setPersons,isPending,error} = useAxios(url)
+    const {data:allPersons,setData:setAllPersons} = useAxios(url)
 
     const addPerson = (newPerson)=>{
         setPersons([...persons,newPerson])
     }
 
 
+
     useEffect(()=>{
         if(persons){
+
+
             const indexDebut = (nbPagin-1)*10
             const indexFin = (persons.length <= nbPagin*10-1) ? persons.length: nbPagin*10
+
             let personsPage = []
             for(let i = indexDebut; i<indexFin; i++){
                 personsPage.push(persons[i])
             }
+
             setPersonsToDisplay(personsPage)
         }
 
@@ -66,7 +72,11 @@ function Persons(props){
                 {token.getType() === 1 &&   <CreatePerson modalState = {modalState} setModalState = {setModalState} type={props.type} addPerson={addPerson}/> }
 
         </Row>
-
+            {allPersons &&<Row className="ml-sm-1 mb-sm-4" md={4}>
+                <Input placeholder="Rechercher" onChange={(event)=>{
+                setNbPagin(1)
+                setPersons(allPersons.filter(p => p.nomPersonne.includes(event.target.value)))}} />
+            </Row>}
             <Table className="align-items-center table-bordered" responsive>
                 <thead className="thead-light">
                 <tr>
@@ -87,7 +97,8 @@ function Persons(props){
                 </thead>
 
                 <tbody>
-                {persons && personsToDisplay.map((p,index)=>{
+                {persons && personsToDisplay && personsToDisplay.map((p,index)=>{
+
                     return(<Person person={p} type={props.type} index={index}/>)
                 })}
                 </tbody>
@@ -106,7 +117,7 @@ function Persons(props){
                     pageRangeDisplayed={5}
                     onChange={(pageNumber)=>{setNbPagin(pageNumber)}}
                     getPageUrl={(nb) => {
-                        return nb
+                        return nb.toString()
                     }}
                 />
             </Row>}
