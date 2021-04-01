@@ -1,7 +1,20 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
 import useAxios from "../utils/useAxios";
-import {Badge, Button, Card, CardBody, Col, Collapse, Input, Label, Row, Table} from "reactstrap";
+import {
+    Alert,
+    Badge,
+    Button,
+    Card,
+    CardBody,
+    Col,
+    Collapse,
+    Input,
+    Label,
+    Row,
+    Table,
+    UncontrolledAlert
+} from "reactstrap";
 import Waiting from "../components/utils/Waiting";
 import token from "../utils/token";
 import Contact from "../components/contact/contact";
@@ -80,6 +93,7 @@ function PersonDetails(props) {
             estExposant:document.getElementById("estExposant").checked,
             exposantInactif:document.getElementById("exposantInactif").checked
         }
+        console.log(localPerson)
         axios.put("/api/gestion/" + typePerson + "/" + props.match.params.idPerson, localPerson,{headers: {Authorization: token.getToken()}})
             .then((res) => {
                 setEditPerson(!editPerson)
@@ -127,6 +141,8 @@ function PersonDetails(props) {
                                         className=" w-100 text-primary text-center border">Informations</Button>
                                 <Collapse isOpen={openDetail}>
                                     <Card>
+                                        {errorDetail.estEditeur && <UncontrolledAlert color="danger"> L'Editeur possède encore des jeux</UncontrolledAlert>}
+                                        {errorDetail.estExposant && <UncontrolledAlert color="danger"> L'Exposant possède encore des réservations</UncontrolledAlert>}
                                         <CardBody>
                                             {editPerson && tokenType===1 && <div>
                                                 <Button
@@ -154,6 +170,7 @@ function PersonDetails(props) {
                                             </Button>}
 
                                             <Row>
+
                                                 <Col>
                                                     <div>
                                                         <Label for="nomPersonne" className="mb--2">Nom</Label>
@@ -206,6 +223,7 @@ function PersonDetails(props) {
                                                                 id="estEditeur"
                                                                 disabled={!editPerson}
                                                                 type="checkbox"
+                                                                className={errorDetail.estEditeur ? "is-invalid" : ""}
                                                                 defaultChecked={info.person.estEditeur}/>
                                                             <span className="custom-toggle-slider rounded-circle"/>
                                                         </label>
@@ -219,6 +237,7 @@ function PersonDetails(props) {
                                                                 id="estExposant"
                                                                 disabled={!editPerson}
                                                                 type="checkbox"
+                                                                className={errorDetail.estExposant ? "is-invalid" : ""}
                                                                 defaultChecked={info.person.estExposant}/>
                                                             <span className="custom-toggle-slider rounded-circle"/>
                                                         </label>
@@ -232,6 +251,7 @@ function PersonDetails(props) {
                                                                 id="exposantInactif"
                                                                 disabled={!editPerson}
                                                                 type="checkbox"
+
                                                                 defaultChecked={info.person.exposantInactif}/>
                                                             <span className="custom-toggle-slider rounded-circle"/>
                                                         </label>
@@ -286,7 +306,7 @@ function PersonDetails(props) {
                             </Col>
                         </Row>
                         {info.games &&
-                        <Row className="m-2 inline-flex">
+                        <Row className="m-4 inline-flex">
                             {info.games.length !== 0 &&
                             <Col className="w-50 p-2">
                                 <Button color="link" onClick={() => setOpenJeux(!openJeux)}
@@ -335,14 +355,14 @@ function PersonDetails(props) {
                         </Row>
                         }
                         {info.reservations &&
-                            <Row>
+                            <Row className="m-4">
                                 {info.reservations.length > 0 &&
 
                                     <Table className="table-striped table-bordered table-responsive-sm">
                                         <thead>
                                         <tr>
                                             <th>
-                                                Exposant
+                                                Festival
                                             </th>
                                             <th colSpan={2}>
 
@@ -357,7 +377,7 @@ function PersonDetails(props) {
                                             <th>
                                                 Prix (€)
                                             </th>
-                                            {token.getToken()===1 && <th>
+                                            {token.getType()===1 && <th>
                                                 Commentaires
                                             </th>}
 
@@ -365,7 +385,7 @@ function PersonDetails(props) {
                                         </thead>
                                         <tbody>
                                         {info.reservations.map((r, index) => {
-                                           return( <Reservation key={index} index={index} r={r}/> )
+                                           return( <Reservation key={index} index={index} r={r} type={1}/> )
                                         })
                                         }
                                         </tbody>

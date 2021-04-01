@@ -169,7 +169,7 @@ function ContactModal(props){
                                     className={errorDetail.fonctionContact ? "is-invalid" : ""}
                                     value={contact && contact.fonctionContact}
                                     onChange={(event)=>{setContact({...contact,fonctionContact:event.target.value})}}
-                                    placeholder="Mail"
+                                    placeholder="Fonction"
                                     type="text"
                                 />
                             </Col>

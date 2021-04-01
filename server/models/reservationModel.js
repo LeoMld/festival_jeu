@@ -85,7 +85,7 @@ module.exports = {
     //get Reservation from person
     getPersonReservations: async (idPerson, client) => {
         const clientUsed = await DB.getPoolClient(client)
-        const queryText = 'SELECT * FROM "Reservation" JOIN "Personne" ON "Reservation"."FK_idPersonne"="Personne"."idPersonne" LEFT JOIN "Note" ON "Reservation"."idReservation"="Note"."FK_idReservation"  WHERE "Reservation"."FK_idPersonne"=$1;'
+        const queryText = 'SELECT * FROM "Reservation" JOIN "Personne" ON "Reservation"."FK_idPersonne"="Personne"."idPersonne" JOIN "Festival" ON "Reservation"."FK_idFestival"="Festival"."idFestival" LEFT JOIN "Note" ON "Reservation"."idReservation"="Note"."FK_idReservation"  WHERE "Reservation"."FK_idPersonne"=$1;'
         return (await clientUsed.query(queryText, [idPerson])).rows
     },
 
