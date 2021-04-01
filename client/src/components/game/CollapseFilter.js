@@ -11,7 +11,7 @@ import token from "../../utils/token";
 function CollapseFilter(props) {
 
     const [nbJoueurState, setNbJoueurState] = useState({min: 0, max: 7});
-    const [ageState, setAgeState] = useState({min: 2, max: 18});
+    const [ageState, setAgeState] = useState({min: 1, max: 18});
     const [prototype, setPrototype] = useState(2);
     const [libelle, setLibelle] = useState("");
     const [type, setType] = useState("");
@@ -37,6 +37,7 @@ function CollapseFilter(props) {
                         )
                     }
                 })
+
                 props.setGames(filter)
             } else {
                 filter = gamesFilter.filter(game => {

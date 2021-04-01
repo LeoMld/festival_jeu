@@ -34,7 +34,7 @@ function Game(props){
     return(
 
             <tr key={props.index}>
-                <td className="text-center">{props.index}</td>
+                <td className="text-center">{(props.nbPagin-1)*10+props.index+1}</td>
                 <td>{props.game.libelleJeu}</td>
                 <td>{props.game.nombreJoueur}</td>
                 <td>{props.game.ageMinimum}</td>

@@ -10,7 +10,7 @@ function AllGames(){
         <Container className="container justify-content-center mt-md" style={{minHeight : "500px"}}>
             <h1 className="mb-md font-weight-800">Liste des jeux</h1>
 
-            <GameList />
+            <GameList  />
 
         </Container>
 
