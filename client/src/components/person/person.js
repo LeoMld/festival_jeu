@@ -6,8 +6,7 @@ import {Alert} from "reactstrap";
 
 function Person(props){
     const [person,setPerson]=useState(props.person)
-    const [errorExposant,setErrorExposant]=useState(false)
-    const [errorEditeur,setErrorEditeur]=useState(false)
+
     let tokenType = token.getType()
     let url;
     let typePerson
@@ -19,6 +18,8 @@ function Person(props){
         typePerson = "Exposants"
 
     }
+    const [errorExposant,setErrorExposant]=useState(false)
+    const [errorEditeur,setErrorEditeur]=useState(false)
     const handleChangeExposant = (bool)=>{
         axios.put(url+person.idPersonne,{estExposant:bool},{ headers: { Authorization: token.getToken() } })
             .then(()=>{

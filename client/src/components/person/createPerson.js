@@ -153,6 +153,8 @@ function CreatePerson(props) {
                                 </Col>
                             </Row>
                         </Row>
+                        <hr/>
+                        <h5>Premier Contact</h5>
                         <Row>
                             <Col className="w-50 mt-2" >
                                 <Label for="nom">Nom</Label>
@@ -162,7 +164,7 @@ function CreatePerson(props) {
                                 className={errorDetail.nomContact && "is-invalid"}
                                 value={contactDetail.nomContact}
                                 onChange={(event)=>{setContactDetail({...contactDetail,nomContact:event.target.value})}}
-                                placeholder="Nom Contact"
+                                placeholder="Nom"
                                 type="text"
                                 />
                             </Col>
@@ -174,7 +176,7 @@ function CreatePerson(props) {
                                     className={errorDetail.prenomContact && "is-invalid"}
                                     value={contactDetail.prenomContact}
                                     onChange={(event)=>{setContactDetail({...contactDetail,prenomContact:event.target.value})}}
-                                    placeholder="Prénom Personne"
+                                    placeholder="Prénom"
                                     type="text"/>
                             </Col>
                         </Row>
@@ -199,7 +201,7 @@ function CreatePerson(props) {
                                     className={errorDetail.fonctionContact && "is-invalid"}
                                     value={contactDetail.fonctionContact}
                                     onChange={(event)=>{setContactDetail({...contactDetail,fonctionContact:event.target.value})}}
-                                    placeholder="Mail"
+                                    placeholder="Fonction"
                                     type="text"
                                 />
                             </Col>

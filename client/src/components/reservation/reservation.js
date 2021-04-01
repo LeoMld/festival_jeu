@@ -84,6 +84,14 @@ function Reservation(props){
     }
     return(
         <tr key={props.index}>
+            {props.type===1 &&
+            <td>
+                <Row className="justify-content-center">
+                    {r.nameFestival}
+                </Row>
+            </td>
+            }
+            {props.type!==1 &&
             <td>
                 <Row className="justify-content-center">
                     {r.nomPersonne}
@@ -92,7 +100,8 @@ function Reservation(props){
                     <Link to={"/Reservations/"+r.idReservation} className="btn btn-default">Voir</Link>
 
                 </Row>
-            </td>
+            </td>}
+
             <td>
 
                 <Row>
