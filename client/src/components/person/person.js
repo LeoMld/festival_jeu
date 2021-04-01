@@ -25,6 +25,7 @@ function Person(props){
 
     useEffect(()=>{
         setPerson(props.person)
+
     },[props.person])
 
     const handleChangeExposant = (bool)=>{
