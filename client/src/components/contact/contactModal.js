@@ -100,6 +100,7 @@ function ContactModal(props){
                 }
                 setErrorDetail(e.response.data)
                 setUpdate(false)
+                setContact(props.contact)
             })
     }
     const handleDelete = async ()=>{

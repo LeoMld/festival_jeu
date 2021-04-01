@@ -46,7 +46,7 @@ module.exports = {
         let values = [idFestival]
         let info = (await clientUsed.query(text, values)).rows
 
-        info = await fillReservationInfo(info,clientUsed)
+        //info = await fillReservationInfo(info,clientUsed)
         return info
 
     },

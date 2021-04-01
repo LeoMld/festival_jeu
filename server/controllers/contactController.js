@@ -12,15 +12,15 @@ const checkContactInputs = (contact)=>{
         telPortableContact : false
     }
     //TODO REGEX sur mail et téléphone
-    if(isNaN(parseInt(contact.telFixeContact))){
+    /*if(isNaN(parseInt(contact.telFixeContact))){
         error.telFixeContact=true
         error.nbError+=1
-    }
-    if(isNaN(parseInt(contact.telPortableContact))){
+    }*/
+    /*if(isNaN(parseInt(contact.telPortableContact))){
         error.telPortableContact=true
         error.nbError+=1
 
-    }
+    }*/
     if(contact.nomContact===""){
         error.nomContact=true
         error.nbError+=1
@@ -29,19 +29,17 @@ const checkContactInputs = (contact)=>{
     if(contact.prenomContact===""){
         error.prenomContact=true
         error.nbError+=1
-
-
     }
     if(contact.mailContact===""){
         error.mailContact=true
         error.nbError+=1
 
     }
-    if(contact.fonctionContact===""){
+    /*if(contact.fonctionContact===""){
         error.fonctionContact=true
         error.nbError+=1
 
-    }
+    }*/
     return error
 }
 module.exports ={
@@ -97,19 +95,12 @@ module.exports ={
     //Update a contact
     updateContact: async (req,res)=>{
         if(req.body.telPortableContact!==undefined){
-            const body = req.body;
-            let idContact = req.params.id;
-            let telFixeContact = body.telFixeContact;
-            let telPortableContact = body.telPortableContact;
-            if(isNaN(idContact)){
-                utils.sendErrorNumber(req,res,Object.keys({idContact})[0])
-            }
-            else if(isNaN(telFixeContact)){
-                utils.sendErrorNumber(req,res,Object.keys({telFixeContact})[0])
-            }
-            else if(isNaN(telPortableContact)){
-                utils.sendErrorNumber(req,res,Object.keys({telPortableContact})[0])
+            let err = checkContactInputs(req.body)
+            if(err.nbError){
+                res.status(400).json(err)
             }else{
+                const body = req.body;
+                let idContact = req.params.id;
                 await Contact.updateContact(idContact,body.prenomContact,body.nomContact,body.mailContact,body.telFixeContact,body.telPortableContact,body.fonctionContact,body.principal,body.FK_idPersonne)
                     .then(()=>{
                         res.status(200).json({updated:true})
@@ -119,7 +110,9 @@ module.exports ={
                             updated:false
                         })
                     })
+
             }
+
         }else if (req.body.principal!==undefined){
             let body = req.body
             await Contact.updatePrincipal(body.idPersonne,req.params.id,body.principal).then(()=>{
