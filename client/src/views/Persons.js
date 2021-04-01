@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import Person from "../components/person/person"
 import CreatePerson from "../components/person/createPerson"
 
@@ -6,10 +6,19 @@ import {Button, Col, Row, Table} from "reactstrap"
 import useAxios from "../utils/useAxios";
 import Waiting from "../components/utils/Waiting";
 import token from "../utils/token";
+import Pagination from "react-js-pagination";
 
 function Persons(props){
     let url;
     let [modalState,setModalState] = useState(false)
+
+    const [nbPagin, setNbPagin] = useState(1)
+
+    const [personsToDisplay, setPersonsToDisplay] = useState([])
+
+
+
+
     //Type = 0 => Exposants
     if(props.type===0){
         url = "/api/gestion/exposants";
@@ -19,9 +28,25 @@ function Persons(props){
        url = "/api/gestion/editeurs";
     }
     const {data:persons,setData:setPersons,isPending,error} = useAxios(url)
+
     const addPerson = (newPerson)=>{
         setPersons([...persons,newPerson])
     }
+
+
+    useEffect(()=>{
+        if(persons){
+            const indexDebut = (nbPagin-1)*10
+            const indexFin = (persons.length <= nbPagin*10-1) ? persons.length: nbPagin*10
+            let personsPage = []
+            for(let i = indexDebut; i<indexFin; i++){
+                personsPage.push(persons[i])
+            }
+            setPersonsToDisplay(personsPage)
+        }
+
+    },[nbPagin,persons])
+
     return(
         <div className={"container justify-content-center"}>
             <Row className="mb-5 mt-5">
@@ -62,7 +87,7 @@ function Persons(props){
                 </thead>
 
                 <tbody>
-                {persons && persons.map((p,index)=>{
+                {persons && personsToDisplay.map((p,index)=>{
                     return(<Person person={p} type={props.type} index={index}/>)
                 })}
                 </tbody>
@@ -71,6 +96,21 @@ function Persons(props){
                 {isPending && <Waiting name={"chargement des données"}/>}
                 {persons && persons.length ===0  && <p className="font-weight-400"> Aucune donnée disponible</p>}
             </Row>
+            {persons && <Row className="justify-content-center mt-md">
+                <Pagination
+                    itemClass="page-item"
+                    linkClass="page-link"
+                    activePage={nbPagin}
+                    itemsCountPerPage={10}
+                    totalItemsCount={persons.length}
+                    pageRangeDisplayed={5}
+                    onChange={(pageNumber)=>{setNbPagin(pageNumber)}}
+                    getPageUrl={(nb) => {
+                        return nb
+                    }}
+                />
+            </Row>}
+
         </div>
 
     )

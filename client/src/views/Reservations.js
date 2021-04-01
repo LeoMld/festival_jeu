@@ -6,6 +6,7 @@ import Reservation from "../components/reservation/reservation";
 import CollapseFilterResa from "../components/reservation/CollapseFilterResa";
 import token from "../utils/token";
 import axios from "axios";
+import Pagination from "react-js-pagination";
 
 
 function Reservations() {
@@ -15,6 +16,22 @@ function Reservations() {
     const [added,setAdded] = useState(false)
     const [updated,setUpdated] = useState(false)
     const [numberUpdated,setNumberUpdated] = useState(0)
+    const [nbPagin, setNbPagin] = useState(1)
+    const [reservationsToDisplay, setReservationsToDisplay] = useState([])
+
+    useEffect(()=>{
+        if(reservations){
+            const indexDebut = (nbPagin-1)*10
+            const indexFin = (reservations.length <= nbPagin*10-1) ? reservations.length: nbPagin*10
+            let reservationsPage = []
+            for(let i = indexDebut; i<indexFin; i++){
+                reservationsPage.push(reservations[i])
+            }
+            setReservationsToDisplay(reservationsPage)
+        }
+
+    },[nbPagin,reservations])
+
     const createNewReservations = ()=>{
         axios.post("/api/gestion/reservations",{},{ headers: { Authorization: token.getToken() } })
             .then((res)=>{
@@ -93,7 +110,7 @@ function Reservations() {
                     <UncontrolledCollapse toggler="#toggler" className="mb-sm-3">
                         <Card>
                             <CardBody>
-                                {reservations &&  <CollapseFilterResa resa={reservations} setResa={setReservations}/>}
+                                {reservations &&  <CollapseFilterResa setNbPagin={setNbPagin} resa={reservations} setResa={setReservations}/>}
                             </CardBody>
                         </Card>
                     </UncontrolledCollapse>
@@ -132,7 +149,20 @@ function Reservations() {
                 </div>}
                 {isPending && <Waiting/>}
             </div>
-
+            {reservations && <Row className="justify-content-center mt-md">
+                <Pagination
+                    itemClass="page-item"
+                    linkClass="page-link"
+                    activePage={nbPagin}
+                    itemsCountPerPage={10}
+                    totalItemsCount={reservations.length}
+                    pageRangeDisplayed={5}
+                    onChange={(pageNumber)=>{setNbPagin(pageNumber)}}
+                    getPageUrl={(nb) => {
+                        return nb
+                    }}
+                />
+            </Row>}
         </div>
     )
 }
