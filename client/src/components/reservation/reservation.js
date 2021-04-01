@@ -31,7 +31,9 @@ function Reservation(props){
         setR(props.r)
         setColor(parseInt(props.r.workflowReservation))
         setTextNote(props.r.textNote)
-        document.getElementById("textNote"+(props.index+(props.nbPagin-1)*5)).value = props.r.textNote
+        if(token.getType()===1){
+            document.getElementById("textNote"+(props.index+(props.nbPagin-1)*5)).value = props.r.textNote
+        }
     },[props.r])
 
     useEffect(()=>{
