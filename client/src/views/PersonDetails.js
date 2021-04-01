@@ -384,7 +384,7 @@ function PersonDetails(props) {
                                         </thead>
                                         <tbody>
                                         {info.reservations.map((r, index) => {
-                                           return( <Reservation key={index} index={index} r={r} type={1}/> )
+                                           return( <Reservation reservations={info} setReservations={setInfo} key={index} index={index} r={r} type={1}/> )
                                         })
                                         }
                                         </tbody>

@@ -36,10 +36,17 @@ function Reservation(props){
     },[props.r])
 
     useEffect(()=>{
-        setColor(r.workflowReservation)
-        let newResas = [...props.reservations]
-        newResas[(props.index+(props.nbPagin-1)*5)] = r
-        props.setReservations(newResas)
+        if(props.nbPagin){
+            setColor(r.workflowReservation)
+            let newResas = [...props.reservations]
+            newResas[(props.index+(props.nbPagin-1)*5)] = r
+            props.setReservations(newResas)
+        }else{
+            let newResas = [...props.reservations.reservations]
+            newResas[props.index] = r
+            props.setReservations({...props.reservations,reservations:newResas})
+        }
+
     },[r])
 
 
