@@ -86,7 +86,6 @@ function CollapseFilter(props){
                                 id="Type"
                                 placeholder="libelle du jeu"
                                 type="select"
-
                             >
                                 <option value="">Tous</option>
                                 {props.types.map((type,index) => {
