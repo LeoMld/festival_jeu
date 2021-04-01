@@ -45,7 +45,6 @@ module.exports = {
         let text = 'SELECT * FROM "Reservation" JOIN "Personne" ON "Reservation"."FK_idPersonne"="Personne"."idPersonne" LEFT JOIN "Note" ON "Reservation"."idReservation"="Note"."FK_idReservation"  WHERE "Reservation"."FK_idFestival"=$1;'
         let values = [idFestival]
         let info = (await clientUsed.query(text, values)).rows
-        console.log(info)
 
         info = await fillReservationInfo(info,clientUsed)
         return info

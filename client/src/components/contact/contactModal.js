@@ -106,9 +106,7 @@ function ContactModal(props){
         axios.delete("/api/gestion/contact/"+contact.idContact,{headers:{Authorization:token.getToken()}})
             .then(()=>{
                 // We remove the contact
-                console.log(contacts)
                 const reNewContacts = props.info.contacts.filter(item => item.idContact !== parseInt(contact.idContact))
-                console.log(reNewContacts)
                 // We update the contacts
                 props.setInfo({...props.info,contacts:reNewContacts})
                 props.setModalState(false)

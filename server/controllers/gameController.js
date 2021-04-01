@@ -79,7 +79,6 @@ module.exports = {
 
 
     handleGame: async (req, res) => {
-        console.log(req.body.game)
         if(req.body.game.libelleJeu.length > 1){
             try {
                 //si il y a un jeu dans la requête, cela indique que l'on veut modifier tout le jeu

@@ -1,6 +1,6 @@
 import React from 'react'
 import useAxios from "../utils/useAxios";
-import {Alert, Col, ListGroup, ListGroupItem, Row} from "reactstrap";
+import {Alert, Button, Col, ListGroup, ListGroupItem, Row} from "reactstrap";
 import Waiting from "../components/utils/Waiting";
 import EditorGames from "../components/person/EditorGames";
 
@@ -21,7 +21,7 @@ function EditorsGames() {
                         editorsGames.map((editor, index) => {
                             if (index % 3 === 0) return (
                                 <ListGroupItem tag="a" href={"#" + index.toString()}>
-                                    {editor.nomPersonne}
+                                    {editor.nomPersonne +" : "+editor.games.length +(editor.games.length > 1 ? " jeux" : " jeu")}
                                 </ListGroupItem>
                             )
                         })}
@@ -32,7 +32,7 @@ function EditorsGames() {
                     editorsGames.map((editor, index) => {
                         if (index % 3 === 1) return (
                             <ListGroupItem tag="a" href={"#" + index.toString()}>
-                                {editor.nomPersonne}
+                                {editor.nomPersonne +" : "+editor.games.length +(editor.games.length > 1 ? " jeux" : " jeu")}
                             </ListGroupItem>
                         )
                     })}
@@ -42,7 +42,7 @@ function EditorsGames() {
                     editorsGames.map((editor, index) => {
                         if (index % 3 === 2) return (
                             <ListGroupItem tag="a" href={"#" + index.toString()}>
-                                {editor.nomPersonne}
+                                {editor.nomPersonne +" : "+editor.games.length +(editor.games.length > 1 ? " jeux" : " jeu")}
                             </ListGroupItem>
                         )
                     })}

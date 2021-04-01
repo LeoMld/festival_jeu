@@ -10,8 +10,6 @@ import CollapseFilter from "./CollapseFilter";
 import Game from "./Game"
 import Pagination from "react-js-pagination";
 
-
-
 function GameList() {
 
     //the state to add a type trough a modal
@@ -52,7 +50,6 @@ function GameList() {
     //open the modal to add a game
     const openModalAddGame = () =>{
         setModalStateAddGame(!modalStateAddGame)
-
     };
 
     //open the modal to add a type

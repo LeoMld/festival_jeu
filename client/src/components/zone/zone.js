@@ -1,6 +1,19 @@
 import React, {useEffect, useState} from 'react'
 
-import {Alert, Button, Card, CardBody, CardHeader, Col, Collapse, Input, Modal, Row, Table} from 'reactstrap'
+import {
+    Alert,
+    Button,
+    Card,
+    CardBody,
+    CardFooter,
+    CardHeader,
+    Col,
+    Collapse,
+    Input,
+    Modal,
+    Row,
+    Table
+} from 'reactstrap'
 
 import token from "../../utils/token";
 import Axios from "axios";
@@ -8,6 +21,7 @@ import axios from "axios";
 import CreateUpdateZone from "./createUpdateZone";
 import Waiting from "../utils/Waiting"
 import {Link} from "react-router-dom";
+import Pagination from "react-js-pagination";
 
 function Zone(props) {
 
@@ -18,9 +32,24 @@ function Zone(props) {
     const [errorDelete, setErrorDelete] = useState(null)
     const [zone, setZone] = useState(props.zone)
 
+    const [nbPagin, setNbPagin] = useState(1)
+    const [gamesToDisplay, setGamesToDisplay] = useState([])
+
+    useEffect(()=>{
+        if(zone){
+            const indexDebut = (nbPagin-1)*5
+            const indexFin = (zone.games.length <= nbPagin*5-1) ? zone.games.length: nbPagin*5
+            let gamesPage = []
+            for(let i = indexDebut; i<indexFin; i++){
+                gamesPage.push(zone.games[i])
+            }
+            setGamesToDisplay(gamesPage)
+        }
+    },[nbPagin, props.zones])
+
     useEffect(() => {
         setZone(props.zone)
-    }, [props.zone])
+    }, [props.zones])
 
     // Delete a zone on the server
     const deleteZone = () => {
@@ -69,6 +98,9 @@ function Zone(props) {
         Axios.put('/api/gestion/jeuPresent/', data, {headers: {Authorization: token.getToken()}})
             .then(() => {
                 // It's fine, we update the view
+                if(nbPagin !== 1 && gamesToDisplay.length === 1 && idZone !== idNewZone){
+                    setNbPagin(nbPagin - 1)
+                }
                 props.changeZoneJeu(idJeu, zone.idZone, idReservation, idNewZone)
             })
     }
@@ -183,7 +215,7 @@ function Zone(props) {
                                 </td>
                             </tr>
                             }
-                            {zone.games && zone.games.map((game, index) => {
+                            {zone.games && gamesToDisplay.map((game, index) => {
                                 return (
                                     <tr key={index}>
                                         <td className="align-middle">{game.libelleJeu}</td>
@@ -257,6 +289,24 @@ function Zone(props) {
                             </tbody>
                         </Table>
                     </CardBody>
+                <CardFooter>
+                    {zone.games && nbPagin &&
+                    <Row className="justify-content-center mt-md">
+                        <Pagination
+                            itemClass="page-item"
+                            linkClass="page-link"
+                            activePage={nbPagin}
+                            itemsCountPerPage={5}
+                            totalItemsCount={zone.games.length}
+                            pageRangeDisplayed={5}
+                            onChange={(pageNumber)=>{setNbPagin(pageNumber)}}
+                            getPageUrl={(nb) => {
+                                return nb.toString()
+                            }}
+                        />
+                    </Row>
+                    }
+                </CardFooter>
                 </Card>
             </Collapse>
         </div>

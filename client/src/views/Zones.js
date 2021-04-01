@@ -83,7 +83,7 @@ function Zones() {
                         zones.map((zone, index) => {
                             if (index % 3 === (token.getType() !== 2 ? 0 : 1)) return (
                                 <ListGroupItem key={"nav" + index} tag="a" href={"#" + index}>
-                                    {zone.libelleZone}
+                                    {zone.libelleZone +" : "+zone.games.length +(zone.games.length > 1 ? " jeux" : " jeu")}
                                 </ListGroupItem>
                             )
                         })}
@@ -94,7 +94,7 @@ function Zones() {
                     zones.map((zone, index) => {
                         if (index % 3 === (token.getType() !== 2 ? 1 : 2)) return (
                             <ListGroupItem key={"nav" + index} tag="a" href={"#" + index.toString()}>
-                                {zone.libelleZone}
+                                {zone.libelleZone +" : "+zone.games.length +(zone.games.length > 1 ? " jeux" : " jeu")}
                             </ListGroupItem>
                         )
                     })}
@@ -104,7 +104,7 @@ function Zones() {
                     zones.map((zone, index) => {
                         if (index % 3 === (token.getType() !== 2 ? 2 : (zone.libelleZone === "Indéfinie" ? -1 : 0))) return (
                             <ListGroupItem key={"nav" + index} tag="a" href={"#" + index.toString()}>
-                                {zone.libelleZone}
+                                {zone.libelleZone +" : "+zone.games.length +(zone.games.length > 1 ? " jeux" : " jeu")}
                             </ListGroupItem>
                         )
                     })}
