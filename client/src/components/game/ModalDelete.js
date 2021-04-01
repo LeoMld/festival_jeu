@@ -50,6 +50,9 @@ function ModalDelete(props){
                 deleteGameView()
                 props.setDeleteModal(!props.deleteModal)
                 setIsChanging(false)
+                if(props.nbPagin !== 1 && props.gamesToDisplay.length === 1){
+                    props.setNbPagin(props.nbPagin - 1)
+                }
 
             }).catch(e => {
             setErrorDeleting(true)

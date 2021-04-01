@@ -61,7 +61,7 @@ function Game(props){
                     </button>
                 </td>}
                 {props.games && token.getType() === 1 && <ModalGame games={props.games} setGames={props.setGames} game={props.game} setGame={props.setGame} modalState={modalState} setModalState={setModalState} type={props.type}/>}
-                {props.games && gameModal && token.getType() === 1 && <ModalDelete games={props.games} setGames={props.setGames} game={props.game}  deleteModal={deleteModal} setDeleteModal={setDeleteModal} type={props.type}/>}
+                {props.games && gameModal && token.getType() === 1 && <ModalDelete nbPagin={props.nbPagin} setNbPagin={props.setNbPagin} games={props.games} setGames={props.setGames} game={props.game} gamesToDisplay={props.gamesToDisplay} deleteModal={deleteModal} setDeleteModal={setDeleteModal} type={props.type}/>}
 
 
             </tr>

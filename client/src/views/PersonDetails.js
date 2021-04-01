@@ -378,7 +378,7 @@ function PersonDetails(props) {
                                                     <tbody>
                                                     {gamesToDisplay.map((g, index) => {
                                                         return (
-                                                            <Game nbPagin={nbPagin} games={info} setGames={setInfo} index={index} game={g}
+                                                            <Game gamesToDisplay={gamesToDisplay} nbPagin={nbPagin} setNbPagin={setNbPagin} games={info} setGames={setInfo} index={index} game={g}
                                                                   type={1}/>
                                                         )
                                                     })
