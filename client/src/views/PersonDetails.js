@@ -115,11 +115,10 @@ function PersonDetails(props) {
         axios.put("/api/gestion/" + typePerson + "/" + props.match.params.idPerson, localPerson, {headers: {Authorization: token.getToken()}})
             .then((res) => {
                 console.log(info)
-                setInfo({...info,person:localPerson})
                 setEditPerson(!editPerson)
                 setErrorEditeur(false)
                 setErrorExposant(false)
-
+                setInfo({...info,person:localPerson})
             })
             .catch(e => {
                 if (e.response && e.response.data.code === 0) {
@@ -346,9 +345,9 @@ function PersonDetails(props) {
                             </Collapse>
                         </Col>
                     </Row>
-                    {info.games &&
+                    {info.person.estEditeur &&
                     <Row className="m-4 inline-flex">
-                        {gamesToDisplay.length !== 0 &&
+
                         <Col className="w-50 p-2">
                             <Button color="link" onClick={() => setOpenJeux(!openJeux)}
                                     className=" w-100 text-primary text-center border">Jeux</Button>
@@ -360,47 +359,50 @@ function PersonDetails(props) {
                                         } color="success" outline type="button" className="mb-3">
                                             Ajouter un jeu
                                         </Button>}
-                                        <Table className="table table-striped table-responsive-sm table-responsive-md">
-                                            <thead>
-                                            <tr>
-                                                <th className="text-center">#</th>
-                                                <th>Titre</th>
-                                                <th className=" d-lg-table-cell">Nombre de joueurs</th>
-                                                <th className=" d-lg-table-cell">Âge minimum</th>
-                                                <th className=" d-lg-table-cell">Durée</th>
-                                                <th className=" d-lg-table-cell">Type</th>
-                                                {token.getType() === 1 && <th>Prototype</th>}
-                                                {token.getType() === 1 && <th>Action</th>}
+                                        {gamesToDisplay.length !== 0 &&
+                                            <div>
+                                                <Table className="table table-striped table-responsive-sm table-responsive-md">
+                                                    <thead>
+                                                    <tr>
+                                                        <th className="text-center">#</th>
+                                                        <th>Titre</th>
+                                                        <th className=" d-lg-table-cell">Nombre de joueurs</th>
+                                                        <th className=" d-lg-table-cell">Âge minimum</th>
+                                                        <th className=" d-lg-table-cell">Durée</th>
+                                                        <th className=" d-lg-table-cell">Type</th>
+                                                        {token.getType() === 1 && <th>Prototype</th>}
+                                                        {token.getType() === 1 && <th>Action</th>}
 
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            {gamesToDisplay.map((g, index) => {
-                                                return (
-                                                    <Game nbPagin={nbPagin} games={info} setGames={setInfo} index={index} game={g}
-                                                          type={1}/>
-                                                )
-                                            })
-                                            }
-                                            </tbody>
-                                        </Table>
-                                        {info && nbPagin &&
-                                        <Row className="justify-content-center mt-md">
-                                            <Pagination
-                                                itemClass="page-item"
-                                                linkClass="page-link"
-                                                activePage={nbPagin}
-                                                itemsCountPerPage={10}
-                                                totalItemsCount={info.games.length}
-                                                pageRangeDisplayed={5}
-                                                onChange={(pageNumber) => {
-                                                    setNbPagin(pageNumber)
-                                                }}
-                                                getPageUrl={(nb) => {
-                                                    return nb
-                                                }}
-                                            />
-                                        </Row>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    {gamesToDisplay.map((g, index) => {
+                                                        return (
+                                                            <Game nbPagin={nbPagin} games={info} setGames={setInfo} index={index} game={g}
+                                                                  type={1}/>
+                                                        )
+                                                    })
+                                                    }
+                                                    </tbody>
+                                                </Table>
+                                                {info && nbPagin &&
+                                                <Row className="justify-content-center mt-md">
+                                                    <Pagination
+                                                        itemClass="page-item"
+                                                        linkClass="page-link"
+                                                        activePage={nbPagin}
+                                                        itemsCountPerPage={10}
+                                                        totalItemsCount={info.games.length}
+                                                        pageRangeDisplayed={5}
+                                                        onChange={(pageNumber) => {
+                                                            setNbPagin(pageNumber)
+                                                        }}
+                                                        getPageUrl={(nb) => {
+                                                            return nb
+                                                        }}
+                                                    />
+                                                </Row>}
+                                            </div>
                                         }
                                     </CardBody>
                                 </Card>
@@ -408,7 +410,7 @@ function PersonDetails(props) {
                             {info.games && modalStateAddGame && token.getType() === 1 &&
                             <ModalNewGame setGames={setInfo} games={info} modalState={modalStateAddGame}
                                           setModalState={setModalStateAddGame} type={1}/>}
-                        </Col>}
+                        </Col>
 
                     </Row>
                     }
