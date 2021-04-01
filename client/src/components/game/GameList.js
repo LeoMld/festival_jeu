@@ -104,7 +104,7 @@ function GameList() {
                     {games && gamesToDisplay && gamesToDisplay.map((game, index) => {
 
                         return(
-                            <Game nbPagin={nbPagin} games={games} setGames={setGames} index={index} game={game}/>
+                            <Game nbPagin={nbPagin} setNbPagin={setNbPagin} gamesToDisplay={gamesToDisplay} games={games} setGames={setGames} index={index} game={game}/>
 
                         )
                     })}
@@ -146,4 +146,4 @@ function GameList() {
 
 }
 
-export default GameList
+export default GameList;
