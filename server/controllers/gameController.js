@@ -133,11 +133,12 @@ module.exports = {
             } else if (isNaN(ageMinimum)) {
                 utils.sendErrorNumber(req, res, Object.keys({ageMinimum})[0])
             } else {
-
+                console.log(body.game)
                 jeux.createJeu(body.game.libelleJeu, body.game.nombreJoueur, ageMinimum, body.game.duree, body.game.prototype, FK_idTypeJeu, FK_idPersonne)
                     .then((result) => {
                         res.status(201).json({inserted: true, idJeu: result})
                     }).catch((error) => {
+                    console.log(error)
                     res.status(503).json({
                         error: error,
                         inserted: false
@@ -145,6 +146,7 @@ module.exports = {
                 })
             }
         } catch (err) {
+
             res.status(503).json({error: err})
         }
 

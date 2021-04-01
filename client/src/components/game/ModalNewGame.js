@@ -75,7 +75,7 @@ function ModalNewGame(props) {
             game.nomPersonne = document.getElementById("proprietaire" + game.FK_idPersonne).text
 
 
-            Axios.post('/api/games/', {game}, {headers: {Authorization: token.getToken()}})
+            Axios.post('/api/games', {game}, {headers: {Authorization: token.getToken()}})
                 .then(res => {
                     game.idJeu = res.data.idJeu
                     addGameView(game)
