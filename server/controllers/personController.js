@@ -40,6 +40,7 @@ const checkPersonInputs = async (data)=>{
             error.nbError += 1
         }
     }
+    console.log(error)
     return error
 }
 const checkInputs = (data)=>{
@@ -274,6 +275,7 @@ module.exports = {
         if(body.nomPersonne!==undefined){
             let err = await checkPersonInputs(body)
             if(err.nbError!==0){
+                console.log(err)
                 res.status(400).json(err)
 
             }else{

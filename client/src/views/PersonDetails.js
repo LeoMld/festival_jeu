@@ -82,6 +82,8 @@ function PersonDetails(props) {
     }
     let [modalState, setModalState] = useState(false)
     let [modalStateAddGame, setModalStateAddGame] = useState(false)
+    let [errorExposant, setErrorExposant] = useState(false)
+    let [errorEditeur, setErrorEditeur] = useState(false)
 
     const [nbPagin, setNbPagin] = useState(1)
     const [gamesToDisplay, setGamesToDisplay] = useState([])
@@ -112,13 +114,26 @@ function PersonDetails(props) {
         }
         axios.put("/api/gestion/" + typePerson + "/" + props.match.params.idPerson, localPerson, {headers: {Authorization: token.getToken()}})
             .then((res) => {
+                console.log(info)
+                setInfo({...info,person:localPerson})
                 setEditPerson(!editPerson)
+                setErrorEditeur(false)
+                setErrorExposant(false)
+
             })
             .catch(e => {
                 if (e.response && e.response.data.code === 0) {
                     token.destroyToken()
                 }
+                if(e.response.data.estEditeur){
+                    setErrorEditeur(true)
+                }
+                if(e.response.data.estExposant){
+                    setErrorExposant(true)
+                }
+                console.log(e.response)
                 setErrorDetail(e.response.data)
+
             })
     }
     const handleCancel = () => {
@@ -130,6 +145,8 @@ function PersonDetails(props) {
         document.getElementById("estExposant").checked = person.estExposant
         document.getElementById("exposantInactif").checked = person.exposantInactif
         setEditPerson(!editPerson)
+        setErrorEditeur(false)
+        setErrorExposant(false)
     }
     //0 : Update
     // 1: create
@@ -158,11 +175,15 @@ function PersonDetails(props) {
                             <Collapse isOpen={openDetail}>
                                 <Card>
                                     {errorDetail.estEditeur &&
-                                    <UncontrolledAlert color="danger"> L'Editeur possède encore des
-                                        jeux</UncontrolledAlert>}
+                                    <Alert  isOpen={errorEditeur} toggle={()=>{
+                                        setErrorEditeur(false)
+                                    }} color="danger"> L'Editeur possède encore des
+                                        jeux</Alert>}
                                     {errorDetail.estExposant &&
-                                    <UncontrolledAlert color="danger"> L'Exposant possède encore des
-                                        réservations</UncontrolledAlert>}
+                                    <Alert isOpen={errorExposant} toggle={()=>{
+                                        setErrorExposant(false)
+                                    }} color="danger"> L'Exposant possède encore des
+                                        réservations</Alert>}
                                     <CardBody>
                                         {editPerson && tokenType === 1 && <div>
                                             <Button
@@ -442,5 +463,4 @@ function PersonDetails(props) {
         </div>
     )
 }
-
 export default PersonDetails;
