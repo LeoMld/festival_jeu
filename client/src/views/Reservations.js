@@ -166,4 +166,5 @@ function Reservations() {
         </div>
     )
 }
-export default Reservations
+
+export default Reservations;

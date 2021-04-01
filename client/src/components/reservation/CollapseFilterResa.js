@@ -35,10 +35,9 @@ function CollapseFilter(props){
                     filter = data.filter(resa => resa.nomPersonne.includes(nom)
                         && (resa.prixReservation >= (isNaN(parseInt(prixMin))? 0: parseInt(prixMin) ))
                         && (resa.prixReservation <= (isNaN(parseInt(prixMax))? Infinity: parseInt(prixMax) )))
-
-
                 }
                 props.setResa([])
+                props.setNbPagin(1)
                 setTimeout(function(){ props.setResa(filter) }, 1)
                 setIsPending(false)
             })
