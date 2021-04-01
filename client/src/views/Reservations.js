@@ -93,11 +93,14 @@ function Reservations() {
                                 Filtres
                             </Button>
                         </Col>
+                        {token.getType() &&
                         <Col className="d-flex flex-row mb-sm-3">
                             <Button  type="button" color="info" onClick={updateNonResponseReservations}>
                                 Trier sans réponses
                             </Button>
                         </Col>
+                        }
+
 
                         {token.getType()===1 && <Col  className="d-flex flex-row mb-sm-3">
                             <Button  type="button" color="info" onClick={createNewReservations}>
