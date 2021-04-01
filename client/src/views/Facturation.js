@@ -7,17 +7,17 @@ function Facturation(){
 
     const {data:reservations,setData:setReservation,isPending,error} = useAxios("/api/gestion/Reservations")
 
-    const [CAprevu,setCAprevu] = useState(1)
+    const [CAprevu,setCAprevu] = useState(0)
     const [CAactuel,setCAactuel] = useState(0)
-    const [nbResaPrevuPayee,setnbResaPrevuPayee] = useState(1)
+    const [nbResaPrevuPayee,setnbResaPrevuPayee] = useState(0)
     const [nbResaActuelPayee,setnbResaActuelPayee] = useState(0)
 
-    const [nbFactureEditee,setNbFactureEditee] = useState(1)
+    const [nbFactureEditee,setNbFactureEditee] = useState(0)
     const [nbFactureEditeePayee,setNbFactureEditeePayee] = useState(0)
 
     useEffect(()=>{
         if(!isPending){
-            let sommePrevu = 1
+            let sommePrevu = 0
             let sommePayee = 0;
             //update sum expected
             reservations.forEach(r => sommePrevu+=r.prixReservation)
@@ -29,8 +29,6 @@ function Facturation(){
             reservationsPayees.forEach(r => sommePayee+= r.prixReservation)
             setnbResaActuelPayee(reservationsPayees.length)
             setCAactuel(sommePayee)
-
-
 
             //facture edited
             const reservationFactureEditee = reservations.filter(reservation => reservation.dateEnvoiFactureReservation !== null)
@@ -65,10 +63,10 @@ function Facturation(){
                                 <span style={{fontSize:"12px"}}>Pourcentage du CA prévu / CA espéré</span>
                             </div>
                             <div className="progress-percentage">
-                                <span>{Math.round(CAactuel/CAprevu*100)}%</span>
+                                <span>{CAprevu !== 0 ? Math.round(CAactuel/CAprevu*100) : 0}%</span>
                             </div>
                         </div>
-                        <Progress max="100" value={CAactuel/CAprevu*100} />
+                        <Progress max="100" value={CAprevu !== 0 ? CAactuel/CAprevu*100 : 0} />
                     </div>
 
 
@@ -79,10 +77,10 @@ function Facturation(){
                                 <span style={{fontSize:"12px"}}>Pourcentage des exposants dont la facture a été éditée et qui ont payé</span>
                             </div>
                             <div className="progress-percentage">
-                                <span>{Math.round(nbFactureEditeePayee/nbFactureEditee*100)}%</span>
+                                <span>{nbFactureEditee !== 0 ? Math.round(nbFactureEditeePayee/nbFactureEditee*100) : 0}%</span>
                             </div>
                         </div>
-                        <Progress max="100" value={nbFactureEditeePayee/nbFactureEditee*100} />
+                        <Progress max="100" value={nbFactureEditee !== 0 ? nbFactureEditeePayee/nbFactureEditee*100 : 0} />
                     </div>
                 </Col>
                 <hr className="hr-vertical"/>
@@ -97,20 +95,14 @@ function Facturation(){
                                 <span style={{fontSize:"12px"}}>Pourcentage des réservations payées</span>
                             </div>
                             <div className="progress-percentage">
-                                <span>{Math.round(nbResaActuelPayee/nbResaPrevuPayee*100)}%</span>
+                                <span>{nbResaPrevuPayee !== 0 ? Math.round(nbResaActuelPayee/nbResaPrevuPayee*100) : 0}%</span>
                             </div>
                         </div>
-                        <Progress max="100" value={nbResaActuelPayee/nbResaPrevuPayee*100} />
+                        <Progress max="100" value={nbResaPrevuPayee !== 0 ? nbResaActuelPayee/nbResaPrevuPayee*100 : 0} />
                     </div>
                 </Col>
             </Row>
-
-
-
         </Container>
-
-
-
     )
 }
 
