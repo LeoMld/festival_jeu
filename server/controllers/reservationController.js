@@ -10,7 +10,6 @@ module.exports = {
         const idFestival = (await utils.getFestivalToDisplay(req)).idFestival
         await Reservation.getFestivalReservations(idFestival)
             .then((result) => {
-                console.log(result)
                 res.status(200).json(result)
             })
             .catch((e) => {

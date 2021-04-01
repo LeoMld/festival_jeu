@@ -89,12 +89,17 @@ function Reservation(props){
                 <Row className="justify-content-center">
                     {r.nameFestival}
                 </Row>
+                <Row className="justify-content-center mt-5">
+                    <Link to={"/Reservations/"+r.idReservation} className="btn btn-default">Voir</Link>
+                </Row>
+
             </td>
             }
             {props.type!==1 &&
             <td>
                 <Row className="justify-content-center">
                     {r.nomPersonne}
+
                 </Row>
                 <Row className="justify-content-center mt-5">
                     <Link to={"/Reservations/"+r.idReservation} className="btn btn-default">Voir</Link>
@@ -209,14 +214,6 @@ function Reservation(props){
                 <Row className="justify-content-center">
                     {r.prixReservation}
 
-                </Row>
-                <Row className="justify-content-center mt-md">
-                    <Button onClick={()=>{pdf.createPDF(r)}}  className="btn-icon btn-3" color="danger"  type="button">
-                              <span className="btn-inner--icon">
-                                <i className="ni ni-paper-diploma" />
-                              </span>
-                        <span className="btn-inner--text">Facture</span>
-                    </Button>
                 </Row>
             </Col></td>
             {token.getType()===1 && <td>
