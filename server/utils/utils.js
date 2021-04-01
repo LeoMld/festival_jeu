@@ -51,5 +51,32 @@ module.exports = {
             i++
         }
         return newResult
+    },
+
+    editorGames: async(result) => {
+        let newResult = []
+        let idsDone = []
+        let i = 0
+        let idPersonne
+        while (i !== result.length) {
+            idPersonne = result[i].idPersonne
+            // Already done ?
+            if (!idsDone.includes(idPersonne)) {
+                idsDone.push(idPersonne)
+                // We retrieve all similar games
+                const games = result.filter(value => value.idPersonne === idPersonne)
+                let editor = {
+                    nomPersonne: result[i].nomPersonne
+                }
+                editor.games = []
+                // We add the zones to the game
+                for (let z = 0; z < games.length; z++) {
+                    editor.games.push(games[z])
+                }
+                newResult.push(editor)
+            }
+            i++
+        }
+        return newResult
     }
 }

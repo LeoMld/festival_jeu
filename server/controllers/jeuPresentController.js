@@ -1,7 +1,7 @@
 const Zone = require('../models/zoneModel')
 const JeuPresent = require('../models/jeuPresentModel')
-const Person = require('../models/personModel')
 const utils = require("../utils/utils");
+const async = require("async")
 
 module.exports = {
     // Update the game in the zone
@@ -70,23 +70,24 @@ module.exports = {
     getAllGamesEditeur: async (req, res) => {
         try {
             const idFestival = (await utils.getFestivalToDisplay(req)).idFestival
+            /*
             const editors = await Person.getEditeurs()
+             */
             // Will contain the editors and their games of the current festival
-            const data = []
-            for (let i = 0; i < editors.length; i++) {
-                const games = await JeuPresent.getGamesReservedEditor(editors[i].idPersonne, idFestival)
-                // We only keep the editors with games on the festival
-                if (games.length !== 0) {
-                    const editor = editors[i]
-                    const newResult = utils.zonesGames(games)
-                    editor.games = newResult
-                    for (let j = 0; j < newResult.length; j++) {
-                        editor.games[j].nomPersonne = editor.nomPersonne
-                    }
-                    data.push(editor)
+            let result = []
+
+            const games = await JeuPresent.getGamesReservedEditor(idFestival)
+            // We retrieve the editors here, and assign them their games
+            const data = await utils.editorGames(games)
+            await async.forEachOf(data, async(editor) => {
+                const newResult = utils.zonesGames(editor.games)
+                editor.games = newResult
+                for (let j = 0; j < newResult.length; j++) {
+                    editor.games[j].nomPersonne = editor.nomPersonne
                 }
-            }
-            res.status(200).json(data)
+                result.push(editor)
+            })
+            res.status(200).json(result)
         } catch (err) {
             res.status(503).json()
         }

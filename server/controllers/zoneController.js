@@ -1,9 +1,7 @@
 const Zone = require("../models/zoneModel");
 const JeuPresent = require("../models/jeuPresentModel")
-const Jeu = require("../models/jeuxModel")
-const Person = require("../models/personModel")
-const Reservation = require("../models/reservationModel")
 const utils = require("../utils/utils");
+const async = require("async")
 
 module.exports = {
 
@@ -13,12 +11,11 @@ module.exports = {
             const idFestival = (await utils.getFestivalToDisplay(req)).idFestival
             const zones = await Zone.getAFestivalZones(idFestival)
             // We need the games in each zones
-            for (let i = 0; i < zones.length; i++) {
+            await async.forEachOf(zones, async (zone, i) => {
                 // We retrieve the reserved games for each zone
                 zones[i].games = await JeuPresent.getGamesReservedZone(zones[i].idZone)
-            }
+            })
             res.status(200).json(zones)
-
         } catch (err) {
             // An error occured
             res.status(503).json()

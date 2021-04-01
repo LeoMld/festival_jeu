@@ -44,17 +44,17 @@ module.exports = {
         return (await clientUsed.query(queryText, queryValues)).rows
     },
 
-    getGamesReservedEditor: async (idPersonne, idFestival, client) => {
+    getGamesReservedEditor: async (idFestival, client) => {
         const clientUsed = DB.getPoolClient(client)
-        const queryText = 'SELECT DISTINCT "idJeu", "libelleJeu", "libelleZone", "nombreJoueur", "ageMinimum", "duree", "libelleTypeJeu", "prototype" ' +
+        const queryText = 'SELECT DISTINCT "idJeu", "idPersonne", "nomPersonne", "libelleJeu", "libelleZone", "nombreJoueur", "ageMinimum", "duree", "libelleTypeJeu", "prototype" ' +
             'from "JeuPresent" ' +
             'JOIN "Reservation" R ON "PK_idReservation" = R."idReservation" ' +
             'JOIN "Jeu" J ON J."idJeu" = "JeuPresent"."PK_idJeu" ' +
             'JOIN "Personne" P on P."idPersonne" = J."FK_idPersonne" ' +
             'JOIN "TypeJeu" TJ ON J."FK_idTypeJeu" = TJ."idTypeJeu" ' +
             'JOIN "Zone" Z ON Z."idZone" = "JeuPresent"."PK_idZone" ' +
-            'WHERE R."FK_idFestival" = $1 AND "idPersonne" = $2 AND "libelleZone" != $3;'
-        const queryValues = [idFestival, idPersonne, "Indéfinie"]
+            'WHERE R."FK_idFestival" = $1 AND "libelleZone" != $2;'
+        const queryValues = [idFestival, "Indéfinie"]
         return (await clientUsed.query(queryText, queryValues)).rows
     },
 

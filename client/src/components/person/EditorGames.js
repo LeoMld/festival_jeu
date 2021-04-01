@@ -1,9 +1,23 @@
-import React, {useState} from 'react'
-import {Button, Card, CardBody, Collapse, Table} from "reactstrap";
+import React, {useEffect, useState} from 'react'
+import {Button, Card, CardBody, CardFooter, Collapse, Row, Table} from "reactstrap";
+import Pagination from "react-js-pagination";
 
 function EditorGames(props) {
 
     const [collapse, setCollapse] = useState(false)
+
+    const [nbPagin, setNbPagin] = useState(1)
+    const [gamesToDisplay, setGamesToDisplay] = useState([])
+
+    useEffect(()=>{
+        const indexDebut = (nbPagin-1)*5
+        const indexFin = (props.editorGames.games.length <= nbPagin*5-1) ? props.editorGames.games.length : nbPagin*5
+        let gamesPage = []
+        for(let i = indexDebut; i<indexFin; i++){
+            gamesPage.push(props.editorGames.games[i])
+        }
+        setGamesToDisplay(gamesPage)
+    },[nbPagin, props.zones])
 
     return (
         <div>
@@ -30,7 +44,7 @@ function EditorGames(props) {
                             </tr>
                             </thead>
                             <tbody>
-                            {props.editorGames.games.map((game, index) => {
+                            {props.editorGames.games && gamesToDisplay.map((game, index) => {
                                 return (
                                     <tr key={index}>
                                         <td className="align-middle">{game.libelleJeu}</td>
@@ -47,6 +61,24 @@ function EditorGames(props) {
                             </tbody>
                         </Table>
                     </CardBody>
+                    <CardFooter>
+                        {props.editorGames.games && nbPagin &&
+                        <Row className="justify-content-center mt-md">
+                            <Pagination
+                                itemClass="page-item"
+                                linkClass="page-link"
+                                activePage={nbPagin}
+                                itemsCountPerPage={5}
+                                totalItemsCount={props.editorGames.games.length}
+                                pageRangeDisplayed={5}
+                                onChange={(pageNumber)=>{setNbPagin(pageNumber)}}
+                                getPageUrl={(nb) => {
+                                    return nb.toString()
+                                }}
+                            />
+                        </Row>
+                        }
+                    </CardFooter>
                 </Card>
             </Collapse>
         </div>

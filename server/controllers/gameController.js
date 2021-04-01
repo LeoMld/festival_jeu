@@ -79,26 +79,26 @@ module.exports = {
 
 
     handleGame: async (req, res) => {
-            try {
-                //si il y a un jeu dans la requête, cela indique que l'on veut modifier tout le jeu
-                if (req.body.game) {
-                    if(req.body.game.libelleJeu !==undefined) {
-                        await changeAllFields(req, res).then(result => {
-                            res.status(200).json(result)
-
-                        })
-                    }
-                    else{
-                        res.status(400).json()
-                    }
-                } else {
-                    await changePrototype(req, res).then(result =>{
+        try {
+            //si il y a un jeu dans la requête, cela indique que l'on veut modifier tout le jeu
+            if (req.body.game) {
+                if(req.body.game.libelleJeu !==undefined) {
+                    await changeAllFields(req, res).then(result => {
                         res.status(200).json(result)
+
                     })
                 }
-            } catch (err) {
-                res.status(503).json({error: err})
+                else{
+                    res.status(400).json()
+                }
+            } else {
+                await changePrototype(req, res).then(result =>{
+                    res.status(200).json(result)
+                })
             }
+        } catch (err) {
+            res.status(503).json({error: err})
+        }
     },
 
     deleteGame: async (req, res) => {
