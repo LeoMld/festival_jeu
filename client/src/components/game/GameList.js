@@ -34,8 +34,6 @@ function GameList() {
 
     useEffect(()=>{
         if(games){
-            console.log("JE PASSE LA")
-            console.log(games)
             const indexDebut = (nbPagin-1)*10
             const indexFin = (games.length <= nbPagin*10-1) ? games.length: nbPagin*10
             let gamesPage = []
@@ -84,7 +82,7 @@ function GameList() {
                 <UncontrolledCollapse toggler="#toggler">
                     <Card>
                         <CardBody>
-                            {games && types && <CollapseFilter types={types.data} games={games} setGames={setGames}/>}
+                            {games && types && <CollapseFilter setNbPagin={setNbPagin} types={types.data} games={games} setGames={setGames}/>}
                         </CardBody>
                     </Card>
                 </UncontrolledCollapse>

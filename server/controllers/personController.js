@@ -205,11 +205,7 @@ module.exports = {
     getAllExposants: async (req,res)=>{
         await Person.getExposants()
             .then((result)=>{
-                if(result.length===0){
-                    res.status(200).json("Pas d'éditeurs dans la Base de données")
-                }else{
-                    res.status(200).json(result)
-                }
+                res.status(200).json(result)
             })
             .catch(error=>{
                 res.status(503).json({error: error})

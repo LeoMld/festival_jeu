@@ -65,6 +65,7 @@ function CollapseFilter(props) {
             .then(({data}) => {
                 setGamesFilter(data);
                 setIsPending(false)
+                props.setNbPagin(1)
             })
             .catch(err => {
                 //if the token is not the good one

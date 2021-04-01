@@ -60,13 +60,17 @@ function Persons(props){
                     <th>Exposant Inactif </th>
                 </tr>
                 </thead>
-                {isPending && <Waiting></Waiting>}
+
                 <tbody>
-                {persons!==null && persons.map((p,index)=>{
+                {persons && persons.map((p,index)=>{
                     return(<Person person={p} type={props.type} index={index}/>)
                 })}
                 </tbody>
             </Table>
+            <Row className="justify-content-center">
+                {isPending && <Waiting name={"chargement des données"}/>}
+                {persons && persons.length ===0  && <p className="font-weight-400"> Aucune donnée disponible</p>}
+            </Row>
         </div>
 
     )
