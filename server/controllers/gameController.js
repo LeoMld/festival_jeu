@@ -71,16 +71,10 @@ module.exports = {
     //return all the types of games
     getTypesJeux: async (req, res) => {
         await jeux.getTypesJeux().then(result => {
-            if (result.length === 0) {
-                res.status(200).json('No types')
-            } else {
-                res.status(200).json({data: result})
-
-            }
+            res.status(200).json({data: result})
         }).catch((error) => {
             res.status(503).json({error: error})
         })
-
     },
 
 
