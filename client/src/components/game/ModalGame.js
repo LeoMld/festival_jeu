@@ -20,14 +20,13 @@ import token from "../../utils/token";
 
 import among_modify from "../../assets/images/amongus/among_modify.png"
 
-function ModalGame(props){
+function ModalGame(props) {
 
     const [isChanging, setIsChanging] = useState(false)
     const [error, setError] = useState()
 
 
-
-    const handleChange = (game)=>{
+    const handleChange = (game) => {
         setIsChanging(true)
         if(document.getElementById("libelleChamp").value.length > 1){
             props.game.libelleJeu = document.getElementById("libelleChamp").value
@@ -61,11 +60,10 @@ function ModalGame(props){
 
 
 
-
     }
 
 
-    return(
+    return (
 
         <Modal
             className="modal-dialog-centered"
@@ -78,20 +76,20 @@ function ModalGame(props){
                 <Card className="bg-secondary shadow border-0">
                     <div className="mr-sm-3 mt-sm-3">
                         <button
-                        aria-label="Close"
-                        className="close"
-                        data-dismiss="modal"
-                        type="button"
-                        onClick={() => props.setModalState(!props.modalState)}
+                            aria-label="Close"
+                            className="close"
+                            data-dismiss="modal"
+                            type="button"
+                            onClick={() => props.setModalState(!props.modalState)}
                         >
-                        <span aria-hidden={true}>×</span>
+                            <span aria-hidden={true}>×</span>
                         </button>
                     </div>
                     <CardHeader className="bg-transparent pb-5">
                         <div className="text-muted text-center mt-2 mb-3">
                             <h3>Modifier le jeu</h3>
                             <img
-                                style={{height : "100px"}}
+                                style={{height: "100px"}}
                                 alt="logo"
                                 className="img-fluid floating"
                                 src={among_modify}
@@ -99,17 +97,18 @@ function ModalGame(props){
                         </div>
 
                     </CardHeader>
-                    <CardBody  className="px-lg-5 py-lg-5">
+                    <CardBody className="px-lg-5 py-lg-5">
                         {props.game != null && <Form role="form">
                             <FormGroup className="mb-3">
                                 <Label for="libelleChamp">Libelle du jeu</Label>
                                 <InputGroup className="input-group-alternative">
                                     <InputGroupAddon addonType="prepend">
                                         <InputGroupText>
-                                            <i className="ni ni-app" />
+                                            <i className="ni ni-app"/>
                                         </InputGroupText>
                                     </InputGroupAddon>
-                                    <Input id="libelleChamp" defaultValue={props.game.libelleJeu} placeholder="libelle du Jeu" type="text" />
+                                    <Input id="libelleChamp" defaultValue={props.game.libelleJeu}
+                                           placeholder="Libellé du Jeu" type="text"/>
                                 </InputGroup>
                             </FormGroup>
                             <FormGroup className="mb-3">
@@ -117,11 +116,12 @@ function ModalGame(props){
                                 <InputGroup className="input-group-alternative">
                                     <InputGroupAddon addonType="prepend">
                                         <InputGroupText>
-                                            <i className="ni ni-single-02" />
+                                            <i className="ni ni-single-02"/>
                                         </InputGroupText>
                                     </InputGroupAddon>
 
-                                    <Input  id="nombreJoueur" type="select" defaultValue={props.game.nombreJoueur}  name="select" >
+                                    <Input id="nombreJoueur" type="select" defaultValue={props.game.nombreJoueur}
+                                           name="select">
                                         <option>1</option>
                                         <option>2</option>
                                         <option>3</option>
@@ -138,11 +138,11 @@ function ModalGame(props){
                                 <InputGroup className="input-group-alternative">
                                     <InputGroupAddon addonType="prepend">
                                         <InputGroupText>
-                                            <i className="ni ni-badge" />
+                                            <i className="ni ni-badge"/>
                                         </InputGroupText>
                                     </InputGroupAddon>
 
-                                    <Input id="age" type="select" defaultValue={props.game.ageMinimum}  name="select" >
+                                    <Input id="age" type="select" defaultValue={props.game.ageMinimum} name="select">
                                         <option>1</option>
                                         <option>2</option>
                                         <option>3</option>
@@ -173,7 +173,7 @@ function ModalGame(props){
                                         </InputGroupText>
                                     </InputGroupAddon>
 
-                                    <Input  defaultValue={props.game.duree} id="duree" placeholder="durée" type="text" />
+                                    <Input defaultValue={props.game.duree} id="duree" placeholder="Durée" type="text"/>
                                 </InputGroup>
                             </FormGroup>
                             {error && <Alert color="danger">
@@ -181,7 +181,9 @@ function ModalGame(props){
                             </Alert> }
                             {!isChanging && <div className="text-center">
                                 <Button
-                                    onClick={()=>{handleChange(props.game)}}
+                                    onClick={() => {
+                                        handleChange(props.game)
+                                    }}
                                     className="my-4"
                                     color="primary"
                                     type="button"
@@ -189,15 +191,13 @@ function ModalGame(props){
                                     Valider les changements
                                 </Button>
                             </div>}
-                            {isChanging && <Waiting className="mt-md" name={"Change"} />}
+                            {isChanging && <Waiting className="mt-md" name={"Change"}/>}
                         </Form>}
                     </CardBody>
                 </Card>
             </div>
 
         </Modal>
-
-
 
 
     )
