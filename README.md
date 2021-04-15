@@ -1,7 +1,7 @@
 # Application Web Festival des jeux de Montpellier
 ## Description
 Ce projet est une application web réalisée en javascript (Front: React, Back: NodeJS) dans le cadre d'un projet de cours à Polytech Montpellier.  
-Elle permet de gérer le festival du jeu de Montpellier qui à lieu tous les ans.  
+Elle permet de gérer le festival du jeu de Montpellier qui a lieu tous les ans.  
 
 Pour permettre cette gestion 3 types de comptes ont été établi:
 - visiteur (visualisation des données du festival en cours)
